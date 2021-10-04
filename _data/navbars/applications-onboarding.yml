@@ -1,0 +1,8 @@
+title: "Application Onboarding (Open)"
+path: /applications-onboard/
+order: 4
+section:
+  - title: Onboarding Applications to an Intel® Smart Edge Open Single-Node Cluster
+    path: /docs/application-onboarding/application-onboarding-cmdline
+    meta_title: 
+    meta_description: 
