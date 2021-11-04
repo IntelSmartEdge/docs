@@ -56,6 +56,8 @@ You will need two machines: a provisioning system where you will build a bootabl
 - Python 3.6 or later, with the PyYAML module installed
 - Internet access
    
+> NOTE: You must install Docker from the [Docker repository](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository). Installation by Docker package is not supported.
+  
 > NOTE: You must add the user account on the provisioning system to /etc/sudoers.
 
 #### Target System
@@ -64,6 +66,8 @@ You will need two machines: a provisioning system where you will build a bootabl
 - Hard drives: Two SATA SSDs, one for booting and one for data caching
 - Network adapters: Two NICs, one connected to each socket
 - Connection to the provisioning system
+
+[View full specs](https://github.com/smart-edge-open/docs/blob/main/release-notes/release-notes-se-open-DEK-21-09.md) of the system the Developer Experience Kit has been validated on. 
 
 > NOTE: The provisioning process will install Ubuntu 20.04 on the target machine. Any existing operating system will be overwritten.
 
@@ -162,7 +166,7 @@ Alternatively, you can inspect the deployment log found in `/opt/seo/logs`.
 
 ## Summary and Next Steps
 In this guide, you created an Intel® Smart Edge Open edge node cluster capable of hosting edge applications. You can then optionally install reference implementations from the Intel® Edge Software Hub.
-- Learn how to [onboard a sample application to your cluster](/application-onboarding/application-onboarding-cmdline.md)
-- Download reference implementations from the [Intel® Edge Software Hub](https://software.intel.com/content/www/us/en/develop/topics/iot/edge-solutions.html)
+- Learn how to [onboard a sample application](/application-onboarding/application-onboarding-cmdline.md) to your cluster.
+- Download and run [reference implementations from the Intel® Developer Catalog](https://www.intel.com/content/www/us/en/developer/tools/software-catalog/full-catalog.html?s=Newest&q=%22smart+edge+open%22)
 
 
