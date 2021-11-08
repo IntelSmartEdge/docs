@@ -29,14 +29,14 @@ The Developer Experience Kit includes the following building blocks:
 | Building Block | Functionality     |
 | :------------- | :------------- |
 |[Calico CNI](https://docs.projectcalico.org/about/about-calico) | Default container network interface |
-[SR-IOV Network Operator](/components/networking/sriov-network-operator.md) | Additional container network interface |
-[Multus CNI](/components/networking/multus.md) | Support for multiple network interfaces |
+[SR-IOV Network Operator](networking/sriov-network-operator.md) | Additional container network interface |
+[Multus CNI](networking/multus.md) | Support for multiple network interfaces |
 [Harbor](https://goharbor.io/) | Cloud native registry service that stores and distributes container images |
-[Telemetry](/components/telemetry/telemetry.md) | Remote collection of device data for real-time monitoring|
-[Node Feature Discovery (NFD)](/components/resource-management/node-feature-discovery.md) | Detects and advertises the hardware features available in each node of a Kubernetes* cluster |
-[Topology Manager](/components/resource-management/topology-manager.md) | Coordinates the resources allocated to a workload |
-[Core Pinning](/components/resource-management/core-pinning.md) | Dedicated CPU core for workload |
-[Provisioning](/components/provisioning/provisioning.md) | Automated system provisioning |
+[Telemetry](telemetry/telemetry.md) | Remote collection of device data for real-time monitoring|
+[Node Feature Discovery (NFD)](resource-management/node-feature-discovery.md) | Detects and advertises the hardware features available in each node of a Kubernetes* cluster |
+[Topology Manager](resource-management/topology-manager.md) | Coordinates the resources allocated to a workload |
+[Core Pinning](resource-management/core-pinning.md) | Dedicated CPU core for workload |
+[Provisioning](provisioning/provisioning.md) | Automated system provisioning |
 
 ## Get Started
 The instructions below walk you through provisioning the operating system and Developer Experience Kit on a target system. After completing these instructions, you will have created a single edge node cluster capable of hosting edge applications. You can then optionally install reference implementations from the Intel® Edge Software Hub.

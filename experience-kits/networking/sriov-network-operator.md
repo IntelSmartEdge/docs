@@ -34,7 +34,7 @@ To enable SR-IOV device resource allocation and CNI, Intel® Smart Edge Open use
 
 ## SR-IOV Network Operator configuration and usage
 
-To deploy the SR-IOV Network Operator to the Intel® Smart Edge Open cluster, `sriov_network_operator_enable: True` must be set in `inventory/default/group_vars/all/10-default.yml`. This component is enabled by default in [Developer Experience Kit](../../experience-kits/developer-experience-kit-open.md). This will perform Operator install and label every Edge Node as `sriov-operator-node=yes` which is required by config Daemon. It is deploying SR-IOV CNI plugin and SR-IOV Device plugin on labeled node when first `SriovNetworkNodePolicy` is applied. It will also automatically install Multus CNI.
+To deploy the SR-IOV Network Operator to the Intel® Smart Edge Open cluster, `sriov_network_operator_enable: True` must be set in `inventory/default/group_vars/all/10-default.yml`. This component is enabled by default in [Developer Experience Kit](../developer-experience-kit-open.md). This will perform Operator install and label every Edge Node as `sriov-operator-node=yes` which is required by config Daemon. It is deploying SR-IOV CNI plugin and SR-IOV Device plugin on labeled node when first `SriovNetworkNodePolicy` is applied. It will also automatically install Multus CNI.
 SR-IOV Network Operator is deployed using Makefiles and it requires additional packages to be installed, which Intel® Smart Edge Opens provides with Operator deployment.
 Images for Operator are downloaded from Openshift repository and stored in local registry.
 
