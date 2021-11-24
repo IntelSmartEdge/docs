@@ -11,6 +11,7 @@ Copyright (c) 2019-2020 Intel Corporation
     - [Overview of SR-IOV Network Operator](#overview-of-sr-iov-network-operator)
   - [SR-IOV Network Operator configuration and usage](#sr-iov-network-operator-configuration-and-usage)
     - [Configuration](#configuration)
+      - [SR-IOV Network Operator](#sr-iov-network-operator-1)
       - [SR-IOV Network Node Policy](#sr-iov-network-node-policy)
       - [SR-IOV Network](#sr-iov-network)
     - [Usage](#usage)
@@ -39,6 +40,23 @@ SR-IOV Network Operator is deployed using Makefiles and it requires additional p
 Images for Operator are downloaded from Openshift repository and stored in local registry.
 
 ### Configuration
+#### SR-IOV Network Operator
+At the file:  `inventory/default/group_vars/all/10-default.yml`
+the SR-IOV NIC's configured:
+```yaml
+cvl_sriov_nics:
+  c0p0: "eno12399"
+  c0p1: "eno12409"
+  c1p0: "ens5f0"
+  c1p1: "ens5f1"
+```
+Currently this list is hard coded.
+Users who are installing the DEK on a system with a different NIC's must update manually the list above with the related interface names.
+During deployment users can use a flag (in the same yml file) which allows for enabling and disabling the NIC's configuration: "sriov_network_operator_configure_enable".
+
+Each NIC interface in the list above is a physical function of a SR-IOV NIC and configured in the same yml file in:
+- The related VF's in the next section: "sriov_network_node_policies".
+- The routing data in the section: "sriov_networks".
 
 SR-IOV Network Operator provides two custom resources to configure SR-IOV network devices and network attachments:
 

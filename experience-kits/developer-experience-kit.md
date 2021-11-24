@@ -24,7 +24,7 @@ Profile](https://github.com/intel/rni-profile-base-ubuntu) tailored for its spec
 
 Building blocks provide specific functionality in the platform you'll deploy. Each experience kit installs a set of building blocks as part of deployment. You can use additional building blocks to customize your platform, or develop your own custom solution by combining building blocks. 
 
-The Developer Experience Kit includes the following building blocks:
+The Developer Experience Kit installs Kubernetes and the following building blocks:
 
 | Building Block | Functionality     |
 | :------------- | :------------- |
@@ -36,7 +36,8 @@ The Developer Experience Kit includes the following building blocks:
 [Node Feature Discovery (NFD)](/components/resource-management/node-feature-discovery.md) | Detects and advertises the hardware features available in each node of a Kubernetes* cluster |
 [Topology Manager](/components/resource-management/topology-manager.md) | Coordinates the resources allocated to a workload |
 [Core Pinning](/components/resource-management/core-pinning.md) | Dedicated CPU core for workload |
-[Provisioning](/components/provisioning/provisioning.md) | Automated system provisioning |
+
+For information on the versions installed, see the Developer Experience Kit [release notes](/release-notes/release-notes-se-open-DEK-21-09.md#package-versions)
 
 ## Get Started
 The instructions below walk you through provisioning the operating system and Developer Experience Kit on a target system. After completing these instructions, you will have created a single edge node cluster capable of hosting edge applications. You can then optionally install reference implementations from the Intel® Edge Software Hub.
@@ -67,7 +68,14 @@ You will need two machines: a provisioning system where you will build a bootabl
 - Network adapters: Two NICs, one connected to each socket
 - Connection to the provisioning system
 
-[View full specs](https://github.com/smart-edge-open/docs/blob/main/release-notes/release-notes-se-open-DEK-21-09.md) of the system the Developer Experience Kit has been validated on. 
+> NOTE: The DEK was validated on a system using the following network interface card: 
+> - Intel Corporation Ethernet Controller E810-C for SFP (rev 02) NIC. 
+> 
+> To install the DEK on a system with a different NIC, update the interface names in open-developer-experience-kits/inventory/default/group_vars/all/10-default.yaml. Otherwise, installation will fail. 
+> 
+> For more information, see the [SR-IOV Network Operator Configuration](https://github.com/smart-edge-open/docs/blob/main/components/networking/sriov-network-operator.md#configuration)
+> 
+> View the full specs of the [validated system](https://github.com/smart-edge-open/docs/blob/main/release-notes/release-notes-se-open-DEK-21-09.md). 
 
 > NOTE: The provisioning process will install Ubuntu 20.04 on the target machine. Any existing operating system will be overwritten.
 
@@ -164,8 +172,11 @@ Check the installation logs by running the following command:
 ```
 Alternatively, you can inspect the deployment log found in `/opt/seo/logs`.
 
+## Troubleshooting
+Find information on resolving common installation problems in the [provisioning guide](/provisioning/provisioning.md#troubleshooting).
+
 ## Summary and Next Steps
-In this guide, you created an Intel® Smart Edge Open edge node cluster capable of hosting edge applications. You can then optionally install reference implementations from the Intel® Edge Software Hub.
+In this guide, you created an Intel® Smart Edge Open edge node cluster capable of hosting edge applications. You can now install sample applications, or reference implementations downloaded from from the Intel® Developer Catalog
 - Learn how to [onboard a sample application](/application-onboarding/application-onboarding-cmdline.md) to your cluster.
 - Download and run [reference implementations from the Intel® Developer Catalog](https://www.intel.com/content/www/us/en/developer/tools/software-catalog/full-catalog.html?s=Newest&q=%22smart+edge+open%22)
 
