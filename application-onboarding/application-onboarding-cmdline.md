@@ -13,11 +13,11 @@ In this guide, you'll use the Helm command-line interface (CLI) to install an ex
 
 Our example application is an NGINX web server. You can use these instructions to onboard any application from a Helm Chart.
 
-These instructions apply to clusters created by deploying the [Developer Experience Kit]().
+These instructions apply to clusters created by deploying the [Developer Experience Kit](/experience-kits/developer-experience-kit.md).
 
 ### Requirements
 #### Hardware
-- An Intel® Smart Edge Open cluster that has been deployed by running the [Developer Experience Kit](). 
+- An Intel® Smart Edge Open cluster that has been deployed by running the [Developer Experience Kit](/experience-kits/developer-experience-kit.md). 
 
 #### Software
 The Helm v3 CLI must be installed on the system hosting the cluster. For instructions, see the [Helm documentation](https://helm.sh/docs/intro/install/)
@@ -223,8 +223,8 @@ docker login <docker account>
 
 ```
 
-If you're unable to resolve your issues, you can post to the [Support Forum](). 
+If you're unable to resolve your issues, you can open an [issue](https://github.com/smart-edge-open/open-developer-experience-kits/issues) on GitHub.
 
 ### Summary
 
-In this guide, you learned how to install and uninstall an application on a single-node cluster created by deploying the [Developer Experience Kit](). 
+In this guide, you learned how to install and uninstall an application on a single-node cluster created by deploying the [Developer Experience Kit](/experience-kits/developer-experience-kit.md). 

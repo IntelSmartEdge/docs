@@ -37,7 +37,7 @@ The Developer Experience Kit installs Kubernetes and the following building bloc
 [Topology Manager](/components/resource-management/topology-manager.md) | Coordinates the resources allocated to a workload |
 [Core Pinning](/components/resource-management/core-pinning.md) | Dedicated CPU core for workload |
 
-For information on the versions installed, see the Developer Experience Kit [release notes](/release-notes/release-notes-se-open-DEK-21-09.md#package-versions)
+For information on the versions installed, see the Developer Experience Kit [release notes](https://github.com/smart-edge-open/docs/blob/main/release-notes/release-notes-se-open-DEK-21-09.md#package-versions)
 
 ## Get Started
 The instructions below walk you through provisioning the operating system and Developer Experience Kit on a target system. After completing these instructions, you will have created a single edge node cluster capable of hosting edge applications. You can then optionally install reference implementations from the Intel® Edge Software Hub.
