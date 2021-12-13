@@ -169,7 +169,7 @@ See the [Default Provisioning Scenario](#default-provisioning-scenario) for the 
 Generate a new configuration file as described in the [Configuration File Generation](#configuration-file-generation) section:
 
 ```bash
-[Provisioning System] # ./dek_provision.py --init-config.yml > custom.yml
+[Provisioning System] # ./dek_provision.py --init-config > custom.yml
 ```
 
 <a id="custom-artifacts-building"></a>
