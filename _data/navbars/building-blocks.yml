@@ -1,9 +1,11 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2021 Intel Corporation
 title: "Building Blocks (Open)"
 path: /building-blocks/
 order: 4
 section:
-    - title: Core Pinning
-      path: /docs/components/resource-management/core-pinning
+    - title: CPU Manager
+      path: /docs/components/resource-management/cpu-manager
       meta_title: 
       meta_description: 
       
@@ -17,7 +19,6 @@ section:
       meta_title: 
       meta_description: 
       
-    #- title: SRIOV
     - title: SR-IOV Network Operator
       path: /docs/components/networking/sriov-network-operator
       meta_title: 

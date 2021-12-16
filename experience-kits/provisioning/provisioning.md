@@ -24,17 +24,18 @@ Copyright (c) 2021 Intel Corporation
   * [Configuration File Generation](#configuration-file-generation)
   * [Configuration File Summary](#configuration-file-summary)
   * [Experience Kit Configuration](#experience-kit-configuration)
-* [GitHub Credentials](#github-credentials)
-* [Docker Pull Rate Limit](#docker-pull-rate-limit)
-  * [Registry Mirror](#registry-mirror)
+  * [GitHub Credentials](#github-credentials)
+  * [Docker Pull Rate Limit](#docker-pull-rate-limit)
+  * [Docker registry Mirror](#registry-mirror)
   * [Docker Hub Credentials](#docker-hub-credentials)
+  * [Secure Boot and TPM](#secure-boot-and-tpm)
 * [Troubleshooting](#troubleshooting)
 
 ## Overview
 
 The Intel® Smart Edge Open automated provisioning process relies on the [Intel® Edge Software
 Provisioner](https://github.com/intel/Edge-Software-Provisioner) (ESP). It provides a method of
-automatic operating system installation and the Intel® Smart Edge Open cluster deployment.
+installation operating system automatically and the Intel® Smart Edge Open cluster deployment.
 
 The Developer Experience Kit provides the `dek_provision.py` command-line utility, using the
 Intel® Edge Software Provisioner toolchain to deliver a smooth installation experience.
@@ -111,18 +112,47 @@ To flash the installation image onto the flash drive, insert the drive into a US
 run the following command:
 
 ```Shell.bash
-[Provisioning System] # ./esp/flashusb.sh --image ./out/SEO_DEK-efi.img --bios efi
+[Provisioning System] # lsblk
+
+NAME                           MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+loop0                            7:0    0 31.1M  1 loop /snap/snapd/10707
+loop1                            7:1    0 69.9M  1 loop /snap/lxd/19188
+loop2                            7:2    0 55.4M  1 loop /snap/core18/1944
+sda                              8:0    0  1.8T  0 disk 
+├─sda1                           8:1    0  512M  0 part /boot/efi
+├─sda2                           8:2    0    1G  0 part /boot
+└─sda3                           8:3    0  1.8T  0 part 
+  ├─ubuntu--vg-ubuntu--lv-real 253:0    0  880G  0 lvm  
+  │ ├─ubuntu--vg-ubuntu--lv    253:1    0  880G  0 lvm  /
+  │ └─ubuntu--vg-clean         253:3    0  880G  0 lvm  
+  └─ubuntu--vg-clean-cow       253:2    0  400G  0 lvm  
+    └─ubuntu--vg-clean         253:3    0  880G  0 lvm  
+sdb                              8:16   0  1.8T  0 disk 
+sdc                              8:32   1 57.3G  0 disk 
+├─sdc1                           8:33   1  1.1G  0 part 
+├─sdc2                           8:34   1  3.9M  0 part 
+└─sdc3                           8:35   1 56.2G  0 part 
 ```
 
-The command should present an interactive menu allowing the selection of the destination device. You can also use the
-`--dev` option to explicitly specify the device.
+The command should list all available block devices. Check which one is the inserted USB drive e.g. "/dev/sdc"
+and run the following command:
 
+```Shell.bash
+[Provisioning System] # ./dek_flash.py -d <usb_drive>
+```
+
+The script should present an interactive menu allowing the selection of a certain profile to flash. In case the script cannot determine a specific bios type from default or provided configuration file, it will also give an option to select legacy "bios" or "efi" type.
+
+After acknowledging that everything is set up correctly by the user, the flashing process will start.
 
 <a id="default-system-installation"></a>
 #### System Installation
 
 Begin the installation by inserting the flash drive into the target system. Reboot the system, and enter the BIOS to
 boot from the installation media.
+
+
+> NOTE: Developer Experience Kit does not support provisioning with Secure Boot enabled, however, Secure Boot can be enabled on reference platform while provisioning. Please refer to [Secure Boot and TPM](#secure-boot-and-tpm).
 
 ##### Log Into the System After Reboot
 
@@ -214,7 +244,7 @@ this command, the utility prints an experience kit default configuration in the 
 has to be redirected to a file of choice to keep it for further use:
 
 ```bash
-[Provisioning System] # ./dek_provision.py --init-config.yml > custom.yml
+[Provisioning System] # ./dek_provision.py --init-config > custom.yml
 ```
 
 The operator can then modify the file to adjust needed options. To instruct the provisioning utility to use the custom
@@ -262,7 +292,7 @@ provided by the experience kit, so there is no need to adjust them in the
 The operator-provided files specified in the `sideload` list are read from a local location, copied to the
 provisioning artifacts, and finally to the provisioned system.
 
-## GitHub Credentials
+### GitHub Credentials
 
 The access to some of the experience kits may be limited and controlled using git credentials.
 In such a case, the operator has to provide these credentials to the provisioning script.
@@ -296,12 +326,12 @@ work, and eventually, it is the operator's responsibility to provide the credent
 The scenario in which different repositories can be accessed using different credentials is currently not
 supported. All the repositories must be either public or available for the specific user.
 
-## Docker Pull Rate Limit
+### Docker Pull Rate Limit
 
 It is possible to use local Docker registry mirrors or Docker Hub
 credentials to mitigate the [Docker pull rate limit](https://docs.docker.com/docker-hub/download-rate-limit/) consequences.
 
-### Registry Mirror
+#### Docker Registry Mirror
 
 It is the operator's responsibility to provide a working Docker registry mirror. When it is up and running, its URL can
 be provided to the provisioning script.
@@ -331,7 +361,7 @@ It is important to note that the provisioning script won't configure the provisi
 mirrors. It is the operator's responsibility to set it up. The script only takes care of the configuration of the
 installer and the provisioned system.
 
-### Docker Hub Credentials
+#### Docker Hub Credentials
 
 The provisioning script provides a possibility to specify Docker Hub credentials to be used by the installer when
 pulling images from Docker Hub.
@@ -359,6 +389,39 @@ The second method is to use the Docker Hub credentials options of the provisioni
 ```
 
 Only the installer will use these credentials. They won't affect the provisioning and the provisioned systems.
+
+### Secure Boot and TPM
+The Developer Experience Kit supports switching on Secure Boot and TPM feature on reference platform. This can be done with
+configuration file. It is disabled by default.
+
+Secure Boot configuration is a part of a profile. Example of configuration file section switching on secure boot for
+a given profile.
+```yml
+profiles:
+  - name: Smart_Edge_Open_Developer_Experience_Kits
+    url: https://github.com/smart-edge-open/profiles.git
+    branch: main
+    scenario: single-node
+    experience_kit:
+      url: https://github.com/smart-edge-open/open-developer-experience-kits.git
+      branch: main
+      deployment: dek
+    controlplane_mac: ''
+    account:
+      username: smartedge-open
+      password: smartedge-open
+
+    # Secure boot and trusted media platform options.
+    bmc:
+      secure_boot: true
+      tpm: true
+      address: '192.168.1.111'
+      user: 'root'
+      password: 'password'
+```
+
+Provisioning machine has to have access to the out-of-band BMC interface of provisioned machine. It is necessary
+to provide BMC address together with user and password.
 
 ## Troubleshooting
 
@@ -397,6 +460,23 @@ Install `docker-compose` tool according to the official instruction:
 [Install Docker Compose](https://docs.docker.com/compose/install/).
 
 
+### Failed to confirm that Docker is configured correctly
+
+#### Problem
+
+Basic Docker commands have failed to confirm that Docker is installed or has Internet connectivity.
+
+#### Solution
+
+Verify that both Docker and Docker Compose are installed. See the official Docker documentation for [Docker](https://docs.docker.com/engine/install/) and [Docker Compose](https://docs.docker.com/compose/install/) installation.
+
+Verify network connection. If using proxy, set up proxy for following Docker components:
+* [Docker cli](https://docs.docker.com/engine/reference/commandline/cli/#automatic-proxy-configuration-for-containers)
+* [Docker daemon](https://docs.docker.com/config/daemon/systemd/#httphttps-proxy)
+
+To investigate further, run provided failing command manually.
+
+
 ### Installation image couldn't be found in the expected location
 
 #### Problem
@@ -422,3 +502,24 @@ rebuild.
 ```Shell.bash
 [Provisioning System] # ./dek_provision.py --cleanup […]
 ```
+
+### ESP script failed
+
+#### Problem
+
+One of the following error messages is displayed, and the execution of a provisioning script stops:
+
+```text
+ERROR: ESP script failed: build.sh
+ERROR: ESP script failed: makeusb.sh
+ERROR: ESP script failed: run.sh
+```
+
+#### Solution
+
+Retry the build attempt by rerunning the same provisioning command with the `--cleanup` flag added:
+
+```Shell.bash
+[Provisioning System] # ./dek_provision.py --cleanup […]
+```
+If it doesn't help, you may inspect the ESP logs, typically located in the ./esp/builder.log file.

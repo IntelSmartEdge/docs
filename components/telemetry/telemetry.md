@@ -63,7 +63,7 @@ profiles:
 
 ### Collectd
 
-Collectd is a daemon/collector enabling the collection of hardware metrics from computers and network equipment. It provides support for Collectd plugins, which extends its functionality for specific metrics collection such as Intel® RDT, Intel PMU, and ovs-dpdk. The metrics collected are exposed to the Prometheus monitoring tool via the [CollectdExporter](https://github.com/prometheus/collectd_exporter) sidecar. In Intel® Smart Edge Open, Collectd is supported with the help of the OPNFV Barometer project - using its Docker image and available plugins. As part of the Intel® Smart Edge Open release, a Collectd plugin for Intel® FPGA Programmable Acceleration Card (Intel® FPGA PAC) N3000 telemetry is now available from Intel® Smart Edge Open (power and temperature telemetry). In Intel® Smart Edge Open, the Collectd pod is deployed as a K8s Daemonset on every available Edge Node, and it is deployed as a privileged container running in host network.
+Collectd is a daemon/collector enabling the collection of hardware metrics from computers and network equipment. It provides support for Collectd plugins, which extends its functionality for specific metrics collection such as Intel® PMU, and ovs-dpdk. The metrics collected are exposed to the Prometheus monitoring tool via the [CollectdExporter](https://github.com/prometheus/collectd_exporter) sidecar. In Intel® Smart Edge Open, Collectd is supported with the help of the OPNFV Barometer project - using its Docker image and available plugins. In Intel® Smart Edge Open, the Collectd pod is deployed as a K8s Daemonset on every available Edge Node, and it is deployed as a privileged container running in host network.
 
 In DEK metrics obtained by NodeExporter are subject to `collectd_<metric_name>` pattern.
 
@@ -80,11 +80,10 @@ The various CEEK flavors are enabled for CollectD deployment as follows:
 | load             | load              | load              | load               |
 | hugepages        | hugepages         | hugepages         | hugepages          |
 | intel_pmu        | intel_pmu         | intel_pmu         | intel_pmu          |
-| intel_rdt        | intel_rdt         | intel_rdt         | intel_rdt          |
 | ipmi             | ipmi              | ipmi              | ipmi               |
 | network          | network           | network           | network            |
 |                  | ovs_pmd_stats     | ovs_stats         | ovs_pmd_stat       |
-|                  | ovs_stats         | fpga_telemetry    |                    |
+|                  | ovs_stats         |                   |                    |
 
 #### Specifying logging threshold
 

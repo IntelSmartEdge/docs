@@ -35,45 +35,40 @@ Before onboarding an application, check the server deployment status and verify 
 
 ```shell
 $ kubectl get pods -A
-NAMESPACE                NAME                                                        READY   STATUS              RESTARTS   AGE
-harbor                   harbor-app-harbor-chartmuseum-7df97c958d-k4zvr              1/1     Running             0          48m
-harbor                   harbor-app-harbor-clair-59c867fcb9-cmv42                    2/2     Running             1          48m
-harbor                   harbor-app-harbor-core-74457d7998-87x7c                     1/1     Running             1          48m
-harbor                   harbor-app-harbor-database-0                                1/1     Running             0          48m
-harbor                   harbor-app-harbor-jobservice-6c9ffddc7c-f275d               1/1     Running             3          48m
-harbor                   harbor-app-harbor-nginx-57dff4794c-8rkqp                    1/1     Running             0          48m
-harbor                   harbor-app-harbor-notary-server-6f5fc7645b-bjj57            1/1     Running             3          48m
-harbor                   harbor-app-harbor-notary-signer-55886d599d-lc5hp            1/1     Running             6          48m
-harbor                   harbor-app-harbor-portal-6f6b56bd68-nh65f                   1/1     Running             0          48m
-harbor                   harbor-app-harbor-redis-0                                   1/1     Running             0          48m
-harbor                   harbor-app-harbor-registry-7c956f55b5-5s2rf                 2/2     Running             0          48m
-harbor                   harbor-app-harbor-trivy-0                                   1/1     Running             0          48m
-kube-system              calico-kube-controllers-cf4844b67-ltt6q                     1/1     Running             0          48m
-kube-system              calico-node-wm7d2                                           1/1     Running             0          48m
-kube-system              coredns-558bd4d5db-mt47m                                    1/1     Running             0          48m
-kube-system              coredns-558bd4d5db-vzwlg                                    1/1     Running             0          48m
-kube-system              etcd-puzz2                                                  1/1     Running             0          48m
-kube-system              kube-apiserver-puzz2                                        1/1     Running             0          48m
-kube-system              kube-controller-manager-puzz2                               1/1     Running             0          48m
-kube-system              kube-multus-ds-amd64-qt6p6                                  1/1     Running             0          32m
-kube-system              kube-proxy-kplxg                                            1/1     Running             0          48m
-kube-system              kube-scheduler-puzz2                                        1/1     Running             0          48m
-kubernetes-dashboard     dashboard-metrics-scraper-665b55f67d-bgpdt                  1/1     Running             0          5m49s
-kubernetes-dashboard     kubernetes-dashboard-5b5bd8dd4c-6l8zl                       1/1     Running             0          5m49s
-smartedge-system         nfd-release-node-feature-discovery-master-894c57d89-2n9bz   1/1     Running             0          14m
-smartedge-system         nfd-release-node-feature-discovery-worker-5vmm7             1/1     Running             0          14m
-sriov-network-operator   network-resources-injector-vtkpd                            1/1     Running             0          6m5s
-sriov-network-operator   operator-webhook-9w9t4                                      1/1     Running             0          6m5s
-sriov-network-operator   sriov-network-config-daemon-v99rw                           0/3     ContainerCreating   0          5m57s
-sriov-network-operator   sriov-network-operator-6898664bff-jzld7                     1/1     Running             0          7m48s
-telemetry                cadvisor-92xpr                                              2/2     Running             0          30m
-telemetry                collectd-xgcfq                                              3/3     Running             0          30m
-telemetry                grafana-86b89d6bcc-k9bj6                                    3/3     Running             0          28m
-telemetry                prometheus-node-exporter-jtsrr                              1/1     Running             3          30m
-telemetry                prometheus-server-b5c7b657d-zx2pn                           3/3     Running             0          30m
-telemetry                statsd-exporter-86586dbf79-sqf56                            2/2     Running             0          30m
-telemetry                telemetry-node-certs-jjt6f                                  1/1     Running             0          30m
-
+NAMESPACE                NAME                                                         READY   STATUS    RESTARTS   AGE
+harbor                   harbor-app-chartmuseum-6b78696d68-qcq7l                      1/1     Running   1          31d
+harbor                   harbor-app-core-5ccc7dd7b7-gm7vz                             1/1     Running   4          31d
+harbor                   harbor-app-database-0                                        1/1     Running   1          31d
+harbor                   harbor-app-jobservice-5dc5c7cd67-b9j2w                       1/1     Running   7          31d
+harbor                   harbor-app-nginx-65dfc4d4b9-8ngk8                            1/1     Running   2          31d
+harbor                   harbor-app-notary-server-697cf7b747-khnhl                    1/1     Running   1          31d
+harbor                   harbor-app-notary-signer-59957c8b64-6t9pt                    1/1     Running   1          31d
+harbor                   harbor-app-portal-88895f59f-2srwb                            1/1     Running   1          31d
+harbor                   harbor-app-redis-0                                           1/1     Running   1          31d
+harbor                   harbor-app-registry-6bf6c79db8-ks7c8                         2/2     Running   2          31d
+harbor                   harbor-app-trivy-0                                           1/1     Running   1          31d
+kube-system              calico-kube-controllers-6b59cd85f8-jqcz4                     1/1     Running   1          31d
+kube-system              calico-node-jxbl8                                            1/1     Running   1          31d
+kube-system              coredns-558bd4d5db-8pbd6                                     1/1     Running   1          31d
+kube-system              coredns-558bd4d5db-r4khd                                     1/1     Running   1          31d
+kube-system              etcd-intel                                                   1/1     Running   1          31d
+kube-system              kube-apiserver-intel                                         1/1     Running   1          31d
+kube-system              kube-controller-manager-intel                                1/1     Running   1          31d
+kube-system              kube-multus-ds-amd64-89dmz                                   1/1     Running   1          30d
+kube-system              kube-proxy-f72h9                                             1/1     Running   1          31d
+kube-system              kube-scheduler-intel                                         1/1     Running   1          31d
+smartedge-system         nfd-release-node-feature-discovery-master-854696fc76-2wwgh   1/1     Running   1          30d
+smartedge-system         nfd-release-node-feature-discovery-worker-jx9t8              1/1     Running   1          30d
+sriov-network-operator   network-resources-injector-c5cqk                             1/1     Running   1          30d
+sriov-network-operator   operator-webhook-flrbx                                       1/1     Running   1          30d
+sriov-network-operator   sriov-network-config-daemon-rn9tg                            3/3     Running   3          30d
+sriov-network-operator   sriov-network-operator-57f857f94c-b8zdh                      1/1     Running   1          30d
+telemetry                cadvisor-vvrk8                                               2/2     Running   2          30d
+telemetry                collectd-jjld8                                               3/3     Running   3          30d
+telemetry                grafana-756ffcb68c-x62nt                                     3/3     Running   3          30d
+telemetry                prometheus-node-exporter-vqhgf                               1/1     Running   1          30d
+telemetry                prometheus-server-5b469cc688-ft85j                           3/3     Running   3          30d
+telemetry                statsd-exporter-cfbd5bf65-j2ppt                              2/2     Running   2          30d
 ```
 
 <!-- * Prepare your target system. -->

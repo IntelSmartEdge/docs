@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright (c) 2021 Intel Corporation
+-->
 {% if include.lightbox == 'true' %}
 <figure data-uk-lightbox="animation: slide">
     <a class="uk-inline" href="{% if include.img contains 'http' %}{{ include.img }}{% else %}{{ site.uploads | absolute_url }}{{ include.img }}{% endif %}"{% if include.caption %} caption="{{ include.caption }}"{% endif %}>
