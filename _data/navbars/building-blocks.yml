@@ -4,8 +4,8 @@ title: "Building Blocks (Open)"
 path: /building-blocks/
 order: 4
 section:
-    - title: Core Pinning
-      path: /docs/components/resource-management/core-pinning
+    - title: CPU Manager
+      path: /docs/components/resource-management/cpu-manager
       meta_title: 
       meta_description: 
       

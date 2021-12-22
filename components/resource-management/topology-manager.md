@@ -15,12 +15,12 @@ Multi-core and Multi-Socket commercial, off-the-shelf (COTS) systems are widely 
 
 Let us look at an Analytics application that is consuming multiple, high-definition video streams and executing an analytics algorithm. This analytics application pod is compute-, memory-, and network performance-sensitive. To improve performance of the analytics application on a typical dual-socket or multi-NUMA node system, an Orchestrator like Kubernetes needs to place the analytics pod on the same NUMA node where the Network Card is located and the memory is allocated. Without the topology manager, the deployment may be like that shown in the diagram below, where the analytics application is on NUMA 1 and the Device is on NUMA 2. This leads to poor and unreliable performance.
 
-![Pod deployment issue without Topology Manager](tm-images/tm1.png)
+![Pod deployment issue without Topology Manager](images/tm1.png)
 _Figure - Pod deployment issue without Topology Manager_
 
 With Topology manager, this issue is addressed and the analytics pod placement will be such that the resource locality is maintained.
 
-![Pod deployment with Topology Manager](tm-images/tm2.png)
+![Pod deployment with Topology Manager](images/tm2.png)
 _Figure - Pod deployment with Topology Manager_
 
 ## How To

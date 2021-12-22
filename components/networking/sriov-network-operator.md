@@ -41,17 +41,28 @@ Images for Operator are downloaded from Openshift repository and stored in local
 
 ### Configuration
 #### SR-IOV Network Operator
-At the file:  `inventory/default/group_vars/all/10-default.yml`
-the SR-IOV NIC's configured:
+
+The SR-IOV NIC's are preconfigured, i.e. currently the list of network interfaces is hard coded (for supported HW platform).
+Users who are installing the DEK on a system with a different NIC's must update manually the list above with the related interface names in the ESP provisioning configuration file (before Smart Edge Open deployment):
+
+- generate a custom configuration file with `./dek_provision.py --init-config > custom.yml`
+- edit generated file and set `cvl_sriov_nics` under `group vars: all:`, e.g.
+
 ```yaml
-cvl_sriov_nics:
-  c0p0: "eno12399"
-  c0p1: "eno12409"
-  c1p0: "ens5f0"
-  c1p1: "ens5f1"
+profiles:
+  - name: SEO_DEK
+    [...]
+    group_vars:
+      groups:
+        all:
+          cvl_sriov_nics:
+            Debian:
+              c0p0: "<interface name>"
+              c0p1: "<interface name>"
+              c1p0: "<interface name>"
+              c1p1: "<interface name>"
 ```
-Currently this list is hard coded.
-Users who are installing the DEK on a system with a different NIC's must update manually the list above with the related interface names.
+
 During deployment users can use a flag (in the same yml file) which allows for enabling and disabling the NIC's configuration: "sriov_network_operator_configure_enable".
 
 Each NIC interface in the list above is a physical function of a SR-IOV NIC and configured in the same yml file in:

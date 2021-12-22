@@ -1,0 +1,59 @@
+/' 
+SPDX-License-Identifier: Apache-2.0
+Copyright (c) 2021 Intel Corporation 
+'/
+
+@startuml
+actor       Admin       as Admin
+actor       User       as User
+box "Caching Service"
+participant PCCS
+participant Cache
+end box
+
+box "Intel Servers" #LightBlue
+participant IntelPCS
+end box
+
+Admin -> PCCS : Deploy/Configure(API Key)
+
+note right of PCCS
+Along with API Key meant for access to Intel PCS, hash
+of user-password & admin-password is also configured
+here. This user-token(or user-password) is configured
+on all edge nodes that will use this PCCS.
+end note
+
+Admin -> EdgeNode : Install PCKIDRetrievalTool 
+
+EdgeNode -> PCCS : Provision(User-token + Provisioning Data)
+
+note right of EdgeNode
+Access to the service is controlled using the user-token.
+Provisioning data :
+1.) Platform Provisioning ID(PPID)
+2.) CPU Security Version Number(CPUSVN)
+3.) Provisioning Certification Enclave Security Version Number(PCESVN)
+4.) Provisioning Certification Enclave ID(PCEID)
+5.) Quoting Enclave ID(QEID)
+end note
+
+PCCS -> Cache : Request (API Key + Platform Identity)
+
+note left of PCCS
+First the platform is searched for in the Cache. If found,
+the PCK cert & issuer chain can be returned from there. Else
+the PCS is reached out and details obtained from there. Then
+the data is also retained in the cache before a response is
+sent. Note that the cache filling option decides when data is
+fetched & fed into the cache. 
+end note
+
+PCCS -> IntelPCS : Request (API Key + Platform Identity)
+IntelPCS -> PCCS : Reponse (Certificates + Endorsement)
+PCCS -> Cache : Cache Data (Certificates + Endorsement)
+PCCS -> EdgeNode : Response (PCK cert + PCK certificate issuer chain)
+
+User -> EdgeNode : Launch SGX Enclave
+EdgeNode --> EdgeNode : Run Workload
+@enduml

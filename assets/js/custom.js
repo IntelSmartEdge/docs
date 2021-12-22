@@ -1,4 +1,6 @@
-
+/* SPDX-License-Identifier: Apache-2.0
+ * Copyright (c) 2021 Intel Corporation
+ */
 function formsubmit() {
     var opurl = 'https://openness-staging.onsumaye.com/index.php?option=com_products&task=githubpages_release_request';
     //var opurl='https://openness.localhost.com/index.php?option=com_products&task=githubpages_release_request';
