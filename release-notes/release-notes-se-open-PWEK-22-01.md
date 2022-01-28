@@ -17,7 +17,7 @@ Copyright (c) 2022 Intel Corporation
 The 22.01 release of Intel® Smart Edge Open provides edge developers with the Private Wireless Experience Kit as a cloud-native platform for delivering AI, video, and other edge services together with network services with optimized performance on Intel edge platforms.
 
 This document describes the hardware and software configuration used to test the experience kit. For architecture and installation information, see the 
-[Private Wireless Experience Kit documentation](/experience-kits/private-wireless-experience-kit-all-in-one.md).
+[Private Wireless Experience Kit documentation](/experience-kits/private-wireless-experience-kit.md).
 
 # New in the release
 
