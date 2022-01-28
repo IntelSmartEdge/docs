@@ -24,11 +24,10 @@ Copyright (c) 2021 Intel Corporation
   * [Configuration File Generation](#configuration-file-generation)
   * [Configuration File Summary](#configuration-file-summary)
   * [Experience Kit Configuration](#experience-kit-configuration)
-  * [GitHub Credentials](#github-credentials)
-  * [Docker Pull Rate Limit](#docker-pull-rate-limit)
-  * [Docker registry Mirror](#registry-mirror)
+* [GitHub Credentials](#github-credentials)
+* [Docker Pull Rate Limit](#docker-pull-rate-limit)
+  * [Registry Mirror](#registry-mirror)
   * [Docker Hub Credentials](#docker-hub-credentials)
-  * [Secure Boot and TPM](#secure-boot-and-tpm)
 * [Troubleshooting](#troubleshooting)
 
 ## Overview
@@ -37,7 +36,7 @@ The Intel® Smart Edge Open automated provisioning process relies on the [Intel�
 Provisioner](https://github.com/intel/Edge-Software-Provisioner) (ESP). It provides a method of
 installation operating system automatically and the Intel® Smart Edge Open cluster deployment.
 
-The Developer Experience Kit provides the `dek_provision.py` command-line utility, using the
+5G Private Wireless Experience Kit with Integrated RAN the `pwek_aio_provision.py` command-line utility, using the
 Intel® Edge Software Provisioner toolchain to deliver a smooth installation experience.
 
 The provisioning process requires a temporary provisioning system operating on a separate machine
@@ -62,7 +61,7 @@ The default provisioning process consists of the following stages:
 
 Each of the Intel® Smart Edge Open experience kits comes with its provisioning utility tailored to the kit's
 requirements. This script resides in the root directory of an experience kit repository, and its name matches the
-following pattern: `<experience-kit-name-abbreviation>_provision.py`, e.g., `dek_provision.py`.
+following pattern: `<experience-kit-name-abbreviation>_provision.py`, e.g., `pwek_aio_provision.py`.
 
 To be able to run the provisioning utility, clone the chosen experience kit repository. You can checkout the `main`
 branch to access the latest experience kit version or select a specific release. In the second case, it is advised to
@@ -70,8 +69,8 @@ use the provisioning instruction published with the release to avoid incompatibi
 For convenience, you can change the current directory to the directory the kit is cloned to, e.g.:
 
 ```Shell.bash
-[Provisioning System] # git clone https://github.com/smart-edge-open/open-developer-experience-kits.git --branch=smart-edge-open-21.09 ~/dek
-[Provisioning System] # cd ~/dek
+[Provisioning System] # git clone https://github.com/smart-edge-open/private-wireless-experience-kits --recursive --branch=main ~/pwek
+[Provisioning System] # cd ~/pwek
 ```
 
 
@@ -91,18 +90,18 @@ then the [Custom Provisioning Scenario](#custom-provisioning-scenario) should be
 <a id="default-artifacts-building"></a>
 #### Artifacts Building
 
-To build the provisioning services, run the following command from the root directory of the Developer Experience Kit
+To build the provisioning services, run the following command from the root directory of the Private Wireless Experience Kit
 repository. You can also use command-line arguments like `--registry-mirror` to specify some typical options:
 
 ```Shell.bash
-[Provisioning System] # ./dek_provision.py
+[Provisioning System] # ./pwek_aio_provision.py
 ```
 
 <a id="default-services-start-up"></a>
 #### Services Start-Up
 
 ```Shell.bash
-[Provisioning System] # ./dek_provision.py --run-esp-for-usb-boot
+[Provisioning System] # ./pwek_aio_provision.py --run-esp-for-usb-boot
 ```
 
 <a id="default-installation-media-flashing"></a>
@@ -111,6 +110,17 @@ repository. You can also use command-line arguments like `--registry-mirror` to 
 To flash the installation image onto the flash drive, insert the drive into a USB port on the provisioning system and
 run the following command:
 
+##### - The first way to flash the installation image onto the flash drive:
+```Shell.bash
+[Provisioning System] # cd esp/
+[Provisioning System] # ./flashusb.sh --image ../out/Smart_Edge_Open_Private_Wireless_Experience_Kit-efi.img --bios efi
+```
+
+The command should present an interactive menu allowing the selection of the destination device. You can also use the
+`--dev` option to explicitly specify the device.
+
+##### - The second way to flash the installation image onto the flash drive:
+To flash the installation image onto the flash drive, insert the drive into a USB port on the provisioning system and run the following command:
 ```Shell.bash
 [Provisioning System] # lsblk
 
@@ -118,32 +128,32 @@ NAME                           MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
 loop0                            7:0    0 31.1M  1 loop /snap/snapd/10707
 loop1                            7:1    0 69.9M  1 loop /snap/lxd/19188
 loop2                            7:2    0 55.4M  1 loop /snap/core18/1944
-sda                              8:0    0  1.8T  0 disk 
+sda                              8:0    0  1.8T  0 disk
 ├─sda1                           8:1    0  512M  0 part /boot/efi
 ├─sda2                           8:2    0    1G  0 part /boot
-└─sda3                           8:3    0  1.8T  0 part 
-  ├─ubuntu--vg-ubuntu--lv-real 253:0    0  880G  0 lvm  
+└─sda3                           8:3    0  1.8T  0 part
+  ├─ubuntu--vg-ubuntu--lv-real 253:0    0  880G  0 lvm
   │ ├─ubuntu--vg-ubuntu--lv    253:1    0  880G  0 lvm  /
-  │ └─ubuntu--vg-clean         253:3    0  880G  0 lvm  
-  └─ubuntu--vg-clean-cow       253:2    0  400G  0 lvm  
-    └─ubuntu--vg-clean         253:3    0  880G  0 lvm  
-sdb                              8:16   0  1.8T  0 disk 
-sdc                              8:32   1 57.3G  0 disk 
-├─sdc1                           8:33   1  1.1G  0 part 
-├─sdc2                           8:34   1  3.9M  0 part 
-└─sdc3                           8:35   1 56.2G  0 part 
+  │ └─ubuntu--vg-clean         253:3    0  880G  0 lvm
+  └─ubuntu--vg-clean-cow       253:2    0  400G  0 lvm
+    └─ubuntu--vg-clean         253:3    0  880G  0 lvm
+sdb                              8:16   0  1.8T  0 disk
+sdc                              8:32   1 57.3G  0 disk
+├─sdc1                           8:33   1  1.1G  0 part
+├─sdc2                           8:34   1  3.9M  0 part
+└─sdc3                           8:35   1 56.2G  0 part
 ```
-
-The command should list all available block devices. Check which one is the inserted USB drive e.g. "/dev/sdc"
-and run the following command:
-
+The command should list all available block devices. Check which one is the inserted USB drive e.g. "/dev/sdc" and run the following command:
 ```Shell.bash
-[Provisioning System] # ./dek_flash.py -d <usb_drive>
+[Provisioning System] # cd esp/
+[Provisioning System] # USBBLK="/dev/sdc"
+[Provisioning System] # MBR_LOCATION="data/usr/share/nginx/html/mbr.bin"
+[Provisioning System] # IMAGE="../out/Smart_Edge_Open_Private_Wireless_Experience_Kit-efi.img"
+[Provisioning System] # USB_IMG_SIZE=$(du -b ${IMAGE} | awk '{print $1}')
+[Provisioning System] # dd if=${IMAGE} status=none | pv -s ${USB_IMG_SIZE} | dd obs=1M oflag=direct status=none of=${USBBLK}
+[Provisioning System] # dd bs=440 count=1 conv=notrunc status=none if=${MBR_LOCATION} of=${USBBLK}
 ```
-
-The script should present an interactive menu allowing the selection of a certain profile to flash. In case the script cannot determine a specific bios type from default or provided configuration file, it will also give an option to select legacy "bios" or "efi" type.
-
-After acknowledging that everything is set up correctly by the user, the flashing process will start.
+###### Note: /dev/sdc is your usb flash drive. Use command ”lsblk“ to find it.
 
 <a id="default-system-installation"></a>
 #### System Installation
@@ -165,7 +175,7 @@ When logging in using remote console or SSH, a message will be displayed that in
 
 Three statuses are possible:
 - `in progress` - deployment is in progress
-- `deployed` - deployment was successful - Developer Experience Kit cluster is ready
+- `deployed` - deployment was successful - Private Wireless Experience Kit cluster is ready
 - `failed` - error occurred during the deployment
 
 Check the installation logs by running the following command:
@@ -179,7 +189,7 @@ Alternatively, you can inspect the deployment log found in `/opt/seo/logs`.
 #### Services Shut Down
 
 ```
-[Provisioning System] # ./dek_provision.py --stop-esp
+[Provisioning System] # ./pwek_aio_provision.py --stop-esp
 ```
 
 ### Custom Provisioning Scenario
@@ -196,7 +206,7 @@ See the [Default Provisioning Scenario](#default-provisioning-scenario) for the 
 Generate a new configuration file as described in the [Configuration File Generation](#configuration-file-generation) section:
 
 ```bash
-[Provisioning System] # ./dek_provision.py --init-config > custom.yml
+[Provisioning System] # ./pwek_aio_provision.py --init-config > custom.yml
 ```
 
 <a id="custom-artifacts-building"></a>
@@ -207,7 +217,7 @@ The provisioning artifacts are built in the same way as in the case of the
 the `--config` command-line option:
 
 ```bash
-[Provisioning System] # ./dek_provision.py --config=custom.yml
+[Provisioning System] # ./pwek_aio_provision.py --config=custom.yml
 ```
 
 ## Provisioning Configuration
@@ -231,7 +241,7 @@ using the command-line options only.
 For the description of the options available for the command line use, see the provisioning utility help:
 
 ```
-[Provisioning System] # ./dek_provision.py -h
+[Provisioning System] # ./pwek_aio_provision.py -h
 ```
 
 ### Configuration File Generation
@@ -241,14 +251,14 @@ this command, the utility prints an experience kit default configuration in the 
 has to be redirected to a file of choice to keep it for further use:
 
 ```bash
-[Provisioning System] # ./dek_provision.py --init-config > custom.yml
+[Provisioning System] # ./pwek_aio_provision.py --init-config > custom.yml
 ```
 
 The operator can then modify the file to adjust needed options. To instruct the provisioning utility to use the custom
 configuration file, use the `--config` option, e.g.:
 
 ```
-[Provisioning System] # ./dek_provision.py --config=custom.yml
+[Provisioning System] # ./pwek_aio_provision.py --config=custom.yml
 ```
 
 ### Configuration File Summary
@@ -266,7 +276,7 @@ objects and the list of operator-provided files through the `sideload` list:
 
 ```
 profiles:
-  - name: Smart_Edge_Open_Developer_Experience_Kits
+  - name: Smart_Edge_Open_Private_Wireless_Experience_Kit
 […]
     group_vars:
       groups:
@@ -306,14 +316,14 @@ github:
 The second method is to use the GitHub credentials options of the provisioning script:
 
 ```bash
-[provisioning system] # ./dek_provision.py -h
+[provisioning system] # ./pwek_aio_provision.py -h
 […]
   --github-user NAME    NAME of the GitHub user to be used to clone required Smart Edge Open repositories
   --github-token VALUE  GitHub token to be used to clone required Smart Edge Open repositories
 […]
 ```
 
-The credentials are used during the provisioning script (e.g., `dek_provision.py`) execution and other contexts like
+The credentials are used during the provisioning script (e.g., `pwek_aio_provision.py`) execution and other contexts like
 provisioning services containers and installer system, so the operator has to provide them explicitly.
 
 The script will try to verify if it can access all the repositories specified through the configuration file and fail
@@ -328,7 +338,7 @@ supported. All the repositories must be either public or available for the speci
 It is possible to use local Docker registry mirrors or Docker Hub
 credentials to mitigate the [Docker pull rate limit](https://docs.docker.com/docker-hub/download-rate-limit/) consequences.
 
-#### Docker Registry Mirror
+#### Registry Mirror
 
 It is the operator's responsibility to provide a working Docker registry mirror. When it is up and running, its URL can
 be provided to the provisioning script.
@@ -344,7 +354,7 @@ docker:
 The second method is to use the `--registry-mirror` option of the provisioning script:
 
 ```bash
-[provisioning system] # ./dek_provision.py -h
+[provisioning system] # ./pwek_aio_provision.py -h
 […]
   --registry-mirror URL
                         add the URL to the list of local Docker registry mirrors
@@ -376,7 +386,7 @@ docker:
 The second method is to use the Docker Hub credentials options of the provisioning script:
 
 ```bash
-[provisioning system] # ./dek_provision.py -h
+[provisioning system] # ./pwek_aio_provision.py -h
 […]
   --dockerhub-user NAME
                         NAME of the user to authenticate with DockerHub during Live System stage
@@ -387,39 +397,6 @@ The second method is to use the Docker Hub credentials options of the provisioni
 
 Only the installer will use these credentials. They won't affect the provisioning and the provisioned systems.
 
-### Secure Boot and TPM
-The Developer Experience Kit supports switching on Secure Boot and TPM feature on reference platform. This can be done with
-configuration file. It is disabled by default.
-
-Secure Boot configuration is a part of a profile. Example of configuration file section switching on secure boot for
-a given profile.
-```yml
-profiles:
-  - name: Smart_Edge_Open_Developer_Experience_Kits
-    url: https://github.com/smart-edge-open/profiles.git
-    branch: main
-    scenario: single-node
-    experience_kit:
-      url: https://github.com/smart-edge-open/open-developer-experience-kits.git
-      branch: main
-      deployment: dek
-    controlplane_mac: ''
-    account:
-      username: smartedge-open
-      password: smartedge-open
-
-    # Secure boot and trusted media platform options.
-    bmc:
-      secure_boot: true
-      tpm: true
-      address: '192.168.1.111'
-      user: 'root'
-      password: 'password'
-```
-
-Provisioning machine has to have access to the out-of-band BMC interface of provisioned machine. It is necessary
-to provide BMC address together with user and password.
-
 ## Troubleshooting
 
 ### Docker has to be installed
@@ -427,7 +404,7 @@ to provide BMC address together with user and password.
 #### Problem
 
 One of the following error messages may appear when you attempt to run the provisioning script (e.g.,
-`dek_provision.py`):
+`pwek_aio_provision.py`):
 
 ```text
 Docker has to be installed on this machine for the provisioning process to succeed. […]
@@ -445,7 +422,7 @@ Install Docker software according to the official instruction:
 
 #### Problem
 
-The following error message appears when you attempt to run the provisioning script (e.g., `dek_provision.py`):
+The following error message appears when you attempt to run the provisioning script (e.g., `pwek_aio_provision.py`):
 
 ```text
 The docker-compose tool has to be installed on this machine for the provisioning process to succeed. […]
@@ -473,12 +450,11 @@ Verify network connection. If using proxy, set up proxy for following Docker com
 
 To investigate further, run provided failing command manually.
 
-
 ### Installation image couldn't be found in the expected location
 
 #### Problem
 
-The following error is displayed when you attempt to run the provisioning script (e.g., `dek_provision.py`):
+The following error is displayed when you attempt to run the provisioning script (e.g., `pwek_aio_provision.py`):
 
 ```text
 ERROR: Installation image couldn't be found in the expected location
@@ -490,14 +466,14 @@ ERROR: Installation image couldn't be found in the expected location
 Retry the build attempt by rerunning the same provisioning command:
 
 ```Shell.bash
-[Provisioning System] # ./dek_provision.py […]
+[Provisioning System] # ./pwek_aio_provision.py […]
 ```
 
 If it doesn't help, retry the build one more time with the `--cleanup` flag added. This option will force the complete
 rebuild.
 
 ```Shell.bash
-[Provisioning System] # ./dek_provision.py --cleanup […]
+[Provisioning System] # ./pwek_aio_provision.py --cleanup […]
 ```
 
 ### ESP script failed
@@ -517,6 +493,6 @@ ERROR: ESP script failed: run.sh
 Retry the build attempt by rerunning the same provisioning command with the `--cleanup` flag added:
 
 ```Shell.bash
-[Provisioning System] # ./dek_provision.py --cleanup […]
+[Provisioning System] # ./pwek_aio_provision.py --cleanup […]
 ```
-If it doesn't help, you may inspect the ESP logs, typically located in the ./esp/builder.log file.
+If it doesn't help, you may inspect the ESP logs, typically located in the ./esp/builder.log file
