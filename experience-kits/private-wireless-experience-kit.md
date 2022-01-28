@@ -173,7 +173,7 @@ The Intel® vRAN Dedicated Accelerator ACC100 Adapter accelerates 5G virtualized
 - Accelerates both 4G and 5G data concurrently.
 - Lowers development cost using commercial off the shelf (COTS) servers.
 - Accommodates space-constrained implementations via a low-profile PCIe* card form factor.
-For more references, see [<b>smartedge-open-acc100</b> ](https://github.com/smart-edge-open/openshift-operator/blob/main/spec/openshift-sriov-fec-operator.md) using ACC100 eASIC in Smart Edge Open: Resource Allocation, and Configuration.
+For more references, see [<b>smartedge-open-acc100</b> ](https://github.com/smart-edge-open/specs/blob/master/doc/building-blocks/enhanced-platform-awareness/smartedge-open-acc100.md) using ACC100 eASIC in Smart Edge Open: Resource Allocation, and Configuration.
 
 #### Hardware BOM
 
