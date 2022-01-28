@@ -131,7 +131,7 @@ The Edge Software Provisioner (ESP) enables ODMs, System Integrators and Develop
 
 5G network functions such as DU and UPF are real-time, time-sensitive applications that require the allocation of dedicated CPU cores.
 
-The example below shows CPU core allocation using the default CPU configuration with hyper-threading enabled and BIOS settings `MADT core enumeration` set to `linear`. See an example configuration below: [Set isolated CPU cores](#set-isolated-CPU-cores)
+The example below shows CPU core allocation using the default CPU configuration with hyper-threading enabled and BIOS settings `MADT core enumeration` set to `linear`. See an example configuration below:
 
 | NUMA |   0    |    1   |   2    |    3   |    4   |    5   |    6   |    7   |    8   |   9    |   10   |   11   |   12   |   13   |   14   |   15   |   16   |   17   |   18    |   19    |   20    |   21    |   ...   |   31    |
 | ---- | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------- | ------- | ------- | ------- | ------- | ------- |
@@ -173,7 +173,7 @@ The Intel® vRAN Dedicated Accelerator ACC100 Adapter accelerates 5G virtualized
 - Accelerates both 4G and 5G data concurrently.
 - Lowers development cost using commercial off the shelf (COTS) servers.
 - Accommodates space-constrained implementations via a low-profile PCIe* card form factor.
-For more references, see [<b>smartedge-open-acc100</b> ](https://github.com/smart-edge-open/specs/blob/main/doc/building-blocks/enhanced-platform-awareness/smartedge-open-acc100.md) using ACC100 eASIC in Smart Edge Open: Resource Allocation, and Configuration.
+For more references, see [<b>smartedge-open-acc100</b> ](https://github.com/smart-edge-open/openshift-operator/blob/main/spec/openshift-sriov-fec-operator.md) using ACC100 eASIC in Smart Edge Open: Resource Allocation, and Configuration.
 
 #### Hardware BOM
 
@@ -824,7 +824,7 @@ Once the application has been deployed, the application pod takes in virtual/rea
 
 In the Private Wireless Experience Kit environment, the UE side will start the visualizer to send request through 5G network, then nginx server in Grafana pod will forward 5G network request to calico network to complete data transfer.
 
-Please follow this link [ITM_Onboard](https://github.com/smart-edge-open/edgeapps/tree/main/applications/wnr-itm-app) to Onboard Wireless Network-Ready Intelligent Traffic Management Application.
+Please follow this link [ITM_Onboard](https://github.com/smart-edge-open/edgeapps/tree/master/applications/wnr-itm-app) to Onboard Wireless Network-Ready Intelligent Traffic Management Application.
 
 ## Troubleshooting
 
@@ -860,7 +860,7 @@ sudo su -
 cd /opt/seo
 ~/.local/bin/pipenv run ./deploy.py -r5g
 ```
-For more details, please refer to [Private Wireless Experience Kit Provisioning](https://github.com/smart-edge-open/docs/blob/main/experience-kits/provisioning/pwek_provisioning.md)
+For more details, please refer to [Private Wireless Experience Kit Provisioning](https://github.com/smart-edge-open/docs/blob/main/experience-kits/provisioning/provisioning_pwek.md)
 
 ## Summary and Next Steps
 
@@ -869,5 +869,5 @@ This guide walked you through deploying the Private Wireless Experience Kit. The
 ### Next Steps
 - Download and install a sample application based on the Intel® Distribution of OpenVINO™ toolkit. 
 [OpenVINO (Open Visual Inference and Neural Network Optimization)](https://github.com/openvinotoolkit/openvino/blob/master/README.md) helps developers and data scientists speed up computer vision workloads, streamline deep learning inference and deployments, and enable easy, heterogeneous execution across Intel® architecture platforms from edge to cloud.
-- Install the [Wireless Network Ready Intelligent Traffic Management reference implementation.](https://github.com/smart-edge-open/edgeapps/blob/main/applications/wnr-itm-app/README.md)
+- Install the [Wireless Network Ready Intelligent Traffic Management reference implementation.](https://github.com/smart-edge-open/edgeapps/blob/master/applications/wnr-itm-app/README.md)
 This reference implementation detects and tracks vehicles and pedestrians using deep learning, and provides the intelligence required to estimate a safety metric for an intersection.
