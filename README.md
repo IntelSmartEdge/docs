@@ -33,7 +33,7 @@ These new edges include the enterprise, locations within the telco infrastructur
 
 Intel® Smart Edge Open offers a set of experience kits customized for the requirements of specific edge locations:
 - The [5G Private
-Wireless Experience Kit with Integrated RAN](https://smart-edge-open.github.io/ido-specs/doc/reference-architectures/smartedge-open-experience-kit-pwek-all-in-one)
+Wireless Experience Kit](https://smart-edge-open.github.io/docs/experience-kits/private-wireless-experience-kit)
 and the [uCPE Experience Kit](https://smart-edge-open.github.io/ido-specs/doc/reference-architectures/smartedge-open-experience-kit_sdwan)
 are optimized for the on-premises edge, typically located in an enterprise.
 - The [Access Edge Experience Kit](https://smart-edge-open.github.io/ido-specs/doc/reference-architectures/ran/smartedge-open_ran)
