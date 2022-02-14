@@ -471,7 +471,7 @@ The Private Wireless Experience Kit can be deployed autonomously using the Edge 
 - Get source code
 
 ```shell
-git clone https://github.com/intel-inners0ource/private-wireless-experience-kits --recursive --branch=main ~/pwek
+git clone https://github.com/smart-edge-open/private-wireless-experience-kits --recursive --branch=main ~/pwek
 ```
 
 - proxy environment variables
