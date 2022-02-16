@@ -65,16 +65,22 @@ Copyright (c) 2021 Intel Corporation
                             jQuery(this).attr('href', url.replace("/intel-smart-edge-open", ""));
                         }else{
                             jQuery(this).attr('href', url.replace(".md", "/"));
+                        }
+                        if(httpUrl == '-1' && httpsUrl == '-1' && hashCheck != '-1'){
+                            //Remove .md From href
+                            jQuery(this).attr('href', url.replace(".md", "/"));
                         }*/
-                        if(url.indexOf('/blob/main') != '-1'){
+                        //Remove .md From href
+                        if(url.indexOf('/blob/main') != '-1' && url.indexOf('https://github.com') != '-1' && (url.indexOf('/docs') != '-1' || url.indexOf('/ido-specs') != '-1')){
                             url = url.replace("/blob/main", "");
                             if(url.indexOf('https://github.com/smart-edge-open') != '-1'){
                                 url = url.replace("https://github.com/smart-edge-open", "");
                             }
                             jQuery(this).attr('href', url.replace(".md", "/"));
-                        }else{
-                            jQuery(this).attr('href', url.replace(".md", "/"));
                         }
+                        /*else{
+                            jQuery(this).attr('href', url.replace(".md", "/"));
+                        }*/
                     }
                 }
             });
