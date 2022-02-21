@@ -9,29 +9,38 @@ Copyright (c) 2021 Intel Corporation
 
 Intel® Smart Edge Open experience kits provide customized infrastructure deployments for common network and on-premises edge use cases. Combining Intel cloud-native technologies, wireless networking, and high-performance compute, experience kits let you deliver AI, video, and other services optimized for performance at the edge.
 
-The Developer Experience Kit (DEK) lets you easily install and instantiate an Intel® Smart Edge Open edge cluster. Once the cluster has been installed, you can onboard edge applications and run reference implementations -- example end-to-end solutions built on Intel® Smart Edge Open -- to get familiar with operating a stand-alone edge node or to start creating your own solution.
+The [Developer Experience Kit](https://github.com/smart-edge-open/open-developer-experience-kits) lets you easily install and instantiate an Intel® Smart Edge Open edge cluster. Once the cluster has been installed, you can onboard edge applications and run reference implementations, which are example end-to-end solutions built on Intel® Smart Edge Open, to get familiar with operating a stand-alone edge node or to start creating your own solution.
 
-Smart Edge Open integrates Intel platform security features for platform attestation with use of Intel Security Libraries (IsecL) and application security through SGX support. These new security features require remote attestation services deploed on an AWS instance.  For this purpose the "verification_controller" deployment is available in the experience kit to install IsecL controller services SGX DCAP on AWS. 
+You can choose to create an edge node with integrated platform platform security features including:
+- Platform attestation using Intel® Security Libraries for Data Center (Intel® SecL - DC)
+- Application security through Intel® Software Guard Extensions (Intel® SGX) and Intel® Software Guard Extensions Data Center Attestation Primitives (Intel® SGX DCAP)
+
+[View the Developer Experience Kit repo](https://github.com/smart-edge-open/open-developer-experience-kits).
 
 ## How It Works
 
-### Edge Node
+The Developer Experience Kit is designed to support a variety of edge computing use cases. Below is the architecture of an edge node instantiated with platform attestation and application security features enabled:
+
+Developer Experience Kit consists of two clusters. 
+
+- DEK cluster in the cloud that hosts IsecL and SGX control plane services. These control plane services enable platform attestation and Secure enclave for Edge applications and services. 
+- DEK cluster at the edge (typically on-premises) that hosts edge services and applications. 
+
+[![Smart Edge Open Developer Experience Kit - Deployment Diagram](images/dek-deploy.png)](images/dek-deploy.png)
+
+Let us now look at the components stack of DEK edge and cloud cluster. 
 
 [![Smart Edge Open Developer Experience Kit - Edge Node Component Diagram](images/dek-node-component-diagram.png)](images/dek-node-component-diagram.png)
 
-*Intel® Smart Edge Open Developer Experience Kit building blocks*
+*Developer Experience Kit edge node with Intel® SecL-DC attestation enabled*
 
-The Developer Experience Kit uses [Edge Software Provisioner](https://github.com/intel/Edge-Software-Provisioner), which automates the process of provisioning bare-metal or virtual machines with an operating system and software stack. Intel® Smart Edge Open provides a fork of the [Ubuntu OS ESP
-Profile](https://github.com/intel/rni-profile-base-ubuntu) tailored for its specific needs.
+The integrated security features require that remote attestation services be deployed on an Amazon Web Services (AWS) EC2 instance. 
 
-### IsecL Controller and SGX DCAP Node
+[![Smart Edge Open Developer Experience Kit - IsecL Controller and SGX DCAP Node Component Diagram](images/verification-node-component-diagram.png)](images/verification-node-component-diagram.png)
 
-[![Smart Edge Open Developer Experience Kit - IsecL Controller and SGX DCAP Node Component Diagram](images/isecl-ctrl-dcap-component-diagram.png)](images/isecl-ctrl-dcap-component-diagram.png)
+*Remote attestation services deployed as a controller node on AWS*
 
-*Intel® Smart Edge Open Verification Controller Node building blocks*
-
-The Developer Experience Kit for deployment of Isecl controller services and SGX DCAP on AWS uses deploy.sh script to automate the deployment. It installs DEK basic functionality with IsecL controller services and DCAP on the top of it. 
-
+The Developer Experience Kit uses the [Edge Software Provisioner (ESP)](https://github.com/intel/Edge-Software-Provisioner), which automates the process of provisioning bare-metal or virtual machines with an operating system and software stack. Intel® Smart Edge Open provides a fork of the [Ubuntu OS ESP Profile](https://github.com/intel/rni-profile-base-ubuntu) tailored for its specific needs.
 
 ## Building Blocks
 
@@ -51,187 +60,107 @@ The Developer Experience Kit installs Kubernetes and the following building bloc
 [Node Feature Discovery (NFD)](/components/resource-management/node-feature-discovery.md) | Detects and advertises the hardware features available in each node of a Kubernetes* cluster |
 [Topology Manager](/components/resource-management/topology-manager.md) | Coordinates the resources allocated to a workload |
 [CPU Manager](/components/resource-management/cpu-manager.md) | Dedicated CPU core for workload |
-[Cert Manager]() | Adds certificates and certificate issuers as resource types in the cluster, and simplifies the process of obtaining, renewing and using those certificates | 
-[ISecL](/components/security/platform-attestation-using-isecl.md) | Isecl components to provide platform attestation on the edge node| 
-[SGX](/components/security/application-security-using-sgx.md) | Provides application security |  
+[cert-manager](https://cert-manager.io/docs/) | Adds certificates and certificate issuers as resource types in the cluster, and simplifies the process of obtaining, renewing and using those certificates | 
+[Intel® SecL-DC](/components/security/platform-attestation-using-isecl.md) | Isecl components to provide platform attestation on the edge node| 
+[Intel® SGX](/components/security/application-security-using-sgx.md) | Provides application security |  
 
-### Isecl Controller Node Components
+### Intel® SecL-DC Controller Node Components
 
 | Building Block | Functionality     |
 | :------------- | :------------- |
 |[Calico CNI](https://docs.projectcalico.org/about/about-calico) | Default container network interface |
 [Topology Manager](/components/resource-management/topology-manager.md) | Coordinates the resources allocated to a workload |
 [Node Feature Discovery (NFD)](/components/resource-management/node-feature-discovery.md) | Detects and advertises the hardware features available in each node of a Kubernetes* cluster |
-[Core Pinning](/components/resource-management/core-pinning.md) | Dedicated CPU core for workload |
-[Cert Manager]() | Adds certificates and certificate issuers as resource types in the cluster, and simplifies the process of obtaining, renewing and using those certificates | 
-[IsecL Controller](/components/security/platform-attestation-using-isecl.md) | Provides IsecL controller services for platform attestation |
-[SGX DCAP](/components/security/application-security-using-sgx.md) | Provides SGX attestation services |
-
+[CPU Manager](/components/resource-management/cpu-manager.md) | Dedicated CPU core for workload |
+[cert-manager](https://cert-manager.io/docs/) | Adds certificates and certificate issuers as resource types in the cluster, and simplifies the process of obtaining, renewing and using those certificates | 
+[Intel® SecL - DC Controller](/components/security/platform-attestation-using-isecl.md) | Provides Intel® SecL-DC controller services for platform attestation |
+[Intel® SGX DCAP](/components/security/application-security-using-sgx.md) | Provides SGX attestation services |
 
 For information on the versions installed, see the Developer Experience Kit [release notes](https://github.com/smart-edge-open/docs/blob/main/release-notes/release-notes-se-open-DEK-21-12.md#package-versions)
 
-## Get Started - IsecL Controller Node(optional)
->Note: This step is required when platform attestation feature enabled.
+## Get Started 
 
-### Prerequisites
-- An AWS account, a server or VM with ubuntu-20.04 
-- A linux system from which deployment is initiated.
-#### Requirements for ISecL controller System
-> Note: It is required for ISecL platform attestation or SGX feature.
-AWS EC2 instance(t2.medium) with minimum of below requirements.
-or
-Bare metal/VM with below system requirements
+The instructions below walk you through provisioning the operating system and Developer Experience Kit on a target system. You can optionally enable platform attestation and/or application security.
 
-- 2 vCPUs
-- 4 GB RAM
-- 100 GB disk space
-- OS Ubuntu 20.04LTS
-
-### Clone the Developer Experience Kit repo
-
-Clone the kit's repository to the provisioning system:
-
-```Shell.bash
-# git clone https://github.com/smart-edge-open/open-developer-experience-kits.git --branch=smart-edge-open-21.12 ~/dek
-# cd ~/dek
-```
-
-#### Setting up ISecL controller cluster setup 
-Update following things in `inventory.yml`
-- Set `deployment` to `verification_controller`.
-- Provide IP address of AWS instance where the deployment is expected to install the IsecL controller - the same one for controller and node01 hosts.
-- Provide the user password.
-
-```Shell.bash
-all:
-  vars:
-    cluster_name: dek_test        
-    deployment: verification_controller
-    single_node_deployment: true
-    limit: 
-controller_group:
-  hosts:
-    controller:
-      ansible_host: <IP-address>
-      ansible_user: <pass>
-edgenode_group:
-  hosts:
-    node01:
-      ansible_host: <IP-address>
-      ansible_user: <pass>
-```    
-- Set IP addresses of Trust Agents to `isecl_ta_san_list` in `deployments/verification_controller/all.yml`
-
-#### Run the Deployment Script
-
-The `deploy.sh` script installs all required packages and deploys the single node cluster on.
-For information on the versions installed, see the Developer Experience Kit [release notes](https://github.com/smart-edge-open/docs/blob/main/release-notes/release-notes-se-open-DEK-21-12.md#package-versions)
-
-```Shell.bash
-# ./deploy.sh
-```
-## Get Started - Setup SGX PCCS service(optional)
->Note: This step is required when SGX feature enabled.
-### Prerequisites
-- An AWS account, a server or VM with ubuntu-20.04 
-- A linux system from which deployment is initiated.
-#### Requirements for DCAP PCCS system
-> Note: It is required for ISecL platform attestation or SGX feature.
-AWS EC2 instance(t2.medium) with minimum of below requirements.
-or
-Bare metal/VM with below system requirements
-
-- 2 vCPUs
-- 4 GB RAM
-- 100 GB disk space
-- OS Ubuntu 20.04LTS
-
-#### Installing SGX PCCS service
-Update following things in `inventory.yml`
-- Set `deployment` to `verification_controller`.
-- Provide IP address of AWS instance where the deployment is expected to install the IsecL controller - the same one for controller and node01 hosts.
-- Provide the user password.
-
-```Shell.bash
-all:
-  vars:
-    cluster_name: dek_test        
-    deployment: verification_controller
-    single_node_deployment: true
-    limit: 
-controller_group:
-  hosts:
-    controller:
-      ansible_host: <IP-address>
-      ansible_user: <pass>
-edgenode_group:
-  hosts:
-    node01:
-      ansible_host: <IP-address>
-      ansible_user: <pass>
-```    
-- Set `pccs_enable` to `true` in `deployments/verification_controller/all.yml`
-
-## Get Started - Edge Node
-The instructions below walk you through provisioning the operating system and Developer Experience Kit on a target system. After completing these instructions, you will have created a single edge node cluster capable of hosting edge applications. You can then optionally install reference implementations from the Intel® Edge Software Hub.
+After completing these instructions, you will have created an edge node cluster capable of hosting edge applications. You can then optionally install reference implementations or onboard edge applications. If you have chosen to enable security features, you will be able to run sample applications that demonstrate their use.
 
 [![Smart Edge Open Developer Experience Kit Edge Node Component Diagram](images/dek-workflow-diagram.png)](images/dek-workflow-diagram.png)
 
 ### Requirements
 
-You will need two machines: a provisioning system where you will build a bootable image of the experience kit, and a target system where you will install the experience kit to create an edge cluster.
+You will need two machines: a provisioning system where you will build a bootable image of the experience kit, and a target system where you will install the experience kit to create an edge cluster. 
 
-#### Provisioning System  
-- Memory: At least 4GB RAM
-- Hard drive: At least 20GB
+If you choose to enable security features in your installation, you will also need an AWS EC2 t2.medium instance to host the controller node.
+
+#### Provisioning System Requirements
+
+- Memory: At least 4 GB RAM
+- Hard drive: At least 20 GB
 - USB flash drive
-- Operating system: Ubuntu 20.04.
+- Operating system: Ubuntu 20.04 LTS
 - Git
 - Docker and Docker Compose
+   - **NOTE:** You must install Docker from the [Docker repository](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository). Installation by Docker package is not supported.
 - Python 3.6 or later, with the PyYAML module installed
 - Internet access
-   
-> NOTE: You must install Docker from the [Docker repository](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository). Installation by Docker package is not supported.
   
-> NOTE: You must add the user account on the provisioning system to /etc/sudoers.
+> **NOTE:** You must add the user account on the provisioning system to /etc/sudoers.
 
-#### Target System
-1) A server with two sockets, each populated with a 3rd Generation Intel® Xeon® Scalable Processor
-- Memory: At least 32GB RAM 
+#### Target System Requirements
+
+- A server with two sockets, each populated with a 3rd Generation Intel® Xeon® Scalable Processor
+- Memory: At least 32 GB RAM 
 - Hard drives: Two SATA SSDs, one for booting and one for data caching
 - Network adapters: Two NICs, one connected to each socket
+  - **NOTE:** This configuration was validated using two Intel Corporation Ethernet Controller E810-C for SFP (rev 02) NICs.
 - Connection to the provisioning system
-- The DEK was validated on a system using this network interface card: Intel Corporation Ethernet Controller E810-C for SFP (rev 02) NIC.
-2) A server with one socket populated with Intel(R) Genuine processor, ICE LAKE-D-22 (ICX-D) HCC
-- Memory: 2x 32GB RAM 
-- Hard drives: One SATA SSDs
-- Network adapters: One NIC
-- Connection to the provisioning system
-- The DEK was validated on a system using this network interface card: Intel Corporation Ethernet Controller Columbia Park for 2x QSFP28 NIC.
 
-Users who are installing the DEK on a system with a different NIC must update the interface names in the generated configuration file used while provisioning. Otherwise, installation will fail. Elaboration can be found in [Sriov Network Operator Configuration](https://github.com/smart-edge-open/docs/blob/main/components/networking/sriov-network-operator.md#configuration)
-- SGX needs to be enabled in BIOS manually if SGX feature is required in DEK [SGX](/components/security/application-security-using-sgx.md#enable-intel-sgx-in-bios)
-- TPM 2.0 and UEFI secure boot support in BIOS if platform attestation is required in DEK
+View the full specs of the [validated system](https://github.com/smart-edge-open/docs/blob/main/release-notes/release-notes-se-open-DEK-21-12.md). 
 
-> NOTE: The DEK was validated on a system using the following network interface card: 
-> - Intel Corporation Ethernet Controller E810-C for SFP (rev 02) NIC.
-  - Intel Corporation Ethernet Controller Columbia Park for QSFP28 NIC
-> 
-> To install the DEK on a system with a different NIC, update the interface names in open-developer-experience-kits/inventory/default/group_vars/all/10-default.yaml. Otherwise, installation will fail. 
-> 
-> For more information, see the [SR-IOV Network Operator Configuration](https://github.com/smart-edge-open/docs/blob/main/components/networking/sriov-network-operator.md#configuration)
-> 
-> View the full specs of the [validated system](https://github.com/smart-edge-open/docs/blob/main/release-notes/release-notes-se-open-DEK-21-09.md). 
+> **NOTE:** The provisioning process will install Ubuntu 20.04 LTS on the target machine. Any existing operating system will be overwritten.
 
-> NOTE: The provisioning process will install Ubuntu 20.04 on the target machine. Any existing operating system will be overwritten.
+> NOTE: Developer Experience Kit does not support provisioning with Secure Boot enabled, however, Secure Boot can be enabled on reference platform while provisioning. Please refer to [provisioning guide](/experience-kits/provisioning/provisioning.md).
 
-#### Knowledge
+#### AWS EC2 Instance Requirements
 
-Basic knowledge of operating system, Kubernetes, and server administration.
+Installations that enable either platform attestation using Intel® SecL - DL or application security using Intel® SGX will require the following:
+
+- An AWS EC2 t2.medium instance with the following system requirements:
+   - Two vCPUs
+   - 4 GB RAM
+   - 100 GB disk space
+   - Ubuntu 20.04 LTS
+- A Linux system from which deployment of the controller node is initiated
+
+#### Knowledge Requirements
+
+The installation instructions assume basic knowledge of operating system administration, server administration, and Kubernetes.
+
+### Steps to Create AWS t2.medium Instance 
+
+1. Create EC2 t2.medium instance (at least) with Ubuntu 20.04 OS image in any geo location.
+2. If the region in which instance is being created does not have default VPC configured, Create VPC and subnet with IPV4 CIDR.
+3. While creating instance, chose the VPC created in step 2, if no default VPC available.
+4. Create Internet gateway and attach to your VPC to allow traffic from internet to reach your instance.
+5. Create custom route table for the above created VPC and associate to the subnet created in step 2.
+6. At the end of instance creation steps, you will be prompted to generate new key pair or import existing key pairs. Generate key pair and download private key and use it to make SSH connection to the AWS instance.
+7. Assign static ip address to AWS instance to prevent disconnect(due to reboot) while deploying ISecL controller.
+> Create elastic ip address from Amazon public IPv4 pool.
+> Associate elastic ip to your newly created AWS instance. 
+8. While connecting to instance from terminals(PuTTY, Xterm, etc), use instance public IP(elastic IP), private key(ppk) and socks5 proxy.
+9. ISecL uses following ports to enable inter service communication. All these ports need to be added to security groups of the EC2 instance.
+> CMS - 30445
+> HVS - 30443
+> AAS - 30444
+> NATS - 30222
+> NFS port - 2049
+> SGX PCCS service - 32666
+
+[Get started with AWS instance](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html)
 
 ### Install the Developer Experience Kit
 
-The Developer Experience Kit provides a command line utility (`dek_provision.py`) which uses the
+The Developer Experience Kit provides a command line utility (`dek_provision.py`) that uses the
 Intel® Edge Software Provisioner toolchain to deliver a smooth installation experience.
 
 <!--
@@ -248,51 +177,114 @@ You must be logged in as root on the provisioning system for the following steps
 ```Shell.bash
 [Provisioning System] $ sudo su -
 ```
-> NOTE: In order for the provisioning script to have the proper permissions, you must run the `sudo` command as shown above. Using `sudo` with the `dek_provision.py` command will not work.
+> **NOTE:** In order for the provisioning script to have the proper permissions, you must run the `sudo` command as shown above. Using `sudo` with the `dek_provision.py` command will not work.
 
-#### Clone the Repository
 
-Clone the kit's repository to the provisioning system:
+#### Clone the Developer Experience Kit Repository
+
+Clone the [Developer Experience Kit repo](https://github.com/smart-edge-open/open-developer-experience-kits) to the provisioning system:
 
 ```Shell.bash
-[Provisioning System] # git clone https://github.com/smart-edge-open/open-developer-experience-kits.git --branch=smart-edge-open-21.12 ~/dek
-[Provisioning System] # cd ~/dek
+# git clone https://github.com/smart-edge-open/open-developer-experience-kits.git --branch=smart-edge-open-21.12 ~/dek
+# cd ~/dek
 ```
 
-#### Modify default configuration for security features (optional)
+#### Set up the Intel® SecL - DC Controller Node and Intel® SGX Provisioning Certificate Caching Service (PCCS)
 
-If Platform Attestation with IsecL is enabled in DEK or/and SGX is enabled modify DEK configuration accordingly:
+The following steps are required if you are installing the Developer Experience Kit with security features enabled for platform attestation with Intel® SecL - DC and application security with Intel® SGX.
+- Make password less from ansible machine to AWS instance by copying ssh public using ssh-copy-id (Ex. ssh-copy-id -i ~/.ssh/<my_key> <user-name>@<aws-instance-ip>)
+- Comment out proxy settings(http_proxy, https_proxy, ftp_proxy and all_proxy) and set  no_proxy to "" in `inventory/default/group_vars/all/10-default.yml`.
+- Add host name of AWS instance public IP in `/etc/hosts` for both IPv4 and IPv6.
+- Set `pccs_user_password` and `pccs_admin_password` in `inventory/default/group_vars/all/10-default.yml`. Make sure password should contain at least 12 characters.(This setting is for application security with Intel® SGX feature)
+- Update following things in `inventory.yml`
+  - Set `deployment` to `verification_controller`.
+  - Provide public IP address of AWS instance where the deployment is expected to install the IsecL controller - the same one for controller and edge node group.
+  - Provide the user name.
 
-1) Generate configuration file:
+```Shell.bash
+all:
+  vars:
+    cluster_name: verification_controller_cluster        
+    deployment: verification_controller
+    single_node_deployment: true
+    limit: 
+controller_group:
+  hosts:
+    controller:
+      ansible_host: <IP-address>
+      ansible_user: <user-name>
+edgenode_group:
+  hosts:
+    node01:
+      ansible_host: <IP-address>
+      ansible_user: <user-name>
+```    
+
+- If you are enabling platform attestation with Intel® SecL - DC, update `deployments/verification_controller/all.yml` with following changes
+  1. IP addresses of edge nodes(where trust agents run) in `isecl_ta_san_list`
+  2. Make sure `platform_attestation_controller` is set to `true`
+- If you are enabling Intel® SGX, set `pccs_enable` to `true` in `deployments/verification_controller/all.yml`
+
+Developer Experiance Kit users can disable certain features to be automatically provisioned and deployed during the setup. This is made available to the users using the "Exclude List" feature. As an example if user wants to exclude Platform Attestation with IsecL or/and SGX then following steps needs to be followed:
+
+##### Run the Deployment Script
+
+The `deploy.sh` script installs all required packages and deploys the single node cluster on.
+
+```Shell.bash
+# ./deploy.sh
+```
+
+#### Generate the Configuration File: 
 
 ```
-[Provisioning System]# ./dek_provision.py --init-config > custom.yml
+[Provisioning System] # ./dek_provision.py --init-config > custom.yml
 ```
 
-2) Modify entries in the generated configuration file:
+#### Optional: Disable Unused Security Features
 
-  a) For IsecL platform attestation set:
+By default, Intel® SecL - DC and Intel® SGX will be enabled in the edge node. If you are not using these security features, you can disable them.
+- To disable Intel® SGX support, set the `sgx_enabled` flag to `false` in file `custom.yml`
+- To disable Intel® SecL - DC platform attestation support, set the `platform_attestation_node` flag to `false` in file `custom.yaml`
 
-  - `isecl_control_plane_ip` - add IP address of node hosting IsecL control plane services to `isecl_control_plane_ip`
+#### Optional: Disable SR-IOV Network Operator Configuration
+
+- Set the `sriov_network_operator_configure_enable` flag to `false` in file `custom.yml`
+For more information, see [SR-IOV Network Operator Configuration](https://github.com/smart-edge-open/docs/blob/main/components/networking/sriov-network-operator.md#configuration)
+
+#### Optional: Update NIC Settings
+
+If you are installing the Developer Experience Kit to a system that uses a different network adapter than the [validated NIC](#target-system-requirements), update the interface names in `custom.yaml`. Otherwise, installation will fail. 
+
+For more information, see [SR-IOV Network Operator Configuration](https://github.com/smart-edge-open/docs/blob/main/components/networking/sriov-network-operator.md#configuration)
+
+#### Create the Installation Image
+
+##### Optional: Configure Provisioning Services for Enabled Security Features
+
+If you enabled platform attestation with Intel® SecL - DC and/or application security with Intel® SGX, you will need to modify the provisioning script's configuration accordingly:
+
+###### Modify Entries in the Generated Configuration File:
+
+  a) For the Intel® SecL - DC platform attestation set:
+
+  - `isecl_control_plane_ip` - add IP address of node hosting Intel® SecL - DC control plane services to `isecl_control_plane_ip`
+
   - On the IsecL controller node execute command:
     ```
     kubectl exec -n isecl --stdin "$(kubectl get pod -n isecl -l app=cms -o jsonpath="{.items[0].metadata.name}")" -- cms tlscertsha384
     ```
     Set `isecl_cms_tls_hash` - add the hash generated by the above command.
-  - Set `platform_attestation_node` to `true`
+  - Update necessary proxy settings(http_proxy, https_proxy,no_proxy,all_proxy) if edge node behind proxy server. Set all_proxy to socks5 proxy settings.
 
-  b) For SGX feature set:
+  b) For the Intel® SGX feature set:
 
-  - `sgx_pcss_ip` - add PCCS server IP address
-  - `pccs_user_token` - insert a token required to access PCCS
-
-
-#### Create the Installation Image
-
-##### Run the Provisioning Script
-The `dek_provision.py` script builds and runs the provisioning services and prepares the installation media.
+  - `sgx_pccs_ip` - add PCCS server IP address
+  - `pccs_user_token` - insert a token required to access PCCS. To get API key follow [here](/components/security/application-security-using-sgx.md#How-to-subscribe-to-Intel-PCS-Service)
 
 ##### Build and Run the Provisioning Services
+
+The `dek_provision.py` script builds and runs the provisioning services and prepares the installation media.
 
 To build and run the provisioning services in a single step, run the following command from the root directory of the
 Developer Experience Kit repository:
@@ -311,12 +303,10 @@ To use the generated configuration file 'custom.yaml', use this command:
 ```Shell.bash
 [Provisioning System] # ./dek_provision.py --run-esp-for-usb-boot --config=custom.yml
 ```
-
-
 The script will create an installation image in the `out` subdirectory of the current working directory.
 
 
-##### Flash the Installation Image
+#### Flash the Installation Image
 
 To flash the installation image onto the flash drive, insert the drive into a USB port on the provisioning system and run the following command:
 
@@ -326,9 +316,16 @@ To flash the installation image onto the flash drive, insert the drive into a US
 
 The command should present an interactive menu allowing the selection of the destination device. You can also use the `--dev` option to explicitly specify the device.
 
-##### Install the Image on the Target System
+#### Install the Image on the Target System
 
-Begin the installation by inserting the flash drive into the target system. Reboot the system, and enter the BIOS to boot from the installation media.
+##### Optional: Enable Security Support in the BIOS
+
+Update the provisioning system's BIOS settings to enable support for any security features you have installed: 
+- If you have installed Intel® SGX, refer to this guide for [enabling Intel® SGX in the BIOS](/components/security/application-security-using-sgx.md#enable-intel-sgx-in-bios)
+
+##### Boot from the Flash Drive
+
+Insert the flash drive into the target system. Reboot the system, and enter the BIOS to boot from the installation media.
 
 ##### Log Into the System After Reboot
 
@@ -338,6 +335,7 @@ The login screen will display the system's IP address and the status of the expe
 To log into the system, use `smartedge-open` as both the user name and password.
 
 #### Check the Status of the Installation
+
 When logging in using remote console or SSH, a message will be displayed that informs about status of the deployment, for example:
 ```Smart Edge Open Deployment Status: in progress```
 
@@ -353,27 +351,14 @@ Check the installation logs by running the following command:
 ```
 Alternatively, you can inspect the deployment log found in `/opt/seo/logs`.
 
-## Exclude List (optional)
-
-Security features: SGX and Platform Attestation are enabled for Edge Node by default. In order to disable them, the user needs to follow the steps:
-
-1) Generate configuration file: 
-```
-[Provisioning System] # ./dek_provision.py --init-config > custom.yml
-```
-2) To disable SGX support in DEK, set flag `sgx_enabled` to `false` in file `custom.yml`
-3) To disable Platform Attestation support in DEK, set flag `platform_attestation_node` to `false` in file `custom.yaml`
-
-The operator can then modify the file to adjust needed options. To instruct the provisioning utility to use the custom configuration file, use the --config option, e.g.:
-```
-[Provisioning System] # ./dek_provision.py --config=custom.yml 
-```
 ## Provisioning guide and troubleshooting
-Find detailed information on provisioning process and on resolving common installation problems in the [provisioning guide](/provisioning/provisioning.md).
+
+Find detailed information on provisioning process and on resolving common installation problems in the [provisioning guide](/experience-kits/provisioning/provisioning.md).
 
 ## Summary and Next Steps
+
 In this guide, you created an Intel® Smart Edge Open edge node cluster capable of hosting edge applications. You can now install sample applications, or reference implementations downloaded from from the Intel® Developer Catalog
 - Learn how to [onboard a sample application](/application-onboarding/application-onboarding-cmdline.md) to your cluster.
-- Download and run [reference implementations from the Intel® Developer Catalog](https://www.intel.com/content/www/us/en/developer/tools/software-catalog/full-catalog.html?s=Newest&q=%22smart+edge+open%22)
+- Download and run [reference implementations from the Intel® Developer Catalog](https://www.intel.com/smart-edge-open-samples)
 
 

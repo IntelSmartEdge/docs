@@ -151,6 +151,8 @@ After acknowledging that everything is set up correctly by the user, the flashin
 Begin the installation by inserting the flash drive into the target system. Reboot the system, and enter the BIOS to
 boot from the installation media.
 
+> NOTE: Developer Experience Kit does not support provisioning with Secure Boot enabled, however, Secure Boot can be enabled on reference platform while provisioning. Please refer to [Secure Boot and TPM](#secure-boot-and-tpm).
+
 ##### Log Into the System After Reboot
 
 The system will reboot as part of the installation process.

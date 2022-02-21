@@ -117,3 +117,5 @@ To subscribe follow the steps below
 6.) On being navigated away to the "Subscription summary" page, confirm by clicking on "Add Subscription"
 
 7.) Now on the next page, scroll down to  "Intel® Software Guard Extensions Provisioning Certification Service subscription" section and click on any of the  "Show" links to reveal your corresponding API key
+### How to test SGX functionality
+Test SGX functionality using gramine based sample OpenVino [application](https://github.com/smart-edge-open/edgeapps/blob/master/applications/sgx/openvino-ssd/README.md)
