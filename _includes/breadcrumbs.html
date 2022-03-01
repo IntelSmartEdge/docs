@@ -1,7 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright (c) 2021 Intel Corporation
--->
 {% assign navigations = "" | split:"|" %}
 {% for navbars_data in site.data.navbars %}
   {% assign nav = navbars_data[1] %}
@@ -14,12 +10,13 @@ Copyright (c) 2021 Intel Corporation
 {% capture pageTitleUpper %}{% for word in pageTitle %}{{ word | capitalize }} {% endfor %}{% endcapture %}
 <div id="breadcrumbs">
   {% assign crumbs = page.url | remove:'/index.html' | split: '/' %}
-  <a href="{{ site.main_url }}">Home</a>
+  <a href="{{ site.main_url }}">Home</a> >
+  {% comment %}
   {% if pageTitleUpper != 'index.html' %}
     {% assign pagePath = page.path | remove: ".md" | prepend:"/" | prepend: site.baseurl | append:'/' %}
     {% for navbar in navbars %}
       {% for breadcrumb in navbar.section %}
-
+      
         {% assign crumbs = breadcrumb.path | remove:'/index.html' | split: '/' %}
         {% assign cur_path = breadcrumb.path | append:'/' %}
         {% if pagePath == cur_path %}
@@ -38,8 +35,9 @@ Copyright (c) 2021 Intel Corporation
             {% endif %}
           {% endfor %}
         {% endif %}
-
+        
       {% endfor %}
     {% endfor %}
   {% endif %}
+  {% endcomment %}
 </div>
