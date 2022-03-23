@@ -77,10 +77,10 @@ Copyright (c) 2021 Intel Corporation
                                 url = url.replace("https://github.com/smart-edge-open", "");
                             }
                             jQuery(this).attr('href', url.replace(".md", "/"));
-                        } else if(url.includes("/docs") == false) {
-							new_url = (url.startsWith("/") == true)?base_url+url:base_url+"/"+url;
-							jQuery(this).attr('href', new_url.replace(".md", "/"));
-						}
+                        }else if((url.includes("/docs") == false) && urlFound == '-1' && httpUrl == '-1' && httpsUrl == '-1'){
+                            new_url = (url.startsWith("/") == true) ? base_url + url : base_url + "/" + url;
+                            jQuery(this).attr('href', new_url.replace(".md", "/"));
+                        }
                         /*else{
                             jQuery(this).attr('href', url.replace(".md", "/"));
                         }*/
