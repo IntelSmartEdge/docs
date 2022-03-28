@@ -98,10 +98,6 @@ If you choose to enable security features in your installation, you will also ne
 - Hard drive: At least 20 GB
 - USB flash drive
 - Operating system: Ubuntu 20.04 LTS
-- Git
-- Docker and Docker Compose
-   - **NOTE:** You must install Docker from the [Docker repository](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository). Installation by Docker package is not supported.
-- Python 3.6 or later, with the PyYAML module installed
 - Internet access
   
 > **NOTE:** You must add the user account on the provisioning system to /etc/sudoers.
@@ -160,6 +156,9 @@ The installation instructions assume basic knowledge of operating system adminis
 
 ### Install the Developer Experience Kit
 
+#### Prepare the Provisioning System
+
+The ESP is used by all experience kits to provision the system used to host the edge cluster. For more details about the ESP, including troubleshooting suggestions, please refer to the [Smart Edge Open Provisioning Process](https://smart-edge-open.github.io/docs/experience-kits/provisioning/provisioning/).
 The Developer Experience Kit provides a command line utility (`dek_provision.py`) that uses the
 Intel® Edge Software Provisioner toolchain to deliver a smooth installation experience.
 
@@ -172,20 +171,86 @@ people new to the Smart Edge Open solution.
 
 <!-- #### Quick Start (Default Configuration) -->
 
-You must be logged in as root on the provisioning system for the following steps. To become the root user, run the following command:
+> **NOTE:** In order for the provisioning script to have the proper permissions, you must run the `sudo` command as shown above. Using `sudo` with the `dek_provision.py` command will not work.
+
+The following steps will walk you through installing software to the provisioning system, including Git, Docker and Docker Compose, and Python.
+You must be logged in as root on the provisioning system for the following steps. To become the root user, run the following command on the provisioning system:
 
 ```Shell.bash
 [Provisioning System] $ sudo su -
 ```
-> **NOTE:** In order for the provisioning script to have the proper permissions, you must run the `sudo` command as shown above. Using `sudo` with the `dek_provision.py` command will not work.
 
+##### Install Git
+
+Install Git to the target system using the following command:
+
+```Shell.bash
+apt-get install git
+```
+
+##### Install Docker and Docker Compose
+
+In the next steps you will install Docker, configure it to use a proxy server, and install Docker Compose.
+
+###### Install Docker from the Docker Repository
+
+Follow the installation instructions at the [Docker repository](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository). Installation by package manager is not supported at this time and will result in errors. Please refer to [official installation guide](https://docs.docker.com/engine/install/ubuntu/)
+
+###### Configure Docker to Use a Proxy Server
+
+Create or edit the Docker configuration file ~/.docker/config.json
+
+```Shell.bash
+{
+ "proxies":
+  {
+    "default":
+    {
+      "httpProxy":"http://myproxy.hostname:8080",
+      "httpsProxy": "http://myproxy.hostname:8080"
+    }
+  }
+}
+```
+
+Set your environment variables. Replace `myproxy.hostname` in the example with the information for your own proxy.
+
+```Shell.bash
+vi /etc/systemd/system/docker.service.d/proxy.conf
+[Service]
+Environment="HTTP_PROXY=http://myproxy.hostname:8080"
+Environment="HTTPS_PROXY=https://myproxy.hostname:8080/"
+Environment="NO_PROXY="localhost,127.0.0.1,::1"
+```
+
+Reload the file and restart the Docker service
+
+```Shell.bash
+systemctl daemon-reload
+systemctl restart docker.service
+```
+
+###### Install Docker Compose
+
+Follow the docker [official guide](https://docs.docker.com/compose/install/).
+
+##### Install Python3 and Related Libraries
+
+Run the following commands to install Python3 and related libraries:
+
+```Shell.bash
+apt-get update
+apt-get install python3
+apt-get install python3-pip
+pip3 install PyYAML
+```
 
 #### Clone the Developer Experience Kit Repository
 
 Clone the [Developer Experience Kit repo](https://github.com/smart-edge-open/open-developer-experience-kits) to the provisioning system:
 
 ```Shell.bash
-# git clone https://github.com/smart-edge-open/open-developer-experience-kits.git --branch=smart-edge-open-21.12 ~/dek
+# git clone https://github.com/smart-edge-open/open-developer-experience-kits.git --branch=smart-edge-open-21.12.02 ~/dek
 # cd ~/dek
 ```
 
@@ -223,6 +288,7 @@ edgenode_group:
 - If you are enabling platform attestation with Intel® SecL - DC, update `deployments/verification_controller/all.yml` with following changes
   1. IP addresses of edge nodes(where trust agents run) in `isecl_ta_san_list`
   2. Make sure `platform_attestation_controller` is set to `true`
+  3. Set `isecl_control_plane_ip` to AWS instance public ip in `inventory/default/group_vars/all/10-default.yml`
 - If you are enabling Intel® SGX, set `pccs_enable` to `true` in `deployments/verification_controller/all.yml`
 
 Developer Experiance Kit users can disable certain features to be automatically provisioned and deployed during the setup. This is made available to the users using the "Exclude List" feature. As an example if user wants to exclude Platform Attestation with IsecL or/and SGX then following steps needs to be followed:

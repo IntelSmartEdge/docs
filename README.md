@@ -49,7 +49,7 @@ Find complete documentation for all experience kits in the
 
 ## Release Notes
 - [Product-level release notes](https://smart-edge-open.github.io/release-notes/)
-- [Release notes for the Developer Experience Kit](https://github.com/smart-edge-open/docs/blob/main/release-notes/release-notes-se-open-DEK-21-09.md), including specs of the hardware used to validate the experience kit.
+- [Release notes for the Developer Experience Kit](https://github.com/smart-edge-open/docs/blob/smart-edge-open-21.12/release-notes/release-notes-se-open-DEK-21-12.md), including specs of the hardware used to validate the experience kit.
 - [Release notes](https://github.com/smart-edge-open/ido-specs/blob/master/smartedge-open_releasenotes.md)
 for experience kits formerly available as OpenNESS 21.03 and earlier
 

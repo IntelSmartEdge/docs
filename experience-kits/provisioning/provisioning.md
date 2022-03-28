@@ -70,7 +70,7 @@ use the provisioning instruction published with the release to avoid incompatibi
 For convenience, you can change the current directory to the directory the kit is cloned to, e.g.:
 
 ```Shell.bash
-[Provisioning System] # git clone https://github.com/smart-edge-open/open-developer-experience-kits.git --branch=smart-edge-open-21.09 ~/dek
+[Provisioning System] # git clone https://github.com/smart-edge-open/open-developer-experience-kits.git --branch=smart-edge-open-21.12.02 ~/dek
 [Provisioning System] # cd ~/dek
 ```
 
