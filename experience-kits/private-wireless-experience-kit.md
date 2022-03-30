@@ -49,7 +49,7 @@ Copyright (c) 2022 Intel Corporation
 
 ## Overview
 
-Intel® Smart Edge Open experience kits provide blueprint as reference for on-premise 5G deployment with edge services. Combining Intel cloud native technologies, wireless networking, and high-performance compute, the Private Wireless Experience Kit delivers AI, video, and other services with optimized performance on Intel edge platforms.
+Intel® Smart Edge Open experience kits provide blueprint as reference for on-premise 5G deployment with edge services. Combining Intel cloud native technologies, wireless networking, and high-performance compute, the Private Wireless Experience Kit you deliver AI, video, and other services with optimized performance on Intel edge platforms.
 
 The Private Wireless Experience Kit accelerate private 5G deployment with Intel Edge platforms.
 

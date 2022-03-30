@@ -25,20 +25,14 @@ The telemetry components used in Intel® Smart Edge Open are deployed from the E
 
 ### How it's deployed
 
-Depending on the role of the component, it is deployed as either a Deployment or Deamonset. Generally, global components receiving inputs from local collectors are deployed as a Deployment type with a single replica set, whereas local collectors running on each host are deployed as Daemonsets. Local collectors running on Edge Nodes that collect platform metrics are deployed as privileged containers, using host networking. Communication between telemetry components is secured with TLS either using native TLS support for a given feature or using a reverse proxy running in a pod as a container. All the components are deployed as Helm charts.
+Depending on the role of the component, it is deployed as either a Deployment or Deamonset. Generally, global components receiving inputs from local collectors are deployed as a Deployment type with a single replica set, whereas local collectors running on each host are deployed as Daemonsets. Local collectors running on Edge Nodes that collect platform metrics are deployed as privileged containers, using host networking. Communication between telemetry components is secured with TLS either using native TLS support for a given feature or using a reverse proxy running in a pod as a container.
 <br/>
 <br/>
-<img style="display: block; margin: auto;" alt="21.09 Telemetry overview" src="images/telemetry_2109.svg">
+<img style="display: block; margin: auto;" alt="OpenDEK telemetry overview" src="images/OpenDek_Telemetry.svg">
 
 
-The deployment of telemetry components in Intel® Smart Edge Open is easily configurable from the open-developer-experience-kits (DEK). The deployment of the Grafana dashboard is optional (telemetry_grafana_enable enabled by default). There are four distinctive flavors for the deployment of the CollectD collector, enabling the respective set of plugins (telemetry_flavor):
-
-- common (default)
-- flexran
-- smartcity
-- corenetwork
-
-Further information on what plugins each flavor enables can be found in the Collectd section. All flags can be changed in ESP provisioning configuration file (before Smart Edge Open deployment):
+The deployment of telemetry components in Intel® Smart Edge Open is easily configurable from the open-developer-experience-kits (DEK). The deployment of the Grafana dashboard is optional (telemetry_grafana_enable enabled by default).
+All flags can be changed in ESP provisioning configuration file (before Smart Edge Open deployment):
 
 - generate a custom configuration file with `./dek_provision.py --init-config > custom.yml`
 - edit generated file and set telemetry flavor under `group vars: all:`, e.g.
@@ -50,48 +44,46 @@ profiles:
     group_vars:
       groups:
         all:
-          telemetry_flavor: common
+          telemetry_enable: true
           telemetry_grafana_enable: true
-          telemetry_prometheus_enable: true
           telemetry_statsd_exporter_enable: true
           telemetry_statsd_exporter_udp_port: 8125
           telemetry_statsd_exporter_tcp_port: 8125
-          telemetry_collectd_enable: true
+          telemetry_telegraf_enable: true
           telemetry_cadvisor_enable: true
 ```
 - use the custom configuration for all the following `dek_provision.py` command invocations, i.e. `./dek_provision.py --config=custom.yml [...]`
 
-### Collectd
+### Telegraf
 
-Collectd is a daemon/collector enabling the collection of hardware metrics from computers and network equipment. It provides support for Collectd plugins, which extends its functionality for specific metrics collection such as Intel® PMU, and ovs-dpdk. The metrics collected are exposed to the Prometheus monitoring tool via the [CollectdExporter](https://github.com/prometheus/collectd_exporter) sidecar. In Intel® Smart Edge Open, Collectd is supported with the help of the OPNFV Barometer project - using its Docker image and available plugins. In Intel® Smart Edge Open, the Collectd pod is deployed as a K8s Daemonset on every available Edge Node, and it is deployed as a privileged container running in host network.
-
-In DEK metrics obtained by NodeExporter are subject to `collectd_<metric_name>` pattern.
+Telegraf is a daemon/collector enabling the collection of hardware metrics from computers and network equipment.In Intel® Smart Edge Open, telegraf is supported with the help of _Intel® Observability Telegraf_, a custom in-house built version of Telegraf docker image containing additional dependencies for Intel supported plugins (like for example _Intel® Powerstat_ or _RASdaemon_). In Intel® Smart Edge Open, Telegraf is deployed as a K8s DaemonSet on every available Edge Node, and it is deployed as a privileged container running in host network.
 
 #### Plugins
 
-There are four distinct sets of plugins (flavors) enabled for CollectD deployment that can be used depending on the use-case/workload being deployed on Intel® Smart Edge Open. `Common` is the default flavor in Intel® Smart Edge Open. The flavors available are: `common`, `corenetwork`, `flexran`, and `smartcity`. Below is a table specifying which CollectD plugins are enabled for each flavor.
-The various CEEK flavors are enabled for CollectD deployment as follows:
+List of plugins enabled by default in Telegraf
 
+- Intel® RDT
+- Intel® Powerstat
+- ras
+- cpu
+- diskio
+- redfish
+- ethtool
+- net
+- iptables
+- system
+- kernel_vmstat
+- kernel_cgroup
+- disk
+- mem
+- temp
+- ipmi_sensor
 
-| Common           | Core Network      | FlexRAN           | SmartCity          |
-|------------------|:-----------------:|------------------:|-------------------:|
-| cpu              | cpu               | cpu               | cpu                |
-| cpufreq          | cpufreq           | cpufreq           | cpufreq            |
-| load             | load              | load              | load               |
-| hugepages        | hugepages         | hugepages         | hugepages          |
-| intel_pmu        | intel_pmu         | intel_pmu         | intel_pmu          |
-| ipmi             | ipmi              | ipmi              | ipmi               |
-| network          | network           | network           | network            |
-|                  | ovs_pmd_stats     | ovs_stats         | ovs_pmd_stat       |
-|                  | ovs_stats         |                   |                    |
+Informaation about collected metrics and troubleshooting for a specific plugin can be obtained by reading README.ms file on telegraf's github page (for example https://github.com/influxdata/telegraf/blob/master/plugins/inputs/smart/README.md for SMART plugin)
 
-#### Specifying logging threshold
+#### Telegraf collection interval
 
-By default only logs of "WARNING" and above thresholds will be displayed. User can change this changing the variable `telemetry_collectd_log_level` to one of "INFO","WARNING","ERROR". Collectd is not built to support "DEBUG" level logs. Please be wary that setting this variable to lower threshold (like INFO) will result in increased disk usage.
-
-#### Collectd collection interval
-
-Due to Collectd architecture relying on Prometheus exporter, Collectd collection interval is half of polling interval of Prometheus set via `telemetry_prometheus_scrape_interval_seconds` variable. For more information please refer to Prometheus' documentation.
+Due to Telegraf architecture not supporting pull model by default (like for example Node Exporter which guarantee that collects fresh metrics on each pull), the collection interval is specified to half of polling interval of Prometheus set via `telemetry_prometheus_scrape_interval_seconds` variable. For more information please refer to Prometheus' documentation.
 ### NodeExporter
 
 Node Exporter is a Prometheus exporter that exposes hardware and OS metrics of \*NIX kernels. The metrics are gathered within the kernel and exposed on a web server so they can be scraped by Prometheus. In Intel® Smart Edge Open, the Node Exporter pod is deployed as a K8s Daemonset; it is a privileged pod, using host networking that runs on every Edge Node in the cluster. It is enabled by default by DEK.
@@ -99,6 +91,8 @@ Node Exporter is a Prometheus exporter that exposes hardware and OS metrics of \
 Node exporter is configured to expose the [default set of collectors and metrics](https://github.com/prometheus/node_exporter/tree/v1.0.0-rc.0#enabled-by-default). Support for distinct collector and metrics vary depending on Operating System and hardware configuration - for details refer to Node Exporter specification.
 
 In Intel® Smart Edge Open metrics obtained by NodeExporter are subject to `node_<metric_name>` pattern.
+
+Node Exporter is part of minimal DEK telemetry, it can only be disabled by disabling telemetry altogether.
 
 ### Cadvisor
 
@@ -122,11 +116,11 @@ Prometheus is an open-source, community-driven toolkit for systems monitoring an
 
 The main idea behind Prometheus is that it defines a unified metrics data format that can be hosted as part of any application that incorporates a simple web server. The data can be then scraped (downloaded) and processed by Prometheus using a simple HTTP/HTTPS connection.
 
-In Intel® Smart Edge Open, Prometheus is deployed as a K8s Deployment with a single pod/replica on the EdgeNode. It is configured out of the box to scrape all other telemetry endpoints/collectors enabled in Intel® Smart Edge Open and gather data from them. Prometheus is enabled in the DEK by default with the telemetry/prometheus role.
+In Intel® Smart Edge Open, Prometheus is deployed as a K8s Deployment with a single pod/replica on the EdgeNode. It is configured out of the box to scrape all other telemetry endpoints/collectors enabled in Intel® Smart Edge Open and gather data from them. Prometheus is part of minimal DEK telemetry, it can only be disabled by disabling telemetry altogether.
 
 #### Prometheus' collection interval
 
-By default Prometheus' collection interval is set to 60 second. This value can be changed via `telemetry_prometheus_scrape_interval_seconds` variable. Prometheus exporters query metrics on demand, with notable exception of Collectd, where the exporter works as a cache for metrics provided by collectd. In order to make sure that Prometheus query always yields updated metrics the interval of Collectd was decreased to match half of Prometheus' polling interval.
+By default Prometheus' collection interval is set to 60 second. This value can be changed via `telemetry_prometheus_scrape_interval_seconds` variable. Prometheus exporters query metrics on demand, with notable exception of Telegraf, which collects and stores metrics each Telegraf interval. In order to make sure that Prometheus query always yields updated metrics the collection interval of Telegraf was decreased to match half of Prometheus' polling interval.
 
 #### Prometheus' retention setting
 
@@ -148,6 +142,18 @@ Default account is created with username `admin` and random password. Method of 
 
 ## How To
 
+### Install DEK without telemetry
+
+Requirements:
+
+- Access to ansible configuration files
+- Text editor of choice
+
+Steps:
+
+- Set the variable `telemetry_enable` to `false`
+
+
 ### Log into Grafana
 
 Requirements:
@@ -162,7 +168,7 @@ Steps:
     ```[bash]
     kubectl get secrets/grafana -n telemetry -o json | jq -r '.data."admin-password"' | base64 -d
     ```
-- Open `https://<nodeIP>:3200` in the browser
+- Open `https://<nodeIP>:32000` in the browser
 - Enter login and obtained password
   ![Grafana login](images/grafana_login_page.png)
 
@@ -179,7 +185,7 @@ Steps:
 - Log in to Grafana using browser
 - Select the "Explore" panel from the side-menu
   ![Explore option](images/grafana_explore_option.png)
-- Enter the metric of interests (in this example it's `collectd_memory`) and press `Run Query`
+- Enter the metric of interests (in this example it's `powerstat_package_current_dram_power_consumption_watts` provided by Telegraf) and press `Run Query`
   ![Result of executed query](images/grafana_explore.png)
 
 ### Create Grafana dashboard
@@ -187,7 +193,7 @@ Steps:
 Requirements:
 
 - Network connection to EdgeNode
-- Obtained login informations
+- Obtained login information
 
 Steps:
 
@@ -211,7 +217,7 @@ Comment:
 
 This "How to" is non-exhaustive there is a plethora of available metrics and panels to chose from. For further we recommend visiting [official documentation for Grafana](https://grafana.com/docs/grafana/latest/).
 
-### Enable prometheus Dashboard http NodePort
+### Expose prometheus Dashboard https endpoint on node IP
 
 Requirements:
 
@@ -220,7 +226,7 @@ Requirements:
 Steps:
 
 - Connect to the node
-- Execute following command to expose the http dashboard endpoint on port 30000:
+- Execute following command to expose the https dashboard endpoint on port 30000:
 
     ```[bash]
     kubectl patch svc -n telemetry prometheus-server --type='json' -p '[{"op":"replace","path":"/spec/type","value":"NodePort"},{"op":"replace","path":"/spec/ports/0/nodePort","value":30000}]'
