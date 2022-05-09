@@ -16,18 +16,18 @@ Copyright (c) 2022 Intel Corporation
 # Overview
 
 The 22.02 release of Intel® Smart Edge Open provides edge developers with the Secure Access Service Edge Experience Kit as a cloud-native platform for delivering integrated solution with SD-WAN connectivity and network security capabilities on Intel edge platform.
-This document describes the hardware and software configuration used to test the experience kit. For architecture and installation information, see 
+This document describes the hardware and software configuration used to test the experience kit. For architecture and installation information, see
 [Secure Access Service Edge documentation](../experience-kits/secure-access-service-edge-limited-release.md).
 
-## Secure and Trusted Computing 
+## Secure and Trusted Computing
 
 - <b>Remote Attestation</b>: Trusted computing consists primarily of two activities – measurement, and attestation. Measurement is the act of obtaining cryptographic representations for the system state. Attestation is the act of comparing those cryptographic measurements against expected values to determine whether the system booted into an acceptable state. This is key for Edge Computing in public and private/On-Premises deployment. Intel® Smart Edge Open supports this feature using Intel® Security Libraries (ISecL).
 
-- <b>Enclave Trust with Attestation</b>: Handling sensitive data is a key requirement for Edge Computing in public and private/On-Premises deployment. Intel® Smart Edge Open supports this feature using The Intel® Software Guard Extensions (Intel® SGX). Remote attestation allows a remote party to check that the intended software is securely running within an enclave on a system with the Intel® SGX enabled. 
+- <b>Enclave Trust with Attestation</b>: Handling sensitive data is a key requirement for Edge Computing in public and private/On-Premises deployment. Intel® Smart Edge Open supports this feature using The Intel® Software Guard Extensions (Intel® SGX). Remote attestation allows a remote party to check that the intended software is securely running within an enclave on a system with the Intel® SGX enabled.
 
-## Reference Implementation on Intel ESH 
+## Reference Implementation on Intel ESH
 
-- Telehealth Reference Implementation is supported and verified on Intel® Smart Edge Open SASE 22.02. 
+- Telehealth Reference Implementation is supported and verified on Intel® Smart Edge Open SASE 22.02.
 
 
 This document describes the hardware and software configuration used to test the experience kit. For architecture and installation information, see the [Sample Reference Documentation](../sample/se-open-sase-22-02-samples-limited-release.md).
@@ -43,7 +43,7 @@ Ubuntu OS 20.04.03
  | ----------- |:-----------------:|
  | Kubernetes |  1.23.3 |
  | Docker | 20.10.12 |
- | Calico | 3.21 | 
+ | Calico | 3.21 |
  | Harbor | 2.4.1 |
  | Multus | 3.8 |
  | NFD | 0.10.1 |
@@ -68,10 +68,10 @@ Ubuntu OS 20.04.03
 
 # Hardware
 
-## Server 
+## Server
 
 The 22.02 release of Intel® Smart Edge Open supports the following hardware platform:
--  Dell PowerEdge R750 Server motherboard 
+-  Dell PowerEdge R750 Server motherboard
 
 ## Configuration
 
@@ -117,11 +117,11 @@ The 22.02 release of Intel® Smart Edge Open supports the following hardware pla
 # Building Blocks
 
 The Secure Access Service Edge Experience Kit uses the following building blocks:
-- **SR-IOV Network Operator** - Operator for provisioning and configuring the SR-IOV CNI and device plugins supporting Intel network adapters. Use this feature to allocate dedicated high performance SR-IOV virtual interfaces to the application pods on the cluster. 
-- **Multus**: A CNI that enables attaching multiple network interfaces to a Kubernetes pod. Typically, in Kubernetes each pod only has one network interface, apart from a loopback. With Multus you can create a multi-homed pod with multiple interfaces. 
-- **Harbor**: An open source registry that secures artifacts with policies and role-based access control. Use Harbor to store application container images and Helm charts that can easily be deployed on the node. 
-- **Prometheus, Grafana, cAdvisor, StatsD**: Cloud native telemetry, observability, logging, monitoring and dashboard component, used to create an observability framework for application and resource utilization. 
-- **Node Feature Discovery (NFD)**: Software that detects hardware features available on each node in a Kubernetes cluster, and advertises those features using node labels. Use the labels created by NFD to deploy applications on nodes that meet required criteria for reliable service. 
+- **SR-IOV Network Operator** - Operator for provisioning and configuring the SR-IOV CNI and device plugins supporting Intel network adapters. Use this feature to allocate dedicated high performance SR-IOV virtual interfaces to the application pods on the cluster.
+- **Multus**: A CNI that enables attaching multiple network interfaces to a Kubernetes pod. Typically, in Kubernetes each pod only has one network interface, apart from a loopback. With Multus you can create a multi-homed pod with multiple interfaces.
+- **Harbor**: An open source registry that secures artifacts with policies and role-based access control. Use Harbor to store application container images and Helm charts that can easily be deployed on the node.
+- **Prometheus, Grafana, cAdvisor, StatsD**: Cloud native telemetry, observability, logging, monitoring and dashboard component, used to create an observability framework for application and resource utilization.
+- **Node Feature Discovery (NFD)**: Software that detects hardware features available on each node in a Kubernetes cluster, and advertises those features using node labels. Use the labels created by NFD to deploy applications on nodes that meet required criteria for reliable service.
 - **Calico**: An open source networking and network security solution for containers, virtual machines, and native host-based workloads. Calico supports network policy and high-performance data plane. It is the default CNI on the edge node cluster created by the Secure Access Service Edge Experience Kit.
 - **Cert Manager**: An open source solution for adding certificates and certificate issuers as resource types in the cluster. It simplifies the process of obtaining, renewing and using those certificates.
 - **Intel® SecL - DC**: Intel® Security Libraries enable platform attestation capability on the edge node. (Feature available only on Dell PowerEdge R750 Server). It supports following features
@@ -141,15 +141,15 @@ The Secure Access Service Edge Experience Kit uses the following building blocks
 
 # Known Issues
 
-- Edge Software provisioner - Occasionally the USB image is not built and SE-O DEK provision exits with an error. 
+- Edge Software provisioner - Occasionally the USB image is not built and SE-O DEK provision exits with an error.
   - Mitigation: Retry the ESP based provisioning.
-- Edge Software provisioner - sometimes builds an incorrect image and machine fails to boot using the image. 
+- Edge Software provisioner - sometimes builds an incorrect image and machine fails to boot using the image.
   - Mitigation: Retry the ESP based provisioning.
 - Edge Software provisioner - Cannot boot USB images using legacy BIOS.
   - Mitigation: Use UEFI BIOS.
 - In Dell PowerEdge R750 TPM endorsement key (EK) is not signed by known Certificate Authority. Our application(Intel® SecL - DC HVS) failed to verify TPM EK certificate.
   - Mitigation: Admin has to provision the root CA certificate of TPM EK to HVS in out of band mode.
-- When the existing PCCS deployment on the cloud instance (AWS) exceeds 24Hrs and user is trying to provision new DEK cluster sometimes there might be failure of provisioning. 
+- When the existing PCCS deployment on the cloud instance (AWS) exceeds 24Hrs and user is trying to provision new DEK cluster sometimes there might be failure of provisioning.
   - Mitigation: Reset SGX using "SGX Factory Reset" option in the BIOS.
-- Platform Attestation - Trust agent is unable to read the Platform Configuration Register(PCR) logs from Nationz TPM in Dell R750. Due to this, Trust agent is failed to generate the attestation with PCR measurements and HVS create_flavor API is failing.
-  - Mitigation: will be addressed next release.
+- Platform Attestation - createHost and createFlavor HVS APIs failed due to reading PCR logs from Nationz TPM in Dell R750.
+  - Mitigation: While deploying the Intel® Security Libraries, the Trust Agent (TA) TPM ownership needs to be acquired explicitly. Clearing TPM hierarchy from BIOS and reinstalling the TA.

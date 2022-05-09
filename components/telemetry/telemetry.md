@@ -31,7 +31,7 @@ Depending on the role of the component, it is deployed as either a Deployment or
 <img style="display: block; margin: auto;" alt="OpenDEK telemetry overview" src="images/OpenDek_Telemetry.svg">
 
 
-The deployment of telemetry components in Intel® Smart Edge Open is easily configurable from the open-developer-experience-kits (DEK). The deployment of the Grafana dashboard is optional (telemetry_grafana_enable enabled by default).
+The deployment of telemetry components in Intel® Smart Edge Open is easily configurable from the developer-experience-kits-open (DEK). The deployment of the Grafana dashboard is optional (telemetry_grafana_enable enabled by default).
 All flags can be changed in ESP provisioning configuration file (before Smart Edge Open deployment):
 
 - generate a custom configuration file with `./dek_provision.py --init-config > custom.yml`
@@ -62,20 +62,15 @@ Telegraf is a daemon/collector enabling the collection of hardware metrics from 
 
 List of plugins enabled by default in Telegraf
 
-- Intel® RDT
-- Intel® Powerstat
-- ras
-- cpu
+- SMART
 - diskio
 - redfish
 - ethtool
 - net
-- iptables
-- system
-- kernel_vmstat
-- kernel_cgroup
 - disk
 - mem
+- prometheus-client
+- disk
 - temp
 - ipmi_sensor
 
@@ -131,7 +126,10 @@ Prometheus is not long-term storage for metrics. By default the retention of met
 Prometheus is configured to scrape metrics related to VMs operated by KubeVirt by default.
 #### 21.09 and the availability of Prometheus Dashboard
 
-Users coming from Openness environment might be surprised by the lack of Prometheus Dashboard http endpoint running on port 3000. Due to security constraints for 21.09, the NodePort access to Prometheus dashboard is disabled. User concerned with this change can re-enable the NodePort (details for that will be presented in "How To" section) or use [port-forwarding feature](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/), forwarding port 80 of prometheus-server service.
+Users coming from Openness environment might be surprised by the lack of Prometheus Dashboard http endpoint running on port 30000. Due to security constraints for 21.09, the NodePort access to Prometheus dashboard is disabled. User concerned with this change can re-enable the NodePort (details for that will be presented in "How To" section) or use [port-forwarding feature](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/), forwarding port 9090 of prometheus-prometheus service.
+
+Since 22.03 Prometheus dashboard can be enabled before the installation by setting the `telemetry_prometheus_nodeport_expose` to  `true`. By default it would expose the service on port `30000`, this value can be changed by setting the
+`telemetry_prometheus_nodeport` variable to desired port value.
 
 ### Grafana
 
@@ -173,7 +171,7 @@ Steps:
   ![Grafana login](images/grafana_login_page.png)
 
 
-### Check the collected of metrics in Prometheus using Grafana
+### Check the collection of metrics in Prometheus using Grafana
 
 Requirements:
 
@@ -229,9 +227,8 @@ Steps:
 - Execute following command to expose the https dashboard endpoint on port 30000:
 
     ```[bash]
-    kubectl patch svc -n telemetry prometheus-server --type='json' -p '[{"op":"replace","path":"/spec/type","value":"NodePort"},{"op":"replace","path":"/spec/ports/0/nodePort","value":30000}]'
+    kubectl patch svc -n telemetry prometheus-prometheus --type='json' -p '[{"op":"replace","path":"/spec/type","value":"NodePort"},{"op":"replace","path":"/spec/ports/0/nodePort","value":30000}]'
     ```
-
 
 ### Instrument application to write StatsD metrics
 
@@ -244,7 +241,7 @@ import statsd
 import time
 from datetime import datetime
 
-HOST = 'statsd-exporter.telemetry.svc' #This is the default statsd-exporter address in DEK
+HOST = 'prometheus-statsd-exporter.telemetry.svc' #This is the default statsd-exporter address in DEK
 PORT = 8125
 
 client = statsd.StatsClient(HOST, PORT)
@@ -262,3 +259,178 @@ while True:
 
     client.incr('example.counter', random_sleep_interval)
 ```
+
+
+### Add RemoteWrite targets to Prometheus
+
+Prometheus data retention is limited by storage size and time-related policy (by default it's 15 days, can be set via `telemetry_prometheus_retention` variable on install_time).
+To create a long-term storage the user is encouraged to create his own storage, for example using M3 stack of Thanos. If the chosen solution allows for Prometheus remote write endpoint, the transport can be easily setup using 2 ways:
+
+- Before the installation
+- After the installation (running cluster)
+
+### Specify the remote write endpoint before the installation
+
+This is done by editing the inventory variable `telemetry_prometheus_remote_write_targets`, which is a list of [RemoteWriteSpec objects](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#remotewritespec). For example to instruct SE installation to send the metrics to M3 cluster via HTTP (insecure) create following config:
+
+```[yaml]
+telemetry_prometheus_remote_write_targets:
+   - name: M3
+     url: "http://<hostname>:<port>/api/v1/prom/remote/write" # Address of M3Coordinator remote write endpoint
+```
+
+Such configuration can be further enchanced by for example providing TLS specification.
+NOTE: it is assumed that CA and server certificates are stored in the same k8s secret (like in the case of cert-manager issued certificates)
+
+```[yaml]
+telemetry_prometheus_remote_write_targets:
+   - name: M3
+     url: "https://<hostname>:<port>/api/v1/prom/remote/write" # Address of M3Coordinator remote write endpoint
+     tlsConfig:
+      ca:
+        secret:
+          key: ca.crt
+          name: <tls-secret-name>
+      cert:
+        secret:
+          key: tls.crt
+          name: <tls-secret-name>
+      keySecret:
+        key: tls.key
+        name: <tls-secret-name>
+```
+
+### Specify the remote write endpoint during runtime
+
+This approach requires ssh access to Smart-Edge master node.
+
+1. Obtain Prometheus definition to a yaml file (let's call it prom.yml)
+  ```kubectl get prometheus -n telemetry prometheus-prometheus -o yaml > prom.yml```
+2. Look for `remoteWrite` field (if no remoteWrite target were specified during the installation, this field would most likely be missing, don't worry).
+   If the field is missing, add it into `spec` object.
+3. Fill the remoteWrite endpoint details into the field:
+  ```
+    spec:
+    alerting:
+      alertmanagers: []
+    remoteWrite:
+      - name: M3
+        url: http://10.211.249.251:32009/api/v1/prom/remote/write
+    enableAdminAPI: false
+    externalLabels:
+      clusterName: se_harness
+    externalUrl: http://prometheus-prometheus.telemetry:9090
+    image: quay.io/prometheus/prometheus:v2.32.1
+  ```
+4. Apply the changed configuration
+  ```kubectl apply -f prom.yml```
+5. Prometheus should detect the change and reload the configuration
+    ![Log after applying the configuration](images/prometheus_config_reload.png)
+
+### Add Prometheus monitoring for your service (using ServiceMonitor)
+
+The easiest way to do it is to create Service & ServiceMonitor manifests when installing the application (for example adding templates to helm charts).
+To pick it up, remember that ServiceMonitor and Service need to have common subset of labels. For example in case of Cadvisor (matching labels are shown with a comment):
+
+```[yaml]
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.cadvisor.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Values.cadvisor.name }}
+    app: {{ .Values.cadvisor.name }} #1
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }} #2
+    chart: {{ .Release.Name }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.proxy.metricsCadvisorPort }}
+      targetPort: {{ .Values.proxy.metricsCadvisorPort }}
+      protocol: TCP
+      name: metrics
+  selector:
+    app.kubernetes.io/name: cadvisor
+```
+
+```[yaml]
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{.Values.cadvisor.name}}
+  namespace: {{.Values.namespace}}
+  labels:
+    app.kubernetes.io/name: {{.Values.cadvisor.name}}
+    app: {{.Values.cadvisor.name}}
+    heritage: {{.Release.Service}}
+    release: {{.Release.Name}}
+    chart: {{.Release.Name}}
+spec:
+  jobLabel: "app.kubernetes.io/name"
+  selector:
+    matchLabels:
+      app: {{.Values.cadvisor.name}} #1
+      release: {{.Release.Name}} #2
+  endpoints:
+    - port: metrics
+      scheme: HTTPS
+      tlsConfig:
+        ca:
+          secret:
+            key: ca.crt
+            name: {{ .Values.proxy.secretName }}
+            optional: false
+        cert:
+          secret:
+            key: tls.crt
+            name: {{ .Values.proxy.secretName }}
+            optional: false
+        keySecret:
+          key: tls.key
+          name: {{ .Values.proxy.secretName }}
+          optional: false
+      relabelings:
+        - action: labelmap
+          regex: __meta_kubernetes_pod_label_(.+)
+        - sourceLabels: [__meta_kubernetes_pod_name]
+          regex: "cadvisor.*"
+          action: keep
+        - sourceLabels: [__address__]
+          regex: ".*:{{ .Values.proxy.metricsCadvisorPort }}"
+          action: keep
+        - sourceLabels: [__meta_kubernetes_pod_node_name]
+          action: replace
+          targetLabel: instance
+        - sourceLabels: [__meta_kubernetes_pod_name]
+          action: replace
+          targetLabel: kubernetes_pod_name
+```
+To generate valid certificates, user is encouraged to use OpenDEK cert-manager, and use clusterIssuer "ca-issuer"
+
+### Plug external query system to OpenDEK Prometheus
+
+It is assumed that the query system is deployed outside of OpenDEK cluster. In this example Grafana will be used.
+it will in a docker container on separate host, outside of SE network.
+Steps:
+
+1. Change the prometheus-prometheus service type to NodePort (is nodeport wasn't enabled during installation )
+    ```[bash]
+    kubectl patch svc -n telemetry prometheus-prometheus --type='json' -p '[{"op":"replace","path":"/spec/type","value":"NodePort"},{"op":"replace","path":"/spec/ports/0/nodePort","value":30000}]'
+    ```
+2. Run Grafana
+    ```[bash]
+    docker run -d --name grafana -p 3000:3000 grafana/grafana
+    ```
+3. Enter http://localhost:3000 and go to datasources
+4. Click on Prometheus
+5. Fill URL field with https://<dek-node-ip>:port
+6. At this point there are 2 ways:
+  - Ignore the certificate validation and check the `Skip TLS Verify` field. Going with this option, check the `Save & Test` field. This concludes this part of tutorial.
+  - Obtain the CA certificate in order to validate the Prometheus Endpoint
+    - SSH into the DEK's master node
+    - Execute  `kubectl get secrets/prometheus-tls -n telemetry -o json | jq -r '.data."ca.crt"' | base64 -d `
+    - Check the `With CA Cert` toggle
+    - Paste the certificate into `TLS/SSL Auth Details` field `CA Cert`
+    - Click `Save & Test` field. This concludes this part of tutorial

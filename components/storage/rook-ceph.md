@@ -7,14 +7,15 @@ Copyright (c) 2019-2021 Intel Corporation
 - [Rook-Ceph](#Rook-Ceph)
   - [Overview](#overview)
     - [Overview of Ceph](#overview-of-ceph)
-    - [Overview of Rook and CSI](#overview-of-rook-and-csi)
+    - [Overview of Rook operator and CSI](#overview-of-rook-operator-and-csi)
   - [Rook-Ceph configuration and usage](#rook-ceph-configuration-and-usage)
     - [Configuration](#configuration)
       - [Pre-requisites](#pre-requisites)
       - [Ceph Configuration](#ceph-configuration)
-      - [Ceph Resource Restraint](#rook-resource-restraint)
+      - [Ceph Resource Restraint](#ceph-resource-restraint)
+    - [Verify the Ceph OSD creation on the node](#verify-the-ceph-osd-creation-on-the-node)
     - [Usage](#usage)
-      - [SR-IOV VM application](#sr-iov-vm-application)
+      - [PVC VM application](#pvc-vm-application)
   - [Limitations](#limitations)
   - [Reference](#reference)
 
@@ -64,7 +65,7 @@ Just like native Ceph, Rook-Ceph provides block, filesystem, and object storage 
 
 ## Rook-Ceph configuration and usage
 
-To deploy the Rook-Ceph operator and Ceph to the Intel® Smart Edge Open cluster, `rook_ceph.enabled: True` must be set in `inventory/default/group_vars/all/20-enhanced.yml`, which is disabled by default. This will perform Rook operator and Ceph daemons install and deploy, images for Rook operator and Ceph daemon with CSI plugins are download from public docker repository.
+To deploy the Rook-Ceph operator and Ceph to the Intel® Smart Edge Open cluster, `rook_ceph_enabled: True` must be set in `/inventory/default/group_vars/all/10-default.yml`, which is disabled by default. This will perform Rook operator and Ceph daemons install and deploy, images for Rook operator and Ceph daemon with CSI plugins are download from public docker repository.
 
 ### Configuration
 
@@ -78,11 +79,12 @@ If the user wants to manually prepare the drive then he can follow
 the steps to reset the drive to a usable state as described in : https://rook.io/docs/rook/v1.7/ceph-teardown.html#zapping-devices
 	
 #### Ceph Configuration
-Specifies Ceph configuration, pwek-upf-app flavor as example, in `deployments/pwek-upf-apps/all.yml`:
+Specifies Ceph configuration in `inventory/default/group_vars/all/10-default.yml`:
 
 ```yaml
+rook_ceph_enabled: True
+
 rook_ceph:
-  enabled: True
   mon_count: 1
   host_name: "{{ hostvars[groups['controller_group'][0]]['ansible_nodename'] }}"
   osds_per_device: "1"
@@ -90,7 +92,7 @@ rook_ceph:
 ```
 
 #### Ceph Resource Restraint
-Since Rook-Ceph daemons deploy in Edge Node, considering that the resource consumption of the ceph daemon may affect the operation of the edge application, the default value of resource restraint for Ceph daemons defined in `roles/kubernetes/rook_ceph/defaults/main.yml`.
+Since Rook-Ceph daemons deploy in Edge Node, considering that the resource consumption of the ceph daemon may affect the operation of the edge application, the default value of resource restraint for Ceph daemons is defined in `roles/kubernetes/rook_ceph/defaults/main.yml`.
 
 ```yaml
 _rook_ceph_limits:

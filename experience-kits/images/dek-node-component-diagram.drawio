@@ -1,1 +1,73 @@
-<mxfile host="Electron" modified="2021-12-13T15:16:53.881Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/15.8.7 Chrome/91.0.4472.164 Electron/13.6.2 Safari/537.36" etag="Ao2dHflpnVK-FbQz_HZf" version="15.8.7" type="device"><diagram id="T3rATqdRYmZI2V5PHrHu" name="Page-1">5Zptb+I4EIB/DdLdh56cGEL4SCl9UV+1tNvb+7JykiGJauLIcVrYX3+exFDAabeVCL32KhWcie3Y88yM7QkdOprNTyTLk0sRAe+4JJp36FHHdR3f9/UXSha1xOsOakEs08hUehZM0l9ghMRIyzSCYqOiEoKrNN8UhiLLIFQbMialeNqsNhV886k5i8ESTELGbel9Gqmklvo98iw/hTROlk92iLkzY8vKRlAkLBJPayI67tCRFELVpdl8BByVt9RL3e74hburgUnI1Fsa3A1//rjTc/jpHo/nJ1fjf8rFyYHp5ZHx0ky443pslnfoYRYU+NXBbjdF40jrzCVXGrb+GolZLjIchEuOUhZLNjMTVoulFqUoswhwIES3f0pSBZOchXj3SduNliVqxvWVo4uMp3GmyxymemKHjyBVqoEMjViJeljbs19ORVeH+ZrIaOMExAyUXOgq5u5Bd8nK2CY1l0/PoAe+kSVrkLt9I2TGuOJV38/61wWD4B043N/iOGUyEFLX+QZxWlTP9DiqKdBCL8bSSGSKpRlgLbmqRVgW6c9T4DOEljCpiqpCLixc2lRzLIYLnmpukv4eWlATvghWAhY+xBX361LpbsDIi9rFnd4a6VBD1MOlh9OU85HgeoI4DhpGEPgBNlJSPMDaHerRAY12ZAfU37QDp2cbguM2GILj9FsyBGoZwl1QZqrUMpf8Rbr6++J20qFDdDqYspKj+6kEHZIzBQVePoDMMBzrIZBhVqSB5ltd3CxUIrK6XCwKBWgSBcjHNISiirBVAMtY5edDhf0xlW42ieqLSIQPaGpYvjqemI5QsosY8JJlENIjMG2yDEKco8MRttBusCafVn8tWUzX79mho9tgMZS2ZDBdy2Am3w7Orr8jFVBPQj7o0nUOkinUCNrNqkIECB6Vwss4zV4h57w7em9xixj407CJmxf6EOyKj9vd4kNtPj5p4tOWQ/csPlfHRzUHs45esED3k2YxKr/McyHVbki85ENTP4SwkUXg97o90hILd/BWFm2tsp7FYqR1FYrtcDq6OmuXwAd5A22IVvsl0LcIXGqVl0VNAMtpzmEjdp2hCqesilN7cY+PgtO1Nx/7hePb7iE414eraLVEGFAKOJhnbh8aWg1cU/CaA1fUHwSkrcDleDYZt9fb4yI/eHmRx1hVMamClj7nyvUV/vux/jg328F1V/r8DrSislzqXTu40cE+/WeZumh2oKxe7WGOEQyk8aTRzV29hb6Emaim96V9a8noNc/q73P77NiJkBGLHtNiuVn+nwGi5A2E9hr7HDs3ciOx7wRKezkimH4AzHh8PTb2jprQj4Zj5yvOfcwkYC5KCl5tHFgGdrLqFSA7SBMEBCh4jWkC8Invt5QOoK4NpDmB1G3rvOnYCYGaiFl/DvT/QxlUp34p5jib8zLgoN7hMZ8XkNu3NwmNgJZ5g93zsRMCE8VUcTQ2GwOTo6lkuoBPTUMEqHffSpYzVCjuJ1ie67Oryc59/uC2tTNoDG373RnY2YITyaYsYyZdwIokEExGX0H728v+XlcWVt6NfPLLZYPJ/X32I3Vu43FDruasgPBCi8ZzBZV+tZeECUQlx6TzPpd7cKIe9JuYDLw+ZV5LWzHHjl37ZWInCGomlT/cyrJ6+TCM61eCf9wO//wKGLaPLE0U2gpMjRTsZEB6WgZfQdV25uXDTb7hTI9ZFGw3Ofkbl4HlO5SbHb5D+Y9h6LsWhebMZGsU7FN6qKdzUL+qlO0qXavcj7pNSvfdgHptKd1teBm9q3ywvnz+/Ul1b+1XPHT8Lw==</diagram></mxfile>
+<mxfile host="65bd71144e">
+    <diagram id="T3rATqdRYmZI2V5PHrHu" name="Page-1">
+        <mxGraphModel dx="1580" dy="378" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="UA_YUWid_2FExGNEZuyG-1" value="&amp;nbsp; &amp;nbsp;Edge Node Component Diagram" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;" parent="1" vertex="1">
+                    <mxGeometry x="-400" y="30" width="980" height="470" as="geometry"/>
+                </mxCell>
+                <mxCell id="UA_YUWid_2FExGNEZuyG-2" value="&amp;nbsp;Harbor Registry&lt;br&gt;Container registry and Helm Charts repo" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;align=center;fillColor=#cdeb8b;strokeColor=#36393d;" parent="1" vertex="1">
+                    <mxGeometry x="-380" y="150" width="120" height="117" as="geometry"/>
+                </mxCell>
+                <mxCell id="UA_YUWid_2FExGNEZuyG-3" value="Ubuntu 20.04 LTS: Default the latest kernel, Ansible, Python, system services to manage Attestation, systemd, docker, NFS server" style="rounded=0;whiteSpace=wrap;html=1;align=center;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="-380" y="485" width="940" height="33" as="geometry"/>
+                </mxCell>
+                <mxCell id="UA_YUWid_2FExGNEZuyG-4" value="SR-IOV Network Operator: SR-IOV device plugin" style="rounded=1;whiteSpace=wrap;html=1;align=left;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+                    <mxGeometry x="-240" y="435" width="800" height="37" as="geometry"/>
+                </mxCell>
+                <mxCell id="UA_YUWid_2FExGNEZuyG-5" value="NFD: Node Labelling support" style="rounded=1;whiteSpace=wrap;html=1;align=center;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+                    <mxGeometry x="-240" y="295" width="800" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="UA_YUWid_2FExGNEZuyG-6" value="Calico: Default CNI" style="rounded=1;whiteSpace=wrap;html=1;align=center;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+                    <mxGeometry x="-240" y="385" width="800" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="UA_YUWid_2FExGNEZuyG-7" value="Multus: Multiple Network Interface support" style="rounded=1;whiteSpace=wrap;html=1;align=center;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+                    <mxGeometry x="-240" y="340" width="800" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="UA_YUWid_2FExGNEZuyG-8" value="Telegraf: telemetry collector" style="rounded=1;whiteSpace=wrap;html=1;align=center;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+                    <mxGeometry x="-240" y="160" width="255" height="33" as="geometry"/>
+                </mxCell>
+                <mxCell id="UA_YUWid_2FExGNEZuyG-9" value="SR-IOV CNI: CNI for SR-IOV VF Kernel Interface" style="rounded=1;whiteSpace=wrap;html=1;align=center;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+                    <mxGeometry x="160" y="425" width="390" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="UA_YUWid_2FExGNEZuyG-10" value="Node Exporter: telemetry collector" style="rounded=1;whiteSpace=wrap;html=1;align=center;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+                    <mxGeometry x="25" y="160" width="270" height="33" as="geometry"/>
+                </mxCell>
+                <mxCell id="UA_YUWid_2FExGNEZuyG-11" value="Cadvisor: CPU, Memory telemetry&amp;nbsp;" style="rounded=1;whiteSpace=wrap;html=1;align=center;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="160" width="255" height="33" as="geometry"/>
+                </mxCell>
+                <mxCell id="UA_YUWid_2FExGNEZuyG-12" value="Prometheus: telemetry backend&amp;nbsp;" style="rounded=1;whiteSpace=wrap;html=1;align=center;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+                    <mxGeometry x="-240" y="203" width="255" height="33" as="geometry"/>
+                </mxCell>
+                <mxCell id="UA_YUWid_2FExGNEZuyG-13" value="K8s Control plane&lt;br&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=center;fillColor=#b0e3e6;strokeColor=#0e8088;" parent="1" vertex="1">
+                    <mxGeometry x="-380" y="323" width="120" height="147" as="geometry"/>
+                </mxCell>
+                <mxCell id="UA_YUWid_2FExGNEZuyG-14" value="K8s node - kube proxy Kublet&amp;nbsp;" style="rounded=0;whiteSpace=wrap;html=1;align=center;fillColor=#b0e3e6;strokeColor=#0e8088;" parent="1" vertex="1">
+                    <mxGeometry x="-380" y="275" width="120" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="UA_YUWid_2FExGNEZuyG-15" value="StatsDExporter: StatsD metrics instrumented application" style="rounded=1;whiteSpace=wrap;html=1;align=center;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+                    <mxGeometry x="25" y="203" width="270" height="33" as="geometry"/>
+                </mxCell>
+                <mxCell id="UA_YUWid_2FExGNEZuyG-16" value="Grafana: Dashboard" style="rounded=1;whiteSpace=wrap;html=1;align=center;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="203" width="255" height="33" as="geometry"/>
+                </mxCell>
+                <mxCell id="auUC80z2a9SWWnYi1TgE-6" value="IsecL Extended Scheduler&amp;nbsp;" style="rounded=1;whiteSpace=wrap;html=1;align=center;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="115" width="255" height="33" as="geometry"/>
+                </mxCell>
+                <mxCell id="auUC80z2a9SWWnYi1TgE-8" value="IsecL: Trust Agent (TA)" style="rounded=1;whiteSpace=wrap;html=1;align=center;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+                    <mxGeometry x="25" y="115" width="270" height="33" as="geometry"/>
+                </mxCell>
+                <mxCell id="auUC80z2a9SWWnYi1TgE-9" value="iHub" style="rounded=1;whiteSpace=wrap;html=1;align=center;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+                    <mxGeometry x="-240" y="115" width="255" height="33" as="geometry"/>
+                </mxCell>
+                <mxCell id="auUC80z2a9SWWnYi1TgE-10" value="Intel SGX Device Plugin" style="rounded=1;whiteSpace=wrap;html=1;align=center;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+                    <mxGeometry x="-240" y="72" width="800" height="33" as="geometry"/>
+                </mxCell>
+                <mxCell id="auUC80z2a9SWWnYi1TgE-11" value="cert-manager" style="rounded=1;whiteSpace=wrap;html=1;align=center;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+                    <mxGeometry x="-240" y="250" width="800" height="30" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

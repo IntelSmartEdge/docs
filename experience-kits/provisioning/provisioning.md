@@ -27,7 +27,7 @@ Copyright (c) 2021 Intel Corporation
   * [Configuration File Generation](#configuration-file-generation)
   * [Configuration File Summary](#configuration-file-summary)
   * [Experience Kit Configuration](#experience-kit-configuration)
-  * [GitHub Credentials](#github-credentials)
+  * [Git Credentials](#git-credentials)
   * [Docker Pull Rate Limit](#docker-pull-rate-limit)
   * [Docker registry Mirror](#registry-mirror)
   * [Docker Hub Credentials](#docker-hub-credentials)
@@ -337,27 +337,27 @@ profiles:
 […]
 ```
 
-### GitHub Credentials
+### Git Credentials
 
 The access to some of the experience kits may be limited and controlled using git credentials.
 In such a case, the operator has to provide these credentials to the provisioning script.
 
-The first method of providing them is through the `github` object of a custom
+The first method of providing them is through the `git` object of a custom
 [configuration file](#configuration-file-summary):
 
 ```yml
-github:
+git:
   user: '<user-name>'
-  token: '<user-token>'
+  password: '<user-password>'
 ```
 
-The second method is to use the GitHub credentials options of the provisioning script:
+The second method is to use the git credentials options of the provisioning script:
 
 ```bash
 [provisioning system] # ./dek_provision.py -h
 […]
-  --github-user NAME    NAME of the GitHub user to be used to clone required Smart Edge Open repositories
-  --github-token VALUE  GitHub token to be used to clone required Smart Edge Open repositories
+  --git-user NAME    Name of the user to be used to clone required Smart Edge Open repositories
+  --git-password VALUE  Password to be used to clone required Smart Edge Open repositories
 […]
 ```
 
@@ -369,7 +369,9 @@ if they cannot be accessed anonymously or with the operator-provided credentials
 work, and eventually, it is the operator's responsibility to provide the credentials if needed.
 
 The scenario in which different repositories can be accessed using different credentials is currently not
-supported. All the repositories must be either public or available for the specific user.
+supported. All the repositories must be either public or available for the specific user. The only supported protocols
+are HTTP and HTTPS, both anonymous and authenticated with user and password. Github's token authentication is supported,
+the token value should be used to specify git password.
 
 ### Docker Pull Rate Limit
 

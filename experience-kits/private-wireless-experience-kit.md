@@ -49,7 +49,7 @@ Copyright (c) 2022 Intel Corporation
 
 ## Overview
 
-Intel® Smart Edge Open experience kits provide blueprint as reference for on-premise 5G deployment with edge services. Combining Intel cloud native technologies, wireless networking, and high-performance compute, the Private Wireless Experience Kit you deliver AI, video, and other services with optimized performance on Intel edge platforms.
+Intel® Smart Edge Open experience kits provide blueprint as reference for on-premise 5G deployment with edge services. Combining Intel cloud native technologies, wireless networking, and high-performance compute, the Private Wireless Experience Kit delivers AI, video, and other services with optimized performance on Intel edge platforms.
 
 The Private Wireless Experience Kit accelerate private 5G deployment with Intel Edge platforms.
 
@@ -173,7 +173,7 @@ The Intel® vRAN Dedicated Accelerator ACC100 Adapter accelerates 5G virtualized
 - Accelerates both 4G and 5G data concurrently.
 - Lowers development cost using commercial off the shelf (COTS) servers.
 - Accommodates space-constrained implementations via a low-profile PCIe* card form factor.
-For more references, see [<b>smartedge-open-acc100</b> ](https://github.com/smart-edge-open/specs/blob/master/doc/building-blocks/enhanced-platform-awareness/smartedge-open-acc100.md) using ACC100 eASIC in Smart Edge Open: Resource Allocation, and Configuration.
+For more references, see [<b>smartedge-open-acc100</b> ](https://github.com/smart-edge-open/specs/blob/main/doc/building-blocks/enhanced-platform-awareness/smartedge-open-acc100.md) using ACC100 eASIC in Smart Edge Open: Resource Allocation, and Configuration.
 
 #### Hardware BOM
 
@@ -824,7 +824,7 @@ Once the application has been deployed, the application pod takes in virtual/rea
 
 In the Private Wireless Experience Kit environment, the UE side will start the visualizer to send request through 5G network, then nginx server in Grafana pod will forward 5G network request to calico network to complete data transfer.
 
-Please follow this link [ITM_Onboard](https://github.com/smart-edge-open/edgeapps/tree/master/applications/wnr-itm-app) to Onboard Wireless Network-Ready Intelligent Traffic Management Application.
+Please follow this link [ITM_Onboard](https://github.com/smart-edge-open/edgeapps/tree/main/applications/wnr-itm-app) to Onboard Wireless Network-Ready Intelligent Traffic Management Application.
 
 ## Troubleshooting
 
@@ -869,5 +869,5 @@ This guide walked you through deploying the Private Wireless Experience Kit. The
 ### Next Steps
 - Download and install a sample application based on the Intel® Distribution of OpenVINO™ toolkit. 
 [OpenVINO (Open Visual Inference and Neural Network Optimization)](https://github.com/openvinotoolkit/openvino/blob/master/README.md) helps developers and data scientists speed up computer vision workloads, streamline deep learning inference and deployments, and enable easy, heterogeneous execution across Intel® architecture platforms from edge to cloud.
-- Install the [Wireless Network Ready Intelligent Traffic Management reference implementation.](https://github.com/smart-edge-open/edgeapps/blob/master/applications/wnr-itm-app/README.md)
+- Install the [Wireless Network Ready Intelligent Traffic Management reference implementation.](https://github.com/smart-edge-open/edgeapps/blob/main/applications/wnr-itm-app/README.md)
 This reference implementation detects and tracks vehicles and pedestrians using deep learning, and provides the intelligence required to estimate a safety metric for an intersection.
