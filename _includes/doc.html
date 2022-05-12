@@ -117,7 +117,7 @@ Copyright (c) 2021-2022 Intel Corporation
                                         </ul>
                                     </li>
                                     {% else %}
-                                    <li><span>{{ navbar.title }}</span></li>
+                                    <li class="noChild"><span><a href="{{ navbar.path }}">{{ navbar.title }}</a></span></li>
                                     {% endif %}
                                 {% endfor %}
                                 </ul>
