@@ -6,6 +6,7 @@ Copyright (c) 2021 Intel Corporation
 # Intel® Smart Edge Open Provisioning Process
 
 * [Overview](#overview)
+* [Preconditions and software requirements](#Preconditions-and-software-requirements)
 * [Provisioning Process Scenarios](#provisioning-process-scenarios)
   * [Default Provisioning Scenario](#default-provisioning-scenario)
     * [Repository Cloning](#default-repository-cloning)
@@ -41,6 +42,9 @@ Intel® Edge Software Provisioner toolchain to deliver a smooth installation exp
 
 The provisioning process requires a temporary provisioning system operating on a separate machine
 and routable from the subnet the provisioned machines are supposed to work on.
+
+## Preconditions and software requirements
+If you want to read preconditions and software requirements please open the [link](./provisioning.md##Preconditions-and-software-requirements), all the required information is there.
 
 ## Provisioning Process Scenarios
 

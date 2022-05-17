@@ -35,15 +35,22 @@ Copyright (c) 2021 Intel Corporation
 10. DEK Cluster is up along with K8s Intel device plugin installed.
 11. Graphenized app is deployed on the kubenetes node using intel device plugin which exposes SGX memory to pods/jobs running on it.
 
-<img src="images/ESP-SGX-workflow.png" style="zoom:100%;" />
+![ESP based SGX deployment flow](images/ESP-SGX-workflow.png)
+
+*Figure - ESP based SGX deployment flow*
+
 
 ## Architecture
 
-<img src="images/SGX-integration-with-DEK-design.png" style="zoom:100%;" />
+![SGX integration into DEK setup](images/SGX-integration-with-DEK-design.png)
+
+*Figure - SGX integration into DEK setup*
 
 ### Sequential deployment workflow showing flow of credentials/certificates
 
-<img src="images/SGX-provisioning-seq-diagram.png" style="zoom:100%;" />
+![SGX provisioning sequence diagram](images/SGX-provisioning-seq-diagram.png)
+
+*Figure - SGX provisioning sequence diagram*
 
 ## How To
 ### Enable Intel SGX in BIOS
@@ -118,4 +125,4 @@ To subscribe follow the steps below
 
 7.) Now on the next page, scroll down to  "Intel® Software Guard Extensions Provisioning Certification Service subscription" section and click on any of the  "Show" links to reveal your corresponding API key
 ### How to test SGX functionality
-Test SGX functionality using gramine based sample OpenVino [application](https://github.com/smart-edge-open/edgeapps/blob/master/applications/sgx/openvino-ssd/README.md)
+Test SGX functionality using gramine based sample OpenVino [application](https://github.com/smart-edge-open/edgeapps/blob/smart-edge-open-21.12-rc2/applications/sgx/openvino-ssd/README.md)
