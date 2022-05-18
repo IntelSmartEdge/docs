@@ -52,6 +52,8 @@ Copyright (c) 2021-2022 Intel Corporation
                                     {% assign doc_url = nav.path | append:"/" %}
                                     <li class="{% if doc_url == repo_path %}uk-active{% endif %}"><a href="{{ nav.path }}">{{ nav.title }}</a></li>
                                     {% endfor %}
+                                    </ul>
+                                {% endfor %}
                                 {% endcomment %}
                                 <!-- End Comment -->
 
