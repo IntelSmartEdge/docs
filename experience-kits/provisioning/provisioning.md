@@ -6,6 +6,9 @@ Copyright (c) 2021 Intel Corporation
 # Intel® Smart Edge Open Provisioning Process
 
 * [Overview](#overview)
+* [Preconditions and software requirements](#Preconditions-and-software-requirements)
+  * [Software requirements](#Software-requirements)
+  * [Preconditions](#Preconditions)
 * [Provisioning Process Scenarios](#provisioning-process-scenarios)
   * [Default Provisioning Scenario](#default-provisioning-scenario)
     * [Repository Cloning](#default-repository-cloning)
@@ -24,11 +27,15 @@ Copyright (c) 2021 Intel Corporation
   * [Configuration File Generation](#configuration-file-generation)
   * [Configuration File Summary](#configuration-file-summary)
   * [Experience Kit Configuration](#experience-kit-configuration)
-  * [GitHub Credentials](#github-credentials)
+  * [Git Credentials](#git-credentials)
   * [Docker Pull Rate Limit](#docker-pull-rate-limit)
   * [Docker registry Mirror](#registry-mirror)
   * [Docker Hub Credentials](#docker-hub-credentials)
+  * [PXE](#pxe)
   * [Secure Boot and TPM](#secure-boot-and-tpm)
+  * [BMC](#bmc)
+  * [Hosts](#hosts) 
+  * [Changing machine hostname](#changing-machine-hostname)
 * [Troubleshooting](#troubleshooting)
 
 ## Overview
@@ -42,6 +49,23 @@ Intel® Edge Software Provisioner toolchain to deliver a smooth installation exp
 
 The provisioning process requires a temporary provisioning system operating on a separate machine
 and routable from the subnet the provisioned machines are supposed to work on.
+
+## Preconditions and software requirements
+
+### Software requirements
+* Ubuntu 20.04
+* Docker 18.09.3 or greater
+* Docker-compose v1.23.2 or greater
+* Python v3.6 or greater
+* Bash v4.3.48 or greater
+* Git v2.25.1 or greater
+
+### Preconditions
+The following steps should be performed on a clean machine in order to prepare the system for the provisioning process:
+
+1. [Install docker.](#Docker-has-to-be-installed)
+2. [Install docker-compose.](#The-docker-compose-tool-has-to-be-installed)
+3. [Install Git.](#Git-has-to-be-installed)
 
 ## Provisioning Process Scenarios
 
@@ -104,6 +128,9 @@ repository. You can also use command-line arguments like `--registry-mirror` to 
 ```Shell.bash
 [Provisioning System] # ./dek_provision.py --run-esp-for-usb-boot
 ```
+
+> NOTE: ESP creates some network services to support remote installation, these services can be blocked by the firewall.
+Please see [ESP documentation](https://github.com/intel/Edge-Software-Provisioner) to check what services are working in which scenario.
 
 <a id="default-installation-media-flashing"></a>
 #### Installation Media Flashing
@@ -261,7 +288,7 @@ configuration file.
 ### Experience Kit Configuration
 
 For each provisioned experience kit, it is possible to adjust its configuration and specify user-provided files if
-needed for a specific deployment variant.  Both of these configuration adjustments are currently possible
+needed for a specific deployment variant. Both of these configuration adjustments are currently possible
 through the [configuration file](#configuration-file-summary) only. For each of the provisioned experience kits (item
 of the `profiles` list), it is possible to set its deployment variables through the `group_vars`, and `hosts_vars`
 objects and the list of operator-provided files through the `sideload` list:
@@ -291,27 +318,46 @@ provided by the experience kit, so there is no need to adjust them in the
 The operator-provided files specified in the `sideload` list are read from a local location, copied to the
 provisioning artifacts, and finally to the provisioned system.
 
-### GitHub Credentials
+### Profile Credentials
+
+For each provisioned experience kit, it is possible to set profile login credentials.
+
+* If username is not set by the user - it will be set to "smartedge-open".
+* If password is not set by the user - it will be randomly generated and displayed at the end of the ESP script runtime.
+
+```
+profiles:
+  - name: Smart_Edge_Open_Developer_Experience_Kits
+[…]
+    # Credentials of the operating system account that will be created.
+    # Account will be added to the sudoers.
+    account:
+      username: smartedge-open
+      password: smartedge-open
+[…]
+```
+
+### Git Credentials
 
 The access to some of the experience kits may be limited and controlled using git credentials.
 In such a case, the operator has to provide these credentials to the provisioning script.
 
-The first method of providing them is through the `github` object of a custom
+The first method of providing them is through the `git` object of a custom
 [configuration file](#configuration-file-summary):
 
 ```yml
-github:
+git:
   user: '<user-name>'
-  token: '<user-token>'
+  password: '<user-password>'
 ```
 
-The second method is to use the GitHub credentials options of the provisioning script:
+The second method is to use the git credentials options of the provisioning script:
 
 ```bash
 [provisioning system] # ./dek_provision.py -h
 […]
-  --github-user NAME    NAME of the GitHub user to be used to clone required Smart Edge Open repositories
-  --github-token VALUE  GitHub token to be used to clone required Smart Edge Open repositories
+  --git-user NAME    Name of the user to be used to clone required Smart Edge Open repositories
+  --git-password VALUE  Password to be used to clone required Smart Edge Open repositories
 […]
 ```
 
@@ -323,7 +369,9 @@ if they cannot be accessed anonymously or with the operator-provided credentials
 work, and eventually, it is the operator's responsibility to provide the credentials if needed.
 
 The scenario in which different repositories can be accessed using different credentials is currently not
-supported. All the repositories must be either public or available for the specific user.
+supported. All the repositories must be either public or available for the specific user. The only supported protocols
+are HTTP and HTTPS, both anonymous and authenticated with user and password. Github's token authentication is supported,
+the token value should be used to specify git password.
 
 ### Docker Pull Rate Limit
 
@@ -389,12 +437,66 @@ The second method is to use the Docker Hub credentials options of the provisioni
 
 Only the installer will use these credentials. They won't affect the provisioning and the provisioned systems.
 
-### Secure Boot and TPM
-The Developer Experience Kit supports switching on Secure Boot and TPM feature on reference platform. This can be done with
-configuration file. It is disabled by default.
+### PXE
 
-Secure Boot configuration is a part of a profile. Example of configuration file section switching on secure boot for
-a given profile.
+Smart Edge Open provisioning process supports network boot with PXE protocol. This provisioning scenario does not need any installation media to carry bootable image.
+
+> NOTE: PXE protocol is a DHCP exentsion, using PXE will disrupt current network DHCP server, so it should be done in separated network environment. 
+
+PXE scenario is disabled by default. To enable it, custom configuration file has to be provided and modified like below:
+```yaml
+dnsmasq:
+  # If true, then the dnsmasq will be started with rest of the Provisioning System suite.
+  enabled: true
+
+  # Domain Name System (DNS) settings
+  # These values should be changed in case of default DNS (8.8.4.4 and 8.8.8.8) are not reachable.
+  network_dns_primary: ''     # e.g. 8.8.4.4
+  network_dns_secondary: ''   # e.g. 8.8.8.8
+
+  # DHCP and network settings
+  dhcp_range_minimum: ''      # e.g. 192.168.1.100
+  dhcp_range_maximum: ''      # e.g. 192.168.1.250
+  network_broadcast_ip: ''    # e.g. 192.168.1.255
+  network_gateway_ip: ''      # e.g. 192.168.1.1
+
+  # IP address of the Provisioning System
+  host_ip: ''                 # e.g. 192.168.1.2
+```
+
+If any of above values is not provided explicitly, it will be guessed from current network configuration.
+
+> NOTE: Dnsmasq component provides DHCP and TFTP services, these services are started on all available network interfaces.
+
+PXE provisioning scenario differs from default scenario in following points.
+
+#### Services startup
+While starting provisioning service, the script invocation have to include additional parameter to support PXE boot mode `--run-esp-for-pxe-boot`.
+```bash
+[provisioning system] # ./dek_provision.py --config custom.yml --run-esp-for-pxe-boot
+```
+#### Installation Media Flashing
+PXE scenario does not require installation media.
+
+#### System installation
+Reset provisioned system, enter the BIOS to boot from network with PXE.
+
+> NOTE: Known issue: PXE EFI boot does not work with Dell PowerEdge R750, please use BIOS verion instead.
+
+### Secure Boot and TPM
+The Developer Experience Kit supports switching on Secure Boot and TPM feature on the reference platform. This can be done with
+configuration file. Both features are enabled by default configuration.
+
+Provisioning configuration allows a global definition of these settings. In such a case, the provisioning script will apply them to all provisioned hosts.
+```yaml
+bios:
+  tpm: false
+  secure_boot: true
+```
+
+Secure Boot and TPM settings can be overridden in the [hosts](#hosts) section for specific hosts and then
+overridden in the profiles section again. Profiles settings have top priority and override settings defined in the global section
+and hosts section. 
 ```yml
 profiles:
   - name: Smart_Edge_Open_Developer_Experience_Kits
@@ -410,17 +512,80 @@ profiles:
       username: smartedge-open
       password: smartedge-open
 
-    # Secure boot and trusted media platform options.
-    bmc:
+    bios:
       secure_boot: true
       tpm: true
-      address: '192.168.1.111'
-      user: 'root'
-      password: 'password'
 ```
 
-Provisioning machine has to have access to the out-of-band BMC interface of provisioned machine. It is necessary
-to provide BMC address together with user and password.
+Secure Boot and TPM modification is done in the profile using the [bmc](#bmc) section data, provisioning machine has to have
+access to the out-of-band BMC interface of provisioned machine. It is necessary to provide BMC address together with
+user and password. If host bios allows in-host BMC access then internal access to BMC can be used and access to
+out-of-band interface from provisioning machine is not needed.
+
+
+### BMC
+BMC stands for Baseboard Management Controller, it is used to remotely control the hardware. There is a global section named **bmc**,
+it defines BMC address, user name and password, it is only used to provide general authentication information for all
+hosts in the cluster. Another possible use case is that in-host BMC passthrough is enabled so it allows to control
+hardware settings from inside of given host, assuming the internal address of BMC interface is always the same.
+
+```yaml
+bmc:
+  address: 169.254.1.1
+  user: admin
+  password: adminpassword
+```
+
+BMC settings control can be overridden for given host in the [hosts](#hosts) section for each configured host.
+
+
+### Hosts
+Provisioning script configuration can provide a list of hosts to apply individual settings. This list is
+defined in ***hosts*** section. Each entry in **hosts** section defines settings which will be applied to given host.
+Individual hosts are identified by MAC address of any network card accessible from given host.
+
+The [BMC](#bmc) settings, Secure Boot and TPM settings can be specified for each host in **hosts** section. Individual
+settings are overridden one by one so it is possible to override just a single value like an address and keep user and
+password unchanged from global configuration.
+```yaml
+hosts:
+  - name: node001
+    mac: 11:22:33:44:55:66
+    bios:
+      secure_boot: true
+    bmc:
+      user: root
+      password: root
+  - name: node002
+    mac: aa:bb:cc:dd:ee:ff
+    bios:
+      tpm: true
+    bmc:
+      address: node017.cluster
+  - name: node003
+    mac: 66:55:44:33:22:11
+    bios:
+      tpm: true
+      secure_boot: true
+```
+
+### Changing machine hostname
+Each host in ***hosts*** section may contain an optional ***name*** parameter.<br/>
+When ***name*** is specified, the value will be set as hostname of the provisioned machine which MAC address of any network card matches the given ***mac*** value.<br/>
+Example - Let's assume following configuration:
+```yaml
+hosts:
+  - mac: 11:22:33:44:55:66
+    bios:
+      secure_boot: true
+    bmc:
+      user: root
+      password: root
+  - name: node002
+    mac: aa:bb:cc:dd:ee:ff
+```
+This will result in a machine with mac ***11:22:33:44:55:66*** to have a randomly generated hostname (ex. 'ubuntu-d4d06edb08' for Ubuntu profile).
+The machine with mac address ***aa:bb:cc:dd:ee:ff*** will have its hostname changed to ***node002*** during provisioning process.
 
 ## Troubleshooting
 
@@ -522,3 +687,70 @@ Retry the build attempt by rerunning the same provisioning command with the `--c
 [Provisioning System] # ./dek_provision.py --cleanup […]
 ```
 If it doesn't help, you may inspect the ESP logs, typically located in the ./esp/builder.log file.
+
+### Git has to be installed
+
+#### Problem
+
+The following error message appears when you try to download a repository (e.g., `git clone [...]`):
+
+```text
+-bash: git: command not found
+```
+
+#### Solution
+
+Install `Git` tool according to the official instruction:
+[Install Git](https://git-scm.com/download/linux).
+
+
+### Provisioning configuration file validation failed
+
+#### Problem
+
+The following error is displayed when you attempt to run the provisioning script with a custom
+[configuration file](#configuration-file-summary) (e.g., `dek_provision.py -c <config-path>`):
+
+```text
+ERROR: The provisioning configuration file ('<config-path>') validation failed:
+    <issue-yaml-path>:
+        <issue-description>
+    […]
+```
+
+The issue list may contain one or more findings. The actual message can look like the following:
+```text
+ERROR: The provisioning configuration file ('custom.yml') validation failed:
+    esp:
+        'url' is a required property
+    profiles/0/experience_kit/deployment:
+        1 is not of type 'string'
+```
+
+#### Solution
+
+This error indicates one or more problems with the custom configuration file. This problem isn't related to the YAML
+syntax which is correct but rather to its structure not matching the expected schema.
+
+The `<issue-yaml-path>` part of the error message identifies the fragment of the configuration file the
+`<issue-description>` refers to. The `profiles/0/experience_kit/deployment` path in the above example refers to the
+following region of the configuration part:
+
+```yaml
+profiles:
+  - name: […]
+    […]
+    experience_kit:
+      […]
+      deployment: 1
+```
+
+After locating the referred region, analyze the `<issue-description>` part of the error message to determine the exact
+problem. The above example shows the case of a wrong type and value of the `deployment` property. With the help of
+configuration file comments (see the output of the `dek_provision.py --init-config` command) it should be possible to
+fix the issue.
+
+Occasionally, the error messages produced by the provisioning command may include fragments of JSON data. These
+fragments may look unfamiliar, but they represent parts of the provided configuration file (converted from YAML to JSON
+for validation purposes). Identifying the configuration file region may be easier with a JSON to YAML conversion tool
+(e.g., https://www.json2yaml.com/).

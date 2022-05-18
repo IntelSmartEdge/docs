@@ -88,12 +88,15 @@ Push model - TAs will push trust reports to HVS via message queue(Using NATS pub
 9. Cluster is up and Trust agent is deployed that reads the PCR registers for the Secure boot key values (a.k.a measurements). TA agent passes these values to the HVS deployed on the cloud instance.
 10. Depending on the success of comparing the Secure boot values, HVS provides trust report of successful or failure attestation. This report is used by higher orchestration layers for taking further action. IHUB (Integration Hub) also uses Kube API server on the edge cluster to label the node based on cluster is successfully attested or not. 
 
-<img src="images/Secure_boot_workflow.png" style="zoom:150%;" />
+![Secure boot - Workflow](images/Secure_boot_workflow.png)
 
+*Figure - Secure boot - Workflow*
 
 ### Design/Architecture
 
-<img src="images/Isecl-platform-attestation-m1.png" style="zoom:150%;" />
+![ISecL platform attestation - Workflow](images/Isecl-platform-attestation-m1.png)
+
+*Figure - ISecL platform attestation - Workflow*
 
 1. Get certificate hash from CMS service. It is be used while boorstrap the trust agent and ihub.
 2. Get bearer/auth token from AAS using curl. It is be used while boorstrap the trust agent and ihub.
@@ -115,7 +118,9 @@ Push model - TAs will push trust reports to HVS via message queue(Using NATS pub
 ### Sequence diagram for certificate management
 Following diagram shows how certificates of AAS and CMS are used by TA, IHUB components during deployments.
 
-<img src="images/IseclControlerCluster.png" style="zoom:150%;" />
+![ISecL end-to-end deployment flow](images/IseclControlerCluster.png)
+
+*Figure - ISecL end-to-end deployment flow*
 
 ## How To
 
