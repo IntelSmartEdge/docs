@@ -6,7 +6,7 @@ Copyright (c) 2021 Intel Corporation
 # Intel® Smart Edge Open Provisioning Process
 
 * [Overview](#overview)
-* [Preconditions and software requirements](#Preconditions-and-software-requirements)
+* [Preconditions and software requirements](#preconditions-and-software-requirements)
 * [Provisioning Process Scenarios](#provisioning-process-scenarios)
   * [Default Provisioning Scenario](#default-provisioning-scenario)
     * [Repository Cloning](#default-repository-cloning)
@@ -87,7 +87,7 @@ necessary to customize some of them.  For this purpose, the operator can set som
 the command line interface.  For details, see the [Command Line Arguments](#command-line-arguments) section.
 
 If there is a need to adjust
-[configuration parameters exposed by the configuration file](#configuration-file-options-summary)
+[configuration parameters exposed by the configuration file](#configuration-file-summary)
 then the [Custom Provisioning Scenario](#custom-provisioning-scenario) should be followed.
 
 

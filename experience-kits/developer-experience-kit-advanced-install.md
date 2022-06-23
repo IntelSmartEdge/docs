@@ -186,7 +186,7 @@ You must be logged in as root on the provisioning system for the following steps
 Clone the [Developer Experience Kit repo](https://github.com/smart-edge-open/open-developer-experience-kits) to the provisioning system:
 
 ```Shell.bash
-# git clone https://github.com/smart-edge-open/open-developer-experience-kits.git --branch=smart-edge-open-22.03 ~/dek
+# git clone https://github.com/smart-edge-open/developer-experience-kits-open.git --branch=smart-edge-open-21.12 ~/dek
 # cd ~/dek
 ```
 
@@ -197,7 +197,7 @@ The following steps are required if you are installing the Developer Experience 
 - Update following things in `inventory/default/group_vars/all/10-default.yml`
   - Comment out proxy settings(http_proxy, https_proxy, ftp_proxy and all_proxy) and set  no_proxy to ""
   - Add host name of AWS instance public IP in `/etc/hosts` for both IPv4 and IPv6.
-  - Set `pccs_user_password` and `pccs_admin_password`. Make sure password should contain at least 12 characters.(This setting is for application security with Intel® SGX feature).
+  - Set `pccs_user_password`. Make sure password should contain at least 12 characters.(This setting is for application security with Intel® SGX feature).
   - Set `kmra_apphsm_ip` and `sgx_pccs_ip` to AWS instance public IP. These parameters are required for KMRA feature.
   - Set `pccs_api_key` which is required by PCCS to access Intel® PCS servers. To get API key follow the instructions [here](/components/security/application-security-using-sgx.md#How-to-subscribe-to-Intel-PCS-Service)
 - Update following things in `inventory.yml`

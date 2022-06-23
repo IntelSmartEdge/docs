@@ -2,6 +2,7 @@
 SPDX-License-Identifier: Apache-2.0
 Copyright (c) 2019-2020 Intel Corporation
 ```
+
 # SR-IOV Network Operator
 
 - [SR-IOV Network Operator](#sr-iov-network-operator)
@@ -19,18 +20,22 @@ Copyright (c) 2019-2020 Intel Corporation
   - [Reference](#reference)
 
 ## Overview
+
 Edge deployments consist of both network functions and applications. Cloud-native solutions such as Kubernetes* typically expose only one interface to the application or network function pods. These interfaces are typically bridged interfaces. This means that network functions like Base station or Core network User plane functions and applications such as CDN are limited by the default interface. To address this, two key networking features must be enabled:
 
 1. Enable a Kubernetes like orchestration environment to provision more than one interface to the application and network function pods.
 2. Enable the allocation of dedicated hardware interfaces to application and network function pods.
 
 ### Overview of SR-IOV CNI
+
 The Single Root I/O Virtualization (SR-IOV) feature provides the ability to partition a single physical PCI resource into virtual PCI functions that can be allocated to application and network function pods. The SR-IOV CNI plugin enables the Kubernetes pod to be attached directly to an SR-IOV virtual function (VF) using the standard SR-IOV VF driver in the container host’s kernel.
 
 ### Overview of SR-IOV Device Plugin
+
 The Intel SR-IOV Network device plugin discovers and exposes SR-IOV network resources as consumable extended resources in Kubernetes. This works with SR-IOV VFs in both Kernel drivers and DPDK drivers. When a VF is attached with a kernel driver, the SR-IOV CNI plugin can be used to configure this VF in the pod. When using the DPDK driver, a VNF application configures this VF as required.
 
 ### Overview of SR-IOV Network Operator
+
 To enable SR-IOV device resource allocation and CNI, Intel® Smart Edge Open uses the SR-IOV Network Operator which wraps SR-IOV CNI and SR-IOV Device Plugin to one simple component. Operator uses custom resources like `SriovNetworkNodePolicy` and `SriovNetwork` to configure SR-IOV plugins and [Multus](./multus.md) CNI.
 
 ## SR-IOV Network Operator configuration and usage
@@ -40,40 +45,53 @@ SR-IOV Network Operator is deployed using Makefiles and it requires additional p
 Images for Operator are downloaded from Openshift repository and stored in local registry.
 
 ### Configuration
+
 #### SR-IOV Network Operator
 
-The SR-IOV NIC's are preconfigured, i.e. currently the list of network interfaces is hard coded (for supported HW platform).
+The SR-IOV NICs are preconfigured, i.e. the list of network interfaces (for supported HW platform), in 2 ways:
+
+1) Automatically: By using the [SR-IOV NICs Detection Application](https://github.com/smart-edge-open/docs/blob/main/components/networking/sriov-detection-app.md). In order to use it:
+
+   - Find the relevant platform In `platform_profiles` directory.
+   - In the relevant sub directory configure `all.yml` file according to the instructions in [How to edit the configuration YAML file](https://github.com/smart-edge-open/docs/blob/main/components/networking/sriov-detection-app.md#how-to-edit-the-configuration-yaml-file)
+   - Make sure that the number of NICs in `sriov_nics` variable is identical to the number of PFs in `criteriaLists` variable.
+
+2) Manually: The SR-IOV NIC's are preconfigured, i.e. currently the list of network interfaces is hard coded (for supported HW platform).
 Users who are installing the DEK on a system with a different NIC's must update manually the list above with the related interface names in the ESP provisioning configuration file (before Smart Edge Open deployment):
 
 - generate a custom configuration file with `./dek_provision.py --init-config > custom.yml`
-- edit generated file and set `cvl_sriov_nics` under `group vars: all:`, e.g.
+- edit generated file and disable automatic interface detection by setting the flag: `sriov_network_detection_application_enable` to false under under `group vars: all
+- edit generated file and set `sriov_nics` under `group vars: all:`, e.g.
 
-```yaml
-profiles:
-  - name: SEO_DEK
-    [...]
-    group_vars:
-      groups:
-        all:
-          cvl_sriov_nics:
-            Debian:
-              c0p0: "<interface name>"
-              c0p1: "<interface name>"
-              c1p0: "<interface name>"
-              c1p1: "<interface name>"
-```
+     ```yaml
+     profiles:
+       - name: SEO_DEK
+         [...]
+         group_vars:
+           groups:
+             all:
+               sriov_network_detection_application_enable: false
+               sriov_nics:
+                 c0p0: "<interface name>"
+                 c0p1: "<interface name>"
+                 c1p0: "<interface name>"
+                 c1p1: "<interface name>"
+     ```
 
 During deployment users can use a flag (in the same yml file) which allows for enabling and disabling the NIC's configuration: "sriov_network_operator_configure_enable".
 
 Each NIC interface in the list above is a physical function of a SR-IOV NIC and configured in the same yml file in:
+
 - The related VF's in the next section: "sriov_network_node_policies".
 - The routing data in the section: "sriov_networks".
 
 SR-IOV Network Operator provides two custom resources to configure SR-IOV network devices and network attachments:
 
 #### SR-IOV Network Node Policy
+
 Specifies SR-IOV network device configuration by e.g. creating VFs from given NIC interface/PCI address or its priority and defines Config Map for SR-IOV Device plugin. To apply resource to the Operator just simply use command: `kubectl apply -f sample-policy.yml`.
 Sample Policy can look like:
+
 ```yaml
 apiVersion: sriovnetwork.openshift.io/v1
 kind: SriovNetworkNodePolicy
@@ -90,13 +108,16 @@ spec:
     deviceID: "159b"
     rootDevices: ["0000:31:00.0"]
 ```
+
 > **NOTE:** After applying it, Operator will create 4 VFs from given Interface and create Config Map for SR-IOV Device plugin with defined `intel_sriov_netdevice` as allocable resource and mapped from given interface.
 
-> **NOTE:** If `SriovNetworkNodePolicy` should be applied only on specific node, `kubernetes.io/hostname: "<hostname>"` should be added to `nodeSelector` field. 
+> **NOTE:** If `SriovNetworkNodePolicy` should be applied only on specific node, `kubernetes.io/hostname: "<hostname>"` should be added to `nodeSelector` field.
 
 #### SR-IOV Network
+
 It defines and configures Network attachment for Multus/SR-IOV CNI. To apply resource to the Operator just simply use command: `kubectl apply -f sample-network.yml`.
 Sample network can look like:
+
 ```yaml
 apiVersion: sriovnetwork.openshift.io/v1
 kind: SriovNetwork
@@ -116,9 +137,11 @@ spec:
       "gateway": "192.168.2.1"
     }
 ```
+
 > **NOTE:** After applying it, Operator will create Network Attachment Definition for Multus/SR-IOV CNI plugin with defined `sriov-seo` network, which applies to `intel_sriov_netdevice` allocable resource in `default` namespace.
 
 ### Usage
+
 To create a pod with an attached SR-IOV device, add the network annotation (`sriov-seo`) to the pod definition and request access to the SR-IOV capable device (`intel.com/intel_sriov_netdevice`):
 
 ```yaml
@@ -158,10 +181,13 @@ To verify that the additional interface was configured, run `ip a` in the deploy
     inet 192.168.2.2/24 brd 192.168.2.255 scope global net1
        valid_lft forever preferred_lft forever
 ```
+
 > **NOTE**: Interface `net1` is SR-IOV net device.
 
 ## Limitations
+
 It was observed that on Ubuntu 20.04, configuring SR-IOV devices via `SriovNetworkNodePolicy` using `pfNames` on CLV NIC can cause some problems. To avoid this issue it is recommended to use `rootDevices`(see [example above](#sr-iov-network-node-policy)) instead of `pfNames`. To get PCI address of devices `lshw -c network -businfo` command can be used, i.g:
+
 ```bash
 $ lshw -c network -businfo
 Bus info          Device           Class          Description
@@ -173,13 +199,16 @@ pci@0000:31:00.1  eno12409         network        Intel Corporation
 pci@0000:b1:00.0  ens5f0           network        Intel Corporation
 pci@0000:b1:00.1  ens5f1           network        Intel Corporation
 ```
+
 There is also observed that on Ubuntu 20.04 with only one type of SR-IOV NIC which is CLV, there can be lack of label on the node: `feature.node.kubernetes.io/network-sriov.capable: "true"`. To properly apply CLV SR-IOV NIC configuration via `SriovNetworkNodePolicy` using `nodeSelector` use entries like `kubernetes.io/hostname: "<hostname>"` (`<hostname>` should be replaced by node hostname) or `sriov-network-operator-node: "yes"`. Using [example above](#sr-iov-network-node-policy) `feature.node.kubernetes.io/network-sriov.capable: "true"` can be replaced with given examples.
 
 ## Reference
+
 For further details:
-- Multus: https://github.com/k8snetworkplumbingwg/multus-cni
-- SR-IOV CNI: https://github.com/k8snetworkplumbingwg/sriov-cni
-- SR-IOV Network Device Plugin: https://github.com/k8snetworkplumbingwg/sriov-network-device-plugin
-- SR-IOV Network Operator: https://github.com/k8snetworkplumbingwg/sriov-network-operator
-- SR-IOV network node policy [(`SriovNetworkNodePolicy`)](#sr-iov-network-node-policy): https://docs.openshift.com/container-platform/4.7/networking/hardware_networks/configuring-sriov-device.html
-- Ethernet network device [(`SriovNetwork`)](#sr-iov-network): https://docs.openshift.com/container-platform/4.7/networking/hardware_networks/configuring-sriov-net-attach.html
+
+- Multus: <https://github.com/k8snetworkplumbingwg/multus-cni>
+- SR-IOV CNI: <https://github.com/k8snetworkplumbingwg/sriov-cni>
+- SR-IOV Network Device Plugin: <https://github.com/k8snetworkplumbingwg/sriov-network-device-plugin>
+- SR-IOV Network Operator: <https://github.com/k8snetworkplumbingwg/sriov-network-operator>
+- SR-IOV network node policy [(`SriovNetworkNodePolicy`)](#sr-iov-network-node-policy): <https://docs.openshift.com/container-platform/4.7/networking/hardware_networks/configuring-sriov-device.html>
+- Ethernet network device [(`SriovNetwork`)](#sr-iov-network): <https://docs.openshift.com/container-platform/4.7/networking/hardware_networks/configuring-sriov-net-attach.html>

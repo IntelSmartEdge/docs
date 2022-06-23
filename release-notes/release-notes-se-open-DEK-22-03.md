@@ -24,26 +24,25 @@ In this release the Developer Experience Kit is updated with:
 
 - Key Management Reference Application (KMRA) is a proof-of-concept software created to demonstrate the integration of Intel® Software Guard Extensions (Intel® SGX) asymmetric key capability with a hardware security model (HSM) on a centralized key server. This reference application sets up an NGINX workload to access the private key in an Intel® SGX enclave on a 3rd Generation Intel® Xeon® Scalable processor, using the Public-Key Cryptography Standard(PKCS) #11 interface and OpenSSL. TLS is the Transport Layer Security protocol for applications that secure communications over computer networks against eavesdropping or need to identify the party at the other end. It is widely used by Internet servers, including the majority of HTTPS websites. KMRA uses DCAP (Data Center Attestation Primitives) libraries for generating and verifying the ECDSA signed Intel SGX quote. For more details, refer [Secure Key Management using KMRA](/components/security/secure-key-management-using-sgx.md)
 
-## Secure and Trusted Computing
+## Secure and Trusted Computing 
 
 ### Remote Attestation
 - Trusted computing consists primarily of two activities – measurement, and attestation. Measurement is the act of obtaining cryptographic representations for the system state. Attestation is the act of comparing those cryptographic measurements against expected values to determine whether the system booted into an acceptable state. This is key for Edge Computing in public and private/On-Premises deployment. Intel® Smart Edge Open supports this feature using Intel® Security Libraries (ISecL).
 
-### Enclave Trust with Attestation:
-- Handling sensitive data key requirement for Edge Computing in public and private/On-Premises deployment. Intel® Smart Edge Open supports this feature using The Intel® Software Guard Extensions (Intel® SGX). Remote attestation allows a remote party to check that the intended software is securely running within an enclave on a system with the Intel® SGX enabled.
+### Enclave Trust with Attestation: 
+- Handling sensitive data key requirement for Edge Computing in public and private/On-Premises deployment. Intel® Smart Edge Open supports this feature using The Intel® Software Guard Extensions (Intel® SGX). Remote attestation allows a remote party to check that the intended software is securely running within an enclave on a system with the Intel® SGX enabled. 
 
-## RAN Intelligence and its Application
+## RAN Intelligence and its Application 
 
-- With the increased demand for vRAN/Cloud-native RAN deployments O-RAN Alliance has defined a scalable Architecture and Interfaces for deploying 5G network functions and services. Intel® Smart Edge Open DEK supports reference implementation of
+- With the increased demand for vRAN/Cloud-native RAN deployments O-RAN Alliance has defined a scalable Architecture and Interfaces for deploying 5G network functions and services. Intel® Smart Edge Open DEK supports reference implementation of 
 ### ORAN Near Real-Time RIC:
-- A logical function that enables near-real-time control and optimization of O-RAN elements and resources via fine-grained data collection and actions. DEK uses ONF SD-RAN as a reference implementation for this.
-### xAPP:
+- a logical function that enables near-real-time control and optimization of O-RAN elements and resources via fine-grained data collection and actions. DEK uses ONF SD-RAN as a reference implementation for this.
+### xAPP: 
 - Defined as an independent software plug-in to the Near-RT RIC platform to provide functional extensibility to the RAN. DEK supports Intelligent Connection Management Application for Automated Handover a reference xAPP.  
 
-## Reference Implementation on Intel Developer Catalog
+## Reference Implementation on Intel ESH 
 
-- EII/PCB Defect detection, Telehealth Remote Monitoring, Intelligent Traffic Management and Smart VR- Live Streaming of Immersive Media Reference Implementation are  supported on Intel® Smart Edge Open 21.12 onwards.
-- These Reference Implementation are available at the Intel® Developer Catalog https://www.intel.com/content/www/us/en/developer/tools/software-catalog/overview.html?s=Newest&f:@emtcontenttype_en=[Software%20Reference%20Implementations]
+- EII/PCB Defect detection, Telehealth and Smart VR- Live Streaming of Immersive Media  Reference Implementation are only supported on Intel® Smart Edge Open 21.09 
 
 
 This document describes the hardware and software configuration used to test the experience kit. For architecture and installation information, see the [Developer Experience Kit documentation](/experience-kits/developer-experience-kit.md).
@@ -59,7 +58,7 @@ Ubuntu 20.04.2 LTS (Focal Fossa)
  | Kubernetes |  1.23.3 |
  | Docker | 20.10.12 |
  | Docker Compose | 1.29.1 |
- | Calico | 3.21 |
+ | Calico | 3.21 | 
  | Harbor | 2.4.1 |
  | Multus | 3.8 |
  | NFD | 0.10.1 |
@@ -76,12 +75,12 @@ Ubuntu 20.04.2 LTS (Focal Fossa)
  | KMRA | 2.1 |
  | BMRA | 22.01 |
 
-## Hardware
+## Hardware 
 
 ### Servers
 
 The 22.03 release of Intel® Smart Edge Open supports the following hardware platform:
--  Dell PowerEdge R750 Server motherboard
+-  Dell PowerEdge R750 Server motherboard 
 
 
 ### Dell PowerEdge Server Configuration  
@@ -129,11 +128,11 @@ The 22.03 release of Intel® Smart Edge Open supports the following hardware pla
 
 ## Building Blocks
 The Developer Experience Kit uses the following building blocks:
-- **SR-IOV Network Operator** - Operator for provisioning and configuring the SR-IOV CNI and device plugins supporting Intel network adapters. Use this feature to allocate dedicated high performance SR-IOV virtual interfaces to the application pods on the cluster.
-- **Multus**: A CNI that enables attaching multiple network interfaces to a Kubernetes pod. Typically, in Kubernetes each pod only has one network interface, apart from a loopback. With Multus you can create a multi-homed pod with multiple interfaces.
-- **Harbor**: An open source registry that secures artifacts with policies and role-based access control. Use Harbor to store application container images and Helm charts that can easily be deployed on the node.
-- **Prometheus, Grafana, cAdvisor, StatsD**: Cloud native telemetry, observability, logging, monitoring and dashboard component, used to create an observability framework for application and resource utilization.
-- **Node Feature Discovery (NFD)**: Software that detects hardware features available on each node in a Kubernetes cluster, and advertises those features using node labels. Use the labels created by NFD to deploy applications on nodes that meet required criteria for reliable service.
+- **SR-IOV Network Operator** - Operator for provisioning and configuring the SR-IOV CNI and device plugins supporting Intel network adapters. Use this feature to allocate dedicated high performance SR-IOV virtual interfaces to the application pods on the cluster. 
+- **Multus**: A CNI that enables attaching multiple network interfaces to a Kubernetes pod. Typically, in Kubernetes each pod only has one network interface, apart from a loopback. With Multus you can create a multi-homed pod with multiple interfaces. 
+- **Harbor**: An open source registry that secures artifacts with policies and role-based access control. Use Harbor to store application container images and Helm charts that can easily be deployed on the node. 
+- **Prometheus, Grafana, cAdvisor, StatsD**: Cloud native telemetry, observability, logging, monitoring and dashboard component, used to create an observability framework for application and resource utilization. 
+- **Node Feature Discovery (NFD)**: Software that detects hardware features available on each node in a Kubernetes cluster, and advertises those features using node labels. Use the labels created by NFD to deploy applications on nodes that meet required criteria for reliable service. 
 - **Calico**: An open source networking and network security solution for containers, virtual machines, and native host-based workloads. Calico supports network policy and high-performance data plane. It is the default CNI on the edge node cluster created by the Developer Experience Kit.
 - **Cert Manager**: An open source solution for adding certificates and certificate issuers as resource types in the cluster. It simplifies the process of obtaining, renewing and using those certificates.
 - **IsecL**: Intel® Security Libraries enable platform attestation capability on the edge node. (Feature available only on Dell PowerEdge R750 Server). It supports following features
@@ -157,17 +156,16 @@ The Developer Experience Kit uses the following building blocks:
 
 ## Known Issues
 
-- Edge Software provisioner - Occasionally the USB image is not built and SE-O DEK provision exits with an error.
+- Edge Software provisioner - Occasionally the USB image is not built and SE-O DEK provision exits with an error. 
   - Mitigation: Retry the ESP based provisioning.
-- Edge Software provisioner - sometimes builds an incorrect image and machine fails to boot using the image.
+- Edge Software provisioner - sometimes builds an incorrect image and machine fails to boot using the image. 
   - Mitigation: Retry the ESP based provisioning.
 - Edge Software provisioner - Cannot boot USB images using legacy BIOS.
   - Mitigation: Use UEFI BIOS
 - In Dell PowerEdge R750 TPM endorsement key (EK) is not signed by known Certificate Authority. Our application(ISecL HVS) failed to verify TPM EK certificate.
   - Mitigation: Admin has to provision the root CA certificate of TPM EK to HVS in out of band mode.
-- When the existing PCCS deployment on the cloud instance (AWS) exceeds 24Hrs and user is trying to provision new DEK cluster sometimes there might be failure of provisioning.
+- When the existing PCCS deployment on the cloud instance (AWS) exceeds 24Hrs and user is trying to provision new DEK cluster sometimes there might be failure of provisioning. 
   - Mitigation: Reset SGX using "SGX Factory Reset" option in the BIOS.
 - When multiple instances of the KMRA ctk_loadkey pods are run, all the pods will receive the same private key as of 22.03 release. Multiple Key configuration is not yet supported.
-  - Mitigation:  Multiple Key configuration support will be provided in next release   
 - Client Key configurations at Apphsm is static as of 22.03 release.
-  - Mitigation: Apphsm will be upgraded in next release.
+

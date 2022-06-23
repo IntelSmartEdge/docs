@@ -6,9 +6,9 @@ Copyright (c) 2021 Intel Corporation
 # Intel® Smart Edge Open Provisioning Process
 
 * [Overview](#overview)
-* [Preconditions and software requirements](#Preconditions-and-software-requirements)
-  * [Software requirements](#Software-requirements)
-  * [Preconditions](#Preconditions)
+* [Preconditions and software requirements](#preconditions-and-software-requirements)
+  * [Software requirements](#software-requirements)
+  * [Preconditions](#preconditions)
 * [Provisioning Process Scenarios](#provisioning-process-scenarios)
   * [Default Provisioning Scenario](#default-provisioning-scenario)
     * [Repository Cloning](#default-repository-cloning)
@@ -29,7 +29,7 @@ Copyright (c) 2021 Intel Corporation
   * [Experience Kit Configuration](#experience-kit-configuration)
   * [Git Credentials](#git-credentials)
   * [Docker Pull Rate Limit](#docker-pull-rate-limit)
-  * [Docker registry Mirror](#registry-mirror)
+  * [Docker registry Mirror](#docker-registry-mirror)
   * [Docker Hub Credentials](#docker-hub-credentials)
   * [PXE](#pxe)
   * [Secure Boot and TPM](#secure-boot-and-tpm)
@@ -57,15 +57,61 @@ and routable from the subnet the provisioned machines are supposed to work on.
 * Docker 18.09.3 or greater
 * Docker-compose v1.23.2 or greater
 * Python v3.6 or greater
+* Pip 20.0 or greater
 * Bash v4.3.48 or greater
 * Git v2.25.1 or greater
 
 ### Preconditions
 The following steps should be performed on a clean machine in order to prepare the system for the provisioning process:
 
-1. [Install docker.](#Docker-has-to-be-installed)
-2. [Install docker-compose.](#The-docker-compose-tool-has-to-be-installed)
-3. [Install Git.](#Git-has-to-be-installed)
+1. [Install Docker](#docker-has-to-be-installed)
+2. [Install Docker Compose](#the-docker-compose-tool-has-to-be-installed)
+3. [Install Git](#git-has-to-be-installed)
+4. [Install Python dependencies](#install-python-dependencies)
+
+#### Install Python Dependencies
+
+##### Install Pip
+
+The Python dependencies installation process relies on the `pip` utility, which may not be installed on a Ubuntu system
+by default. To check if the `pip` program is available, use the `pip --version` command. If its output looks like the
+following, the `pip` program is ready to be used:
+
+```Shell.bash
+[Provisioning System] $ pip --version
+pip 20.0.2 from /usr/lib/python3/dist-packages/pip (python 3.8)
+```
+
+If the command output looks similar to the following, the command is missing, and you have to install it:
+
+```Shell.bash
+[Provisioning System] $ pip --version
+Command 'pip' not found, but there are 18 similar ones.
+```
+
+To install the `pip` command, execute the following command:
+
+```Shell.bash
+[Provisioning System] $ sudo apt install python3-pip
+```
+
+##### Run Pip
+
+Installation of the dependencies requires a `pip` configuration file which is a part of the Developer Experience Kit
+repository. It is typically performed only once – unless the same provisioning system is used to install different
+releases of the experience kit.
+
+To install the Python packages required by the `dek_provision.py` and the `dek_flash.py` scripts, change the current
+directory to the root of the Developer Experience Kit repository (see the
+[Repository Cloning](#default-repository-cloning) section) and use the following command:
+
+```Shell.bash
+[Provisioning System] $ cd <developer-experience-kit>
+[Provisioning System] $ sudo pip install -r dek_requirements.txt
+```
+
+It is essential to use `sudo` to install these dependencies globally as they also have to be available for the root
+user.
 
 ## Provisioning Process Scenarios
 
@@ -94,10 +140,12 @@ use the provisioning instruction published with the release to avoid incompatibi
 For convenience, you can change the current directory to the directory the kit is cloned to, e.g.:
 
 ```Shell.bash
-[Provisioning System] # git clone https://github.com/smart-edge-open/open-developer-experience-kits.git --branch=smart-edge-open-21.09 ~/dek
+[Provisioning System] # git clone https://github.com/smart-edge-open/developer-experience-kits-open.git --branch=smart-edge-open-21.09 ~/dek
 [Provisioning System] # cd ~/dek
 ```
 
+If you didn't install provisioning scripts' dependencies on this provisioning system instance before, install them
+using the instruction provided in the [Install Python Dependencies](#install-python-dependencies) section.
 
 <a id="default-configuration"></a>
 #### Configuration
@@ -108,7 +156,7 @@ necessary to customize some of them.  For this purpose, the operator can set som
 the command line interface.  For details, see the [Command Line Arguments](#command-line-arguments) section.
 
 If there is a need to adjust
-[configuration parameters exposed by the configuration file](#configuration-file-options-summary)
+[configuration parameters exposed by the configuration file](#configuration-file-summary)
 then the [Custom Provisioning Scenario](#custom-provisioning-scenario) should be followed.
 
 
@@ -504,7 +552,7 @@ profiles:
     branch: main
     scenario: single-node
     experience_kit:
-      url: https://github.com/smart-edge-open/open-developer-experience-kits.git
+      url: https://github.com/smart-edge-open/developer-experience-kits-open.git
       branch: main
       deployment: dek
     controlplane_mac: ''
@@ -589,6 +637,20 @@ The machine with mac address ***aa:bb:cc:dd:ee:ff*** will have its hostname chan
 
 ## Troubleshooting
 
+### Required Python dependencies are not installed
+
+#### Problem
+
+The following error message is displayed when you attempt to run one of the provisioning scripts (e.g., `dek_provision.py` or `dek_flash.py`):
+
+```text
+ERROR: Required Python dependencies are not installed
+```
+
+#### Solution
+
+Install the dependencies using the instruction in the [Install Python Dependencies](#install-python-dependencies) section.
+
 ### Docker has to be installed
 
 #### Problem
@@ -597,9 +659,9 @@ One of the following error messages may appear when you attempt to run the provi
 `dek_provision.py`):
 
 ```text
-Docker has to be installed on this machine for the provisioning process to succeed. […]
-Docker CLI has to be installed on this machine for the provisioning process to succeed. […]
-The containerd.io runtime has to be installed on this machine for the provisioning process to succeed. […]
+ERROR: Failed to execute 'docker --version':
+    [Errno 2] No such file or directory: 'docker'
+    See the Troubleshooting section of the Intel® Smart Edge Open Provisioning Process document
 ```
 
 #### Solution
@@ -615,7 +677,9 @@ Install Docker software according to the official instruction:
 The following error message appears when you attempt to run the provisioning script (e.g., `dek_provision.py`):
 
 ```text
-The docker-compose tool has to be installed on this machine for the provisioning process to succeed. […]
+ERROR: Failed to execute 'docker-compose --version':
+    [Errno 2] No such file or directory: 'docker-compose'
+    See the Troubleshooting section of the Intel® Smart Edge Open Provisioning Process document
 ```
 
 #### Solution

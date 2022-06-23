@@ -4,7 +4,7 @@ Copyright (c) 2019-2021 Intel Corporation
 ```
 # Rook-Ceph
 
-- [Rook-Ceph](#Rook-Ceph)
+- [Rook-Ceph](#rook-ceph)
   - [Overview](#overview)
     - [Overview of Ceph](#overview-of-ceph)
     - [Overview of Rook operator and CSI](#overview-of-rook-operator-and-csi)
@@ -66,6 +66,8 @@ Just like native Ceph, Rook-Ceph provides block, filesystem, and object storage 
 ## Rook-Ceph configuration and usage
 
 To deploy the Rook-Ceph operator and Ceph to the Intel® Smart Edge Open cluster, `rook_ceph_enabled: True` must be set in `/inventory/default/group_vars/all/10-default.yml`, which is disabled by default. This will perform Rook operator and Ceph daemons install and deploy, images for Rook operator and Ceph daemon with CSI plugins are download from public docker repository.
+
+> Note: For Rook-Ceph to work it is expected that two SSDs are present in the platform.
 
 ### Configuration
 
