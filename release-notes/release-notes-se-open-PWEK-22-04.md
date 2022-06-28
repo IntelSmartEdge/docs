@@ -14,17 +14,19 @@ Copyright (c) 2022 Intel Corporation
 
 # Overview
 
-The 22.04 release of Intel® Smart Edge Open provides edge developers with the Private Wireless Experience Kit as a cloud-native platform for delivering AI, video, and other edge services together with network services with optimized performance on Intel edge platforms.
+The 22.04 release of Intel® Smart Edge Open includes updates to the Private Wireless Experience Kit.  The Private Wireless Experience Kit is a cloud-native platform for delivering AI, video, and other edge services together with network services optimized for performance on Intel edge platforms.
 
-This document describes the hardware and software configuration used to test the experience kit. For architecture and installation information, see the [Private Wireless Experience Kit documentation](/experience-kits/private-wireless-experience-kit.md).
+This document describes the updates to the Private Wireless Experience kit included in this release. For architecture and installation information, see the [Private Wireless Experience Kit documentation](/experience-kits/private-wireless-experience-kit.md).
 
 # New in the release
 
- This release provides CPU management and network split functions to the Private Wireless Experience Kit .
+- CPU management and network split functions have been added to the Private Wireless Experience Kit.
  
- For Provisioning, both Autonomous Deployment through Edge Software Provisioner (ESP) and Staged Deployment through ESP are supported. 
+- For provisioning, Autonomous Deployment and Staged Deployment are now supported through the Edge Software Provisioner (ESP). 
 
- For reference edge applications, this release offers an edge application for Intelligent traffic management - the Wireless Network Ready Intelligent Traffic Management. And an EdgeDNS application which acts as a Domain Name System (DNS) Server.
+- For reference edge applications, an edge application is now available for Intelligent traffic management - the Wireless Network Ready Intelligent Traffic Management.
+
+- EdgeDNS application that acts as a Domain Name System (DNS) Server is now available.
 
 # Operating System
 
@@ -62,43 +64,45 @@ Centos OS 7.9.2009
 
 ## Servers
 
-The 22.04 release of Intel® Smart Edge Open Private Wireless Experience Kit supports the hardware platform on Dell PowerEdge R750 Server motherboard.
+The 22.04 release of Intel® Smart Edge Open Private Wireless Experience Kit supports the following hardware platform:
 
-Note: The same system specification is used for Edge node and Control Plane node. Some accelerator cards will not be needed.
+- Dell PowerEdge R750 Server motherboard.
+
+Note: The same system specification is used for the Edge node and the Control Plane node. Some accelerator cards will not be needed.
 
 ## Dell PowerEdge Server Configuration  
-2 Intel® Xeon® Gold 6338N Processors: 2.2G, 32C/64T, 11.2GT/s, 48M Cache, Turbo, HT (185W) DDR4-2666    
-1 iDRAC,Legacy Password    
-1 iDRAC Group Manager, Disabled    
-1 2.5" Chassis with up to 16 NVMe Drives     
-1 Riser Config 7, 2x8, 2x16 slots    
-1 Performance Optimized    
-1 3200MT/s RDIMMs     
-16 32GB RDIMM, 3200MT/s, Dual Rank    
-1 iDRAC9, Enterprise 15G     
-1 BOSS-S2 controller card + with 2 M.2 480GB (RAID 1)    
-1 No Controller     
-1 Heatsink for 2 CPU with GPU configuration    
-1 Dual, Hot-Plug,Power Supply Redundant (1+1), 1400W, Mixed Mode     
-2 C13 to C14, PDU Style, 10 AMP, 6.5 Feet (2m), Power Cord     
-1 Trusted Platform Module 2.0 V3     
-1 Order Configuration Shipbox Label (Ship Date, Model, Processor Speed, HDD Size, RAM)      
-1 Asset Tag - ProSupport (Website, barcode, Onboard MacAddress)      
-1 BOSS Cables and Bracket for R750 (Riser 1)      
-1 PowerEdge R750 Shipping Material     
-1 GPU Ready Configuration Cable Install Kit R750          
-1 Very High Performance Fan x6 V3     
-1 Fan Foam, HDD 2U    
-1 Power Saving Dell Active Power Controller    
-1 C30, No RAID for NVME chassis Software   
-1 TPM Module   
-1 Intel® QuickAssist Adapter 8970   
-1 Intel® vRAN Dedicated Accelerator ACC100 Adapter   
-1 Intel® Ethernet Controller E810-XXV for SFP (rev 02)   
+- 2 Intel® Xeon® Gold 6338N Processors: 2.2G, 32C/64T, 11.2GT/s, 48M Cache, Turbo, HT (185W) DDR4-2666    
+- 1 iDRAC,Legacy Password    
+- 1 iDRAC Group Manager, Disabled    
+- 1 2.5" Chassis with up to 16 NVMe Drives     
+- 1 Riser Config 7, 2x8, 2x16 slots    
+- 1 Performance Optimized    
+- 1 3200MT/s RDIMMs     
+- 16 32GB RDIMM, 3200MT/s, Dual Rank    
+- 1 iDRAC9, Enterprise 15G     
+- 1 BOSS-S2 controller card + with 2 M.2 480GB (RAID 1)    
+- 1 No Controller     
+- 1 Heatsink for 2 CPU with GPU configuration    
+- 1 Dual, Hot-Plug,Power Supply Redundant (1+1), 1400W, Mixed Mode     
+- 2 C13 to C14, PDU Style, 10 AMP, 6.5 Feet (2m), Power Cord     
+- 1 Trusted Platform Module 2.0 V3     
+- 1 Order Configuration Shipbox Label (Ship Date, Model, Processor Speed, HDD Size, RAM)      
+- 1 Asset Tag - ProSupport (Website, barcode, Onboard MacAddress)      
+- 1 BOSS Cables and Bracket for R750 (Riser 1)      
+- 1 PowerEdge R750 Shipping Material     
+- 1 GPU Ready Configuration Cable Install Kit R750          
+- 1 Very High Performance Fan x6 V3     
+- 1 Fan Foam, HDD 2U    
+- 1 Power Saving Dell Active Power Controller    
+- 1 C30, No RAID for NVME chassis Software   
+- 1 TPM Module   
+- 1 Intel® QuickAssist Adapter 8970   
+- 1 Intel® vRAN Dedicated Accelerator ACC100 Adapter   
+- 1 Intel® Ethernet Controller E810-XXV for SFP (rev 02)   
 
 # Building Blocks
 The Private Wireless Experience Kit uses the following building blocks:
-- **Intel® QAT Device plugin for Kubernetes**: The Intel® QAT device plugin provides support for Intel QAT devices under Kubernetes and enables users to harness Intel devices to increase performance and efficiency across applications and platforms.  QAT takes advantage of the feature that Kubernetes provides a device plugin framework that is used to advertise system hardware resources. For Private Wireless Experience Kit, CU applications consume the QAT resources allocated by QAT device plugin as crypto devices. 
+- **Intel® QAT Device plugin for Kubernetes**: The Intel® QAT device plugin provides support for Intel QAT devices under Kubernetes. It enables users to harness Intel devices to increase performance and efficiency across applications and platforms.  QAT takes advantage of the Kubernetes feature that provides a device plugin framework used to advertise system hardware resources. For the Private Wireless Experience Kit, CU applications consume the QAT resources allocated by QAT device plugin as crypto devices. 
 - **SR-IOV Network Operator**: Provides an elegant user interface that simplifies SR-IOV networking set up by provisioning and configuring plugins for the SR-IOV CNI and NIC. 
 - **SR-IOV FEC Operator**: Orchestrates and manages the resources exposed by Intel® Forward Error Correction Devices (Intel® FEC Devices). ACC100 is an example of the FEC acceleration devices/hardware that are supported with Private Wireless Experience Kit. The FEC operator is a state machine that configures and monitors resources, acting on them autonomously based on the user interaction. 
 - **Node Feature Discovery (NFD)**: Detects hardware features available on each node in a Kubernetes cluster and advertises those features using node labels. 
@@ -107,7 +111,7 @@ The Private Wireless Experience Kit uses the following building blocks:
 
 # Known Issues
 
-- Kubernetes RPC error happens in phy/cu/du log, this is known issue from Radisys side. 
-  - Mitigation: this issue is not observed in Radisys 3.0 version. Private Wireless Experience Kit will upgrade Radisys version next release.
-- In Radisys version 2.5.3 DU-L2 fails with core auto-allocation due to hardcode configuration, this is known issue from Radisys side. 
+- Kubernetes RPC error occurs in phy/cu/du log, this is a known issue for Radisys. 
+  - Mitigation: this issue is not observed in Radisys 3.0. The Private Wireless Experience Kit will upgrade Radisys version next release.
+- In Radisys version 2.5.3, DU-L2 fails with core auto-allocation due to hardcode configuration, this is a known issue for Radisys. 
   - Mitigation: Private Wireless Experience Kit disables DU-L2 core auto allocation for 22.04 release. 
