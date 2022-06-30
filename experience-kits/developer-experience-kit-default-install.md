@@ -151,7 +151,7 @@ Run the following commands to install Python3 and related libraries:
 Clone the [Developer Experience Kit repo](https://github.com/smart-edge-open/open-developer-experience-kits) to the provisioning system:
 
 ```Shell.bash
-# git clone https://github.com/smart-edge-open/developer-experience-kits-open.git --branch=smart-edge-open-21.12 ~/dek
+# git clone https://github.com/smart-edge-open/open-developer-experience-kits.git --branch=smart-edge-open-21.12 ~/dek
 # cd ~/dek
 ```
 

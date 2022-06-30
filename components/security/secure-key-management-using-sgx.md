@@ -36,7 +36,7 @@ The libp11 engine is an interface used for NGINX Application to access keys secu
 - Soft HSM is running on the AWS cloud does not require any additional hardware features like HSM or Intel SGX. Default App HSM port that needs be opened in AWS is 30500.
 - BMRA (container experience kit https://github.com/intel/container-experience-kits) also contains k8s/helm based manifests for KMRA installation. BMRA also works with k8s version 1.23.
 - App HSM service is running as part of ISecL verification cluster on the AWS cloud.
-- KMRA version 2.1 (https://github.com/smart-edge-open/applications.platforms.security.kmra.kmra) is used for the integration.
+- KMRA version 2.1 (https://www.intel.com/content/www/us/en/download/721126/key-management-reference-application-kmra.html) is used for the integration.
 - Every application uses an individual crypto enclave to provision private key. It's an 1:1 mapping.
 - CTK pod does not require any privilege access to run.
 - NGINX + CTK enclave helm charts are part of edge app repo(https://github.com/smart-edge-open/edgeapps/tree/main/applications) because NGINX and CTK are tightly coupled, and it has to be co-existed with other applications.
