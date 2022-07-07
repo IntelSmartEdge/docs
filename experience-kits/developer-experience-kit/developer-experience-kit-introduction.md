@@ -10,22 +10,13 @@ This guide provides information about the Intel® Smart Edge Open Developer Expe
 
 The Intel® Smart Edge Open Developer Experience Kit is useful for application developers ,or anyone else, looking to explore the Intel® Smart Edge Open features without the 5G components or build their own applications using containerized edge services like networking, security, and telemetry. 
 
+To install the Developer experience kit, you will need basic knowledge of operating system administration, server administration, and Kubernetes.
+
 ## About the Intel® Smart Edge Open Developer Experience Kit
 
 The Intel® Smart Edge Open Developer Experience Kit provides customized infrastructure deployments for common network and on-premises edge use cases. Combining Intel Cloud Native technologies, and high-performance compute, this kit provides a blueprint that enables you to build AI, video and edge services covering diverse IoT segments with optimization at the edge.
 
-The Intel® Smart Edge Open Developer Experience Kit enables you to install and instantiate an Intel® Smart Edge Open edge cluster on a single node. A typical Intel® Smart Edge Open Developer Experience Kit-based deployment consists of a Kubernetes Control Plane and an Edge Node.
-
-Once the cluster is installed, you will be able to run edge applications, including [reference implementations](reference-implementations.md) built on Intel® Smart Edge Open, and become familiar with operating a stand-alone edge node.
-
 The Intel® Smart Edge Open Developer Experience Kit contains building blocks that provide functionality for containerized networking, resource management, and telemetry. These building blocks are designed to support a variety of edge computing cases.
-
-|      |
-| :--: |
-| [![Smart Edge Open Developer Experience Kit - Edge Node Component Diagram](../images/dek-component-diagram.png)](images/dek-component-diagram.png) |
-| <b>Intel® Smart Edge Open Developer Experience Kit building blocks</b>|
-
-The Developer Experience Kit uses Intel's [Edge Software Provisioner (ESP)](https://github.com/intel/Edge-Software-Provisioner) to streamline deployment of the edge node cluster. The ESP automates the provisioning of the operating system and software stack used by the hardware that hosts the Intel® Smart Edge Open edge cluster. 
 
 ## Supported Hardware
 
