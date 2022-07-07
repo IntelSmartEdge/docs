@@ -8,7 +8,7 @@ This guide provides information about the Intel® Smart Edge Open Developer Expe
 
 ## Audience
 
-The Intel® Smart Edge Open Developer Experience Kit is useful for application developers ,or anyone else, looking to explore the Intel® Smart Edge Open features without the 5G components or build their own applications using containerized edge services like networking, security, and telemetry. 
+The Intel® Smart Edge Open Developer Experience Kit is useful for application developers ,or anyone else looking to explore the Intel® Smart Edge Open features without the 5G components or build their own applications using containerized edge services like networking, security, and telemetry. 
 
 To install the Developer experience kit, you will need basic knowledge of operating system administration, server administration, and Kubernetes.
 
