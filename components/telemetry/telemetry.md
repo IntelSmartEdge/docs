@@ -28,8 +28,7 @@ The telemetry components used in Intel® Smart Edge Open are deployed from the E
 Depending on the role of the component, it is deployed as either a Deployment or Deamonset. Generally, global components receiving inputs from local collectors are deployed as a Deployment type with a single replica set, whereas local collectors running on each host are deployed as Daemonsets. Local collectors running on Edge Nodes that collect platform metrics are deployed as privileged containers, using host networking. Communication between telemetry components is secured with TLS either using native TLS support for a given feature or using a reverse proxy running in a pod as a container.
 <br/>
 <br/>
-<img style="display: block; margin: auto;" alt="OpenDEK telemetry overview" src="images/OpenDek_Telemetry.svg">
-
+![OpenDEK telemetry overview](images/OpenDek_Telemetry.svg)
 
 The deployment of telemetry components in Intel® Smart Edge Open is easily configurable from the developer-experience-kits-open (DEK). The deployment of the Grafana dashboard is optional (telemetry_grafana_enable enabled by default).
 All flags can be changed in ESP provisioning configuration file (before Smart Edge Open deployment):
