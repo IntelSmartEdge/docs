@@ -3,7 +3,7 @@ SPDX-License-Identifier: Apache-2.0
 Copyright (c) 2022 Intel Corporation
 ```
 
-# Intel® Smart Edge Open Developer Experience Kit Default Installation - Prepare the Provisioning System 
+# Prepare the Provisioning System 
 
 Before you can install the Intel® Smart Edge Open Developer Experience Kit, you will need to first prepare the provisioning system by installing the following software:
 
@@ -114,7 +114,7 @@ If you plan to install the Intel® Smart Edge Open Developer Experience Kit with
 > SGX PCCS service - 32666
 > KMRA AppHSM service - 30500
 
-Review the office [Get started with AWS instance](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html) documentation for more information about creating your instance.
+Review the official [Get started with AWS instance](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html) documentation for more information about creating your instance.
 
 
 ### 5. Clone the Developer Experience Kit Repository
@@ -135,4 +135,4 @@ Run the following command to generate the `custom.yml` file. It is recommended y
 
 ### Next
 
-After preparing the provisioning system, you will create the installation image. This is covered in the next section. 
+After preparing the provisioning system, you will need to complete the default or advanced installation. This is covered in the next section. 

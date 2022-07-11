@@ -22,18 +22,11 @@ Use the [advanced installation instructions](experience-kits/developer-experienc
 
 The default installation process has 3 stages to:
 
-- Prepare the Provisioning system
-
 - Create the installation image
 
 - Install the image on the target system
 
 ### Next
 
-The next section explains how to prepare the provisioning system. 
-
-
-## Provisioning guide and troubleshooting
-
-Find detailed information on provisioning process and on resolving common installation problems in the [provisioning guide](/experience-kits/provisioning/provisioning.md).
+The next section explains how to create the installation image. 
 

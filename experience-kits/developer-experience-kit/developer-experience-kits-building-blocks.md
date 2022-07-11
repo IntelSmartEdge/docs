@@ -4,9 +4,9 @@ Copyright (c) 2022 Intel Corporation
 ```
 # The Intel® Smart Edge Open Developer Experience Kit building blocks
 
-Installing the Developer Experience Kit will install Kubernetes and the following building blocks on your edge node and controller.
+Installing the Developer Experience Kit will install Kubernetes as well as the following building blocks on your edge node and controller.
 
-**Note:** Different building blocks installed on your system based on your installation method. You will learn more about the default and advanced installed methods in the next section. 
+**Note:** Different building blocks are installed on your system based on your installation method. You will learn more about the default and advanced installation methods in the next section. 
 
 ## Edge node building blocks 
 

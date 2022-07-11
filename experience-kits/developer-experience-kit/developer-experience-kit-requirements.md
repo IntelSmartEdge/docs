@@ -2,7 +2,14 @@
 SPDX-License-Identifier: Apache-2.0
 Copyright (c) 2022 Intel Corporation
 ```
-# Install the Intel® Smart Edge Open Developer Experience Kit
+# Install the Intel® Smart Edge Open Developer Experience Kit - requirements
+
+There are two ways to install the Developer Experience kit on your target system:
+
+- **The default installation:** Installs the Developer Experience kit without security features enabled. 
+- **The advanced installation:** Installs the Developer Experience kit with security features enabled. 
+
+This page includes the requirements to complete both a default installation and an advanced installation. 
 
 |      |
 | :--: |
@@ -16,6 +23,8 @@ You will need:
 - **A provisioning system:** where you run the Edge Software Provisioner to build a bootable image of the experience kit.
 
 - **A target system:** where you install the bootable image to create an edge cluster.
+
+- **AWS EC2 instance:** Only required if you need security features enabled and you are completing the advanced installation. 
 
 > **Note:** You must add the provisioning system's user account to `/etc/sudoers` for installation to succeed.
 
@@ -44,11 +53,9 @@ Below are the minimum requirements for running the Developer Experience Kit. See
 
 > **NOTE:** The provisioning process will install Ubuntu 20.04 LTS on the target machine. Any existing operating system will be overwritten.
 
-### AWS EC2 Instance Requirements
+### AWS EC2 Instance (Advanced installation only)
 
-Advanced installations that enable either platform attestation using Intel® SecL - DL or application security using Intel® SGX will require the following:
-
-- An AWS EC2 t2.medium instance with the following system requirements:
+Advanced installations that enable either platform attestation using Intel® SecL - DL or application security using Intel® SGX will also require an AWS EC2 t2.medium instance with the following system requirements:
    - Two vCPUs
    - 4 GB RAM
    - 100 GB disk space
@@ -57,14 +64,7 @@ Advanced installations that enable either platform attestation using Intel® Sec
 
 The Developer Experience Kit uses the [Edge Software Provisioner (ESP)](https://github.com/intel/Edge-Software-Provisioner), which automates the process of provisioning bare-metal or virtual machines with an operating system and software stack. Intel® Smart Edge Open provides a fork of the [Ubuntu OS ESP Profile](https://github.com/intel/rni-profile-base-ubuntu) tailored for its specific needs.
 
-## Install the Developer Experience Kit
-
-There are two ways of installing the Developer Experience kit on your target system:
-
-- **The default installation:** Installs the Developer Experience kit without security features enabled. 
-- **The advanced installation:** Installs the Developer Experience kit with security features enabled. 
-
 
 ### Next
 
-The next sections explain the default and advanced installation processes. 
+The next section explains how to prepare the provisioning system for installation.

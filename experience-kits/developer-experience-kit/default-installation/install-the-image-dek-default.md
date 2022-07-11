@@ -7,7 +7,7 @@ Copyright (c) 2022 Intel Corporation
 
 Once you create the installation image, you can begin the installation by inserting the flash drive into the target system, rebooting the system, and entering the BIOS to boot from the installation media.
 
-## Log into the system after reboot
+## 1. Log into the system after reboot
 
 The system will reboot as part of the installation process.
 
@@ -15,7 +15,7 @@ The login screen will display the system's IP address and the status of the expe
 
 To log into the system, use `smartedge-open` as both the user name and password.
 
-## Check the Status of the Installation
+## 2. Check the Status of the Installation
 
 When logging in with a remote console or SSH, a message will display the status of the deployment. For example:
 
@@ -35,12 +35,16 @@ $ sudo journalctl -xefu seo
 
 You can find more details in the deployment log in `/opt/seo/logs`.
 
-## Use the Smart Edge Open cluster
+## 4. Use the Smart Edge Open cluster
 
 Now that you have created an Intel® Smart Edge Open edge node cluster capable of hosting edge applications, you can:
 
 - [Onboard a sample application](/application-onboarding/application-onboarding-cmdline.md) to your cluster.
 - Download and run [reference implementations from the Intel® Developer Catalog](https://www.intel.com/content/www/us/en/developer/tools/software-catalog/overview.html?s=ContentType&q=%22smart%20edge%20open%22)
+
+## Provisioning guide and troubleshooting
+
+Find detailed information on provisioning process and on resolving common installation problems in the [provisioning guide](/experience-kits/provisioning/provisioning.md).
 
 ### Next
 
