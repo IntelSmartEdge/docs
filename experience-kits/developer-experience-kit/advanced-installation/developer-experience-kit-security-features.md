@@ -5,7 +5,7 @@ Copyright (c) 2021 Intel Corporation
 
 # Configure security features for the Intel® Smart Edge Open Developer Experience Kit
 
-Follow these steps to begin the installation of the Intel® Smart Edge Developer Experience Kit with security features enabled for platform attestation with Intel® SecL - DC and application security with Intel® SGX:
+Follow these steps to begin installing the Intel® Smart Edge Developer Experience Kit with security features enabled for platform attestation with Intel® SecL - DC and application security with Intel® SGX:
 
 1.  Make password-less from the Ansible machine to the AWS instance by copying the ssh public using ssh-copy-id (Ex. `ssh-copy-id -i ~/.ssh/<my_key> <user-name>@<aws-instance-ip>`).
 

@@ -4,6 +4,8 @@ Copyright (c) 2021 Intel Corporation
 ```
 # Install the Image on the Target System
 
+This section explains how to install the the Intel® Smart Edge Open Developer Experience Kit image on the target system and begin using Smart Edge Open cluster.
+
 ## Optional: Enable Security Support in the BIOS
 
 Update the provisioning system's BIOS settings to enable support for any security features you have installed: 
@@ -47,5 +49,5 @@ Now that you have created an Intel® Smart Edge Open edge node cluster capable o
 
 - [Onboard a sample application](/application-onboarding/application-onboarding-cmdline.md) to your cluster.
 - Download and run [reference implementations from the Intel® Developer Catalog](https://www.intel.com/content/www/us/en/developer/tools/software-catalog/overview.html?s=ContentType&q=%22smart%20edge%20open%22)
-- Learn how to run sample SGX openVINO application which uses Intel SGX for running secure workloads inside an enclave(Only if SGX feature is enabled in edge node) [Intel SGX OpenVINO sample application](https://github.com/smart-edge-open/edgeapps/blob/main/applications/sgx/openvino-ssd/README.md)
-- Learn how to run the KMRA sample NGINX application which uses Intel SGX for managing keys securely(Only if KMRA is enabled feature is enabled) - [KMRA Reference application guide](https://github.com/smart-edge-open/edgeapps/tree/main/applications/sgx/kmra#readme)
+- Run a sample SGX openVINO application which uses Intel SGX for running secure workloads inside an enclave(Only if SGX feature is enabled in edge node) [Intel SGX OpenVINO sample application](https://github.com/smart-edge-open/edgeapps/blob/main/applications/sgx/openvino-ssd/README.md)
+- Run a sample KMRA NGINX application which uses Intel SGX for managing keys securely(Only if KMRA is enabled feature is enabled) - [KMRA Reference application guide](https://github.com/smart-edge-open/edgeapps/tree/main/applications/sgx/kmra#readme)

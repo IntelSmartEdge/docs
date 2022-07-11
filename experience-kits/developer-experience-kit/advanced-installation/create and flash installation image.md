@@ -31,19 +31,19 @@ If you [enabled platform attestation with Intel® SecL - DC and/or application s
 
 The `dek_provision.py` script builds and runs the provisioning services and prepares the installation media.
 
-To build and run the provisioning services in a single step, run the following command from the root directory of the
-Developer Experience Kit repository:
+To build and run the provisioning services in a single step, run the following command from the root directory of the Developer Experience Kit repository:
 
 ```Shell.bash
 [Provisioning System] # ./dek_provision.py --run-esp-for-usb-boot
 ```
 
 Alternatively, to specify the Docker registry mirror to be used during the Developer Experience Kit deployment use the `--registry-mirror` option:
+
 ```Shell.bash
 [Provisioning System] # ./dek_provision.py --registry-mirror=http://example.local:5000 --run-esp-for-usb-boot
 ```
 
-To use the generated configuration file 'custom.yaml', use this command:
+To use the generated configuration file `custom.yaml`, use this command:
 
 ```Shell.bash
 [Provisioning System] # ./dek_provision.py --run-esp-for-usb-boot --config=custom.yml
@@ -63,4 +63,4 @@ The command should present an interactive menu allowing the selection of the des
 
 ### Next
 
-After creating and flashing the installation image, the next step is to install the image on the target syste. 
+After creating and flashing the installation image, the next step is to install the image on the target system. 
