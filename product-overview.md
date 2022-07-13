@@ -10,7 +10,6 @@ Copyright (c) 2021 Intel Corporation
   - [Next Steps](#next-steps)
 
 # Intel® Smart Edge Open Developer Guide
-Version 21.09 
 
 ## What is Intel® Smart Edge Open?
 Intel® Smart Edge Open is an edge computing software toolkit for building platforms optimized for the edge. 
