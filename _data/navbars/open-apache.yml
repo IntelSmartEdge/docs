@@ -69,7 +69,7 @@ section:
           - title: Platform Attestation
             path: /docs/components/security/platform-attestation-using-isecl/?page=building-blocks
             meta_title: 
-            meta_description:   
+            meta_description: 
           - title: Secure Key Management
             path: /docs/components/security/secure-key-management-using-sgx/?page=building-blocks
             meta_title: 
