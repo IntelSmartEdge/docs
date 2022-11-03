@@ -8,11 +8,11 @@ Copyright (c) 2021 Intel Corporation
             <div data-uk-navbar>
                 <div class="uk-navbar-left">
                     <!-- <a class="uk-navbar-item uk-logo uk-visible@m" href="{{ "/" | relative_url }}">{% if site.logo %}<img src="{{ site.uploads | absolute_url }}{{ site.logo }}" alt="{{ site.title | escape }}">{% else %}{{ site.title | escape }}{% endif %}</a> -->
-                    <a class="uk-navbar-item uk-logo uk-visible@m" href="{{ site.main_url }}">{% if site.logo %}<img src="{{ site.uploads | absolute_url }}{{ site.logo }}" alt="{{ site.title | escape }}">{% else %}Intel&reg; Smart Edge Open{% endif %}</a>
+                    <a class="uk-navbar-item uk-logo uk-visible@m" href="{{ site.main_url }}">{% if site.logo %}<img src="{{ site.uploads | absolute_url }}{{ site.logo }}" alt="{{ site.title | escape }}">{% else %}Intel&reg; Smart Edge {% endif %}</a>
                     <span class="uk-navbar-toggle uk-hidden@m toggleMenu">
                         <svg class="menuIcon mainIcon" width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><rect style="fill:#0068b5" y="9" width="20" height="3"></rect><rect style="fill:#0068b5" y="3" width="20" height="3"></rect><rect style="fill:#0068b5" y="15" width="20" height="3"></rect></svg>
                         <svg class="menuIcon crossIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><defs><style>.a{fill:#0068b5;}</style></defs><path class="a" d="M25,7.014,22.986,5,15,12.986,7.014,5,5,7.014,12.986,15,5,22.986,7.014,25,15,17.014,22.986,25,25,22.986,17.014,15Z" transform="translate(-5 -5)"/></svg>
-                        <a href="/">Intel&reg; Smart Edge Open</a>
+                        <a href="/">Intel&reg; Smart Edge</a>
                     </span>
                     <ul class="uk-navbar-nav uk-visible@m">
                         {% for link in site.data.navigation_header.left %}
