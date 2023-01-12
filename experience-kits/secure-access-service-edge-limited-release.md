@@ -237,7 +237,7 @@ The `deploy.sh` script installs all required packages and deploys the single nod
 
 ### Prepare the Provisioning System
 
-The ESP is used by all experience kits to provision the system used to host the edge cluster. For more details about the ESP, including troubleshooting suggestions, please refer to the [Smart Edge Open Provisioning Process](https://smart-edge-open.github.io/docs/experience-kits/provisioning/provisioning/).
+The ESP is used by all experience kits to provision the system used to host the edge cluster. For more details about the ESP, including troubleshooting suggestions, please refer to the [Smart Edge Open Provisioning Process](https://intelsmartedge.github.io/docs/experience-kits/provisioning/provisioning/).
 
 The following steps will walk you through installing software to the provisioning system, including Git, Docker and Docker Compose, and Python.
 

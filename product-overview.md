@@ -37,7 +37,7 @@ The Intel® Smart Edge Open portfolio of experience kits includes:
 - **Access Edge Experience Kit**: The starting point for building O-RAN compliant edge platforms. 
 - **Near Edge Experience Kit**: The starting point for building edge platforms that reside in a telco cloud.
 
-The Developer Experience Kit is available under the Apache 2.0 license. All other experience kits require a royalty-free Intel proprietary license. [Request a license](https://smart-edge-open.github.io/request-license/).
+The Developer Experience Kit is available under the Apache 2.0 license. All other experience kits require a royalty-free Intel proprietary license. [Request a license](https://intelsmartedge.github.io/request-license/).
 
 Experience kits are composed of sets of building blocks from the open community or from Intel. Building blocks are units of functionality that have been carefully selected and optimized to address the services targeted for use cases at a specific edge location. You can consume experience kits in their entirety, or use only the building blocks required by your own use case.
 
@@ -90,4 +90,4 @@ Intel® Smart Edge Open (formerly known as OpenNESS) is a [CNCF Certified Kubern
 
 ## Next Steps
 - Get started with the [Developer Experience Kit](/experience-kits/developer-experience-kit.md). 
-- To get started with our licensed experience kits, [request a license](https://smart-edge-open.github.io/request-license/).
+- To get started with our licensed experience kits, [request a license](https://intelsmartedge.github.io/request-license/).

@@ -18,7 +18,7 @@ The Intel® Smart Edge Open Developer Experience Kit lets you
 explore the toolkit under an Apache 2.0 license. This foundational kit can be used to create solutions for any edge location.
 
 Find instructions for installing the Developer Experience Kit from GitHub in the
-[developer guide](https://smart-edge-open.github.io/docs/experience-kits/developer-experience-kit/).
+[developer guide](https://intelsmartedge.github.io/docs/experience-kits/developer-experience-kit/).
 
 Alternatively, you can download and run the Developer Experience Kit as a software package from the
 [Intel Developer Catalog](https://www.intel.com/content/www/us/en/developer/articles/reference-implementation/smart-edge-open-developer-experience-kit.html).
@@ -33,22 +33,22 @@ These new edges include the enterprise, locations within the telco infrastructur
 
 Intel® Smart Edge Open offers a set of experience kits customized for the requirements of specific edge locations:
 - The [5G Private
-Wireless Experience Kit](https://smart-edge-open.github.io/docs/experience-kits/private-wireless-experience-kit)
-and the [uCPE Experience Kit](https://smart-edge-open.github.io/ido-specs/doc/reference-architectures/smartedge-open-experience-kit_sdwan)
+Wireless Experience Kit](https://intelsmartedge.github.io/docs/experience-kits/private-wireless-experience-kit)
+and the [uCPE Experience Kit](https://intelsmartedge.github.io/ido-specs/doc/reference-architectures/smartedge-open-experience-kit_sdwan)
 are optimized for the on-premises edge, typically located in an enterprise.
-- The [Access Edge Experience Kit](https://smart-edge-open.github.io/ido-specs/doc/reference-architectures/ran/smartedge-open_ran)
+- The [Access Edge Experience Kit](https://intelsmartedge.github.io/ido-specs/doc/reference-architectures/ran/smartedge-open_ran)
 is for creating edge platforms located at or near a 5G base station.
-- The [Near Edge Experience Kit](https://smart-edge-open.github.io/ido-specs/doc/reference-architectures/Smartedge-Open-Experience-Kit-Near-Edge) for creating solutions for aggregation points hosting a distributed UPF (user plane function).
+- The [Near Edge Experience Kit](https://intelsmartedge.github.io/ido-specs/doc/reference-architectures/Smartedge-Open-Experience-Kit-Near-Edge) for creating solutions for aggregation points hosting a distributed UPF (user plane function).
 
 Location-specific experience kits are available under a royalty-free license. To get started with a location-specific experience kit,
-[request a license](https://smart-edge-open.github.io/request-license/).
+[request a license](https://intelsmartedge.github.io/request-license/).
 
 ## Documentation
 Find complete documentation for all experience kits in the
-[developer guide](https://smart-edge-open.github.io/docs/product-overview/).
+[developer guide](https://intelsmartedge.github.io/docs/product-overview/).
 
 ## Release Notes
-- [Product-level release notes](https://smart-edge-open.github.io/release-notes/)
+- [Product-level release notes](https://intelsmartedge.github.io/release-notes/)
 - [Release notes for the Developer Experience Kit](https://github.com/smart-edge-open/docs/blob/main/release-notes/release-notes-se-open-DEK-21-09.md), including specs of the hardware used to validate the experience kit.
 - [Release notes](https://github.com/smart-edge-open/ido-specs/blob/master/smartedge-open_releasenotes.md)
 for experience kits formerly available as OpenNESS 21.03 and earlier

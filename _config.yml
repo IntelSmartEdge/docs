@@ -23,7 +23,7 @@ permalink:          /:title/
 # Site base hostname & protocol, e.g. http://example.com
 
 url:                ""
-main_url:           "https://smart-edge-open.github.io"
+main_url:           "https://intelsmartedge.github.io"
 
 # Site logo # e.g. logo.png, upload logo image file to /uploads/ folder
 logo:               
