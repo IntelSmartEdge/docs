@@ -36,20 +36,21 @@ Copyright (c) 2022 Intel Corporation
       - [BIOS Setup](#bios-setup)
       - [RRU Preparation](#rru-preparation)
       - [Grand Master Preparation](#grand-master-preparation)
-    - [Autonomous Deployment Through ESP](#autonomous-deployment-through-esp)
+    - [Infrastructure Deployment Through ESP](#infrastructure-deployment-through-esp)
       - [Prerequisites](#prerequisites-1)
       - [Steps to buliding ESP server](#steps-to-buliding-esp-server)
-    - [Staged Deployment Through ESP](#staged-deployment-through-esp)
-      - [Prerequisites](#prerequisites-2)
-      - [Phase 1 Steps](#phase-1-steps)
-      - [Phase 2 Steps](#phase-2-steps)
+    - [5G CNFs Deployment](#5g-cnfs-deployment)
+      - [Steps](#steps)
+    - [Multi cells Deployment](#multi-cells-deployment)
+      - [Steps](#steps-1)
     - [How to Customize the Configuration](#how-to-customize-the-configuration)
       - [Configurations](#configurations)
     - [Onboard The Wireless Network-Ready Intelligent Traffic Management Application](#onboard-the-wireless-network-ready-intelligent-traffic-management-application)
+    - [Multi-Access with Private 5G Application](#multi-access-with-private-5g-application)
     - [How to use edgeDNS](#how-to-use-edgedns)
       - [Step by step operation](#step-by-step-operation)
   - [Troubleshooting](#troubleshooting)
-    - [How to configure mimo](#how-to-configure-mimo)
+    - [How to Configure QAT VFs](#qat-configuration)
     - [How to Reinstall esp service](#how-to-reinstall-esp-service)
     - [How to Restart Deploy Cluster](#how-to-restart-deploy-cluster)
     - [How to deploy and redeploy 5GC etc.](#how-to-deploy-and-redeploy-5gc-etc)
@@ -94,7 +95,7 @@ The Private Wireless Experience Kit includes building blocks for 5G DU/CU and Co
 
 > Figure 2 - Building blocks for the Private Wireless Experience Kit
 
-> Note: WNR-ITM(Wireless Network Ready Intelligent Traffic Management Application) is a reference application for an edge service provided with the Private Wireless Experience Kit.
+> Note: WNR-ITM(Wireless Network Ready Intelligent Traffic Management Application) and GMA (Generic Multi-Access with Private 5G) are two reference applications for an edge service provided with the Private Wireless Experience Kit.
 
 ### Deployment Architecture
 
@@ -134,12 +135,12 @@ The figure below shows a network topology with Split Network enabled. Please ref
 
 ### Provisioning
 
-The Private Wireless Experience Kit hosts the 5G access network and core network functions on a single cluster. There are two ways to deploy the cluster.
+The Private Wireless Experience Kit hosts the 5G access network and core network functions on a single cluster. In order to better meet the diverse deployment requirements, Staged Deployment is adopted. Staged Deployment is carried out in two phases. Phase 1 only deploys infrastructure through ESP without deploying any vendor's 5G CNFs. Phase 2 deploys verdor's 5G CNFs.
 
-- [Autonomous Deployment Through ESP](#autonomous-deployment-through-esp)
-The Edge Software Provisioner (ESP) enables ODMs, System Integrators and Developers to automate the installation of a complete operating system and software stack (defined by a Profile) on bare-metal or virtual machines using a "Just-in-Time" provisiong process. The software stack can include software components, middleware, firmware, and applications. Automating this process increases velocity by focusing resources on rapid development, validation of use cases and scalable deployment. ESP simplifies customer adoption through confidence gained validating Profiles. Profiles are cloned and distributed through GitHub containing the human readable prescriptive literature to deploy the complete operating system and software stack. In summary, this a scalable, simple bare metal provisioning process including virtual machine provisioning.
-- [Staged Deployment Through ESP](#staged-deployment-through-esp)
-Staged Deployment is carried out in two phases. Phase 1 only deploys infrastructure through ESP without deploying any vendor's 5G CNFs， this is similar to Autonomous Deployment through ESP.  In Phase 2 of the deployment, the customer needs to install the vendor 5G CNFs manually by following the vendor guide after the infrastructure deployment through Phase 1 is finished. Please contact Radisys or your local Intel representative for more information.
+- [Infrastructure Deployment Through ESP](#infrastructure-deployment-through-esp)
+The Edge Software Provisioner (ESP) enables ODMs, System Integrators and Developers to automate the installation of a complete operating system and software stack (defined by a Profile) on bare-metal using a "Just-in-Time" provisioning process. The software stack can include software components, middleware, firmware, and applications. Automating this process increases velocity by focusing resources on rapid development, validation of use cases and scalable deployment. ESP simplifies customer adoption through confidence gained validating Profiles. Profiles are cloned and distributed through GitHub containing the human readable prescriptive literature to deploy the complete operating system and software stack. In summary, this a scalable, simple bare metal provisioning process including virtual machine provisioning.
+- [5G CNFs Deployment](#5g-cnfs-deployment)
+Customer needs to install the vendor 5G CNFs manually by following the vendor guide after the infrastructure deployment through Phase 1 is finished. For radisys CNFs，end user can get a bundle installer to simplify the deployment. Please contact Radisys or your local Intel representative for more information.
 
 ![Private Wireless Experience Kit Provisioning](images/pwek/esp_for_pwek.png)
 
@@ -169,9 +170,9 @@ Set up the Isolation CPUs in file: `deployments/pwek-all-in-one/edgenode_group.y
 # isolcpus_enabled controls the CPU isolation mechanisms configured via grub command line.
 isolcpus_enabled: true
 # CPUs to be isolated (for RT procesess)
-isolcpus: "2-31,34-61,66-95,98-125"
+isolcpus: "2-29,66-93"
 # CPUs not to be isolate (for non-RT processes) - minimum of two OS cores necessary for controller
-os_cpu_affinity_cpus: "0,1,32-33,62-65,96-97,126-127"
+os_cpu_affinity_cpus: "0,1,30-65,94-127"
 ```
 
 #### CPU Management Description
@@ -195,7 +196,7 @@ The CPU Manager policy is set with the --cpu-manager-policy kubelet flag or the 
     # CPU policy - possible values: none (disabled), static (default)
     cpus_policy: "static"
     # Configure reserved CPUs for System threads
-    reservedsys_cpus: "0,1,32-127"
+    reservedsys_cpus: "0,1,30-65,94-127"
 ```
 
 - Set up cores amount used by 5G CNFs for the CPU management in file: `deployments/pwek-all-in-one/all.yml`:
@@ -203,10 +204,8 @@ The CPU Manager policy is set with the --cpu-manager-policy kubelet flag or the 
     # Setting below for CPU management
     # Using default cores allocation below is preferred, or should be made sure upf/cu/phy/du core numbers are 5/6/8/10 respectively at least.
     upf_core_num: 5
-    cu_core_num: 6
-    phy_core_num: 8
-    du_core_num: 10
 ```
+> Note: PWEK supports to tune the CPU number of UPF. The minimum UPF CPU number is 5, it can be bigger than 5 which depends on the workload of UFP data plane. For the tunning of CPU number for RAN CNFs, Please contact Radisys.
 #### How Does The CPU Manager work
 
 There are three kinds of CPU resource controls available in most Linux distributions. The first two are CFS shares (what's weighted fair share of CPU time on this system) and CFS quota (what's hard cap of CPU time over a period). The CPU manager uses a third control called CPU affinity (on what logical CPUs there are allowed to execute).
@@ -222,6 +221,8 @@ All non-exclusive-CPU containers (Burstable, BestEffort and Guaranteed with non-
 The Private Wireless Experience Kit uses an architectural paradigm that enables convergence of network functions and edge services and applications across different market segments. This is demonstrated by taking diverse workloads native to different segments and successfully integrating within a common platform.
 
 The Private Wireless Experience Kit offers an edge application for Intelligent traffic management.  The Wireless Network Ready Intelligent Traffic Management is designed to detect and track vehicles and pedestrians and provides the intelligence required to estimate a safety metric for an intersection. Vehicles, motorcyclists, bicyclists and pedestrians are detected and located in video frames via object detection deep learning modules. Object tracking recognizes the same object detected across successive frames, giving the ability to estimate trajectories and speeds of the objects. The reference implementation automatically detects collisions and near-miss collisions. A real-time dashboard visualizes the intelligence extracted from the traffic intersection along with annotated video stream(s). This collected intelligence can be used to adjust traffic light cycling to optimize the traffic flow of the intersection in near real time, or to evaluate and enhance the safety of the intersection. For example, emergency services notifications, i.e, 911 calls, could be triggered by collision detection, reducing emergency response times. Intersections with higher numbers of collisions and near-miss collision detections could be flagged for authority's attention as high-risk intersections.
+
+The Private Wireless Experience Kit offers an edge application for multi-access with private 5G. The solution has a client software part (running at the PC/UE/IoT device side) and a server software part (running at the Edge Server). The Generic Multi-Access (GMA) client software connects to the GMA server software over cellular and Wi-Fi connectivity. This RI demonstrates how a device can be simultaneously connected to multiple networks, for example, Wi-Fi, LTE, 5G, and DSL. Seamlessly combining the connectivity over these networks below the transport layer is shown to improve quality of experience for applications that do not have built-in multi-path capabilities. This RI demonstrates a new control protocol to manage traffic steering, splitting, and duplicating across multiple connections. 
 
 The Private Wireless Experience Kit offers an EdgeDNS application which acts as a Domain Name System (DNS) Server. To control it a kubectl plugin is also provided that acts as a client for it. The EdgeDNS server listens for requests from a client. On receiving a request, a function handling the request adds or removes RULE in the EdgeDNS database. EdgeDNS supports only type A records for Set/Get/Delete Fully Qualified Domain Names (FQDN). It also has a provision for setting/clearing forwarders.
 
@@ -247,7 +248,7 @@ The Intel® vRAN Dedicated Accelerator ACC100 Adapter accelerates 5G virtualized
 - Accelerates both 4G and 5G data concurrently.
 - Lowers development cost using commercial off the shelf (COTS) servers.
 - Accommodates space-constrained implementations via a low-profile PCIe* card form factor.
-For more references, see [<b>smartedge-open-acc100</b> ](https://github.com/smart-edge-open/specs/blob/master/doc/building-blocks/enhanced-platform-awareness/smartedge-open-acc100.md) using ACC100 eASIC in Smart Edge Open: Resource Allocation, and Configuration.
+For more references, see [<b>smartedge-open-acc100</b> ](https://github.com/smart-edge-open/specs/blob/main/doc/building-blocks/enhanced-platform-awareness/smartedge-open-acc100.md) using ACC100 eASIC in Smart Edge Open: Resource Allocation, and Configuration.
 
 #### Hardware BOM
 
@@ -391,18 +392,19 @@ AMF and SMF are the 5G core architecture functions responsible for access and mo
 
 | Software        | Notes                                 |
 | --------------- | :-------------------------------------|
-| DU-L1           | validated with FlexRAN BBU v21.07     |
-| DU-L2           | validated with Radisys L2DU v2.5.3    |
-| CU-L2L3         | validated with Radisys L2L3CU v2.5.3  |
+| DU-L1           | validated with FlexRAN BBU v22.07     |
+| DU-L2           | validated with Radisys L2DU v3.2.2    |
+| CU-L2L3         | validated with Radisys L2L3CU v3.2.2  |
 | UPF             | validated with Radisys 5GC v3.0.1     |
 | AMF and SMF     | validated with Radisys 5GC v2.5.1     |
 | Kubernetes      | v1.23.3                               |
-| Calico          | v3.21.5                               |
+| Calico          | v3.21.6                               |
 | Centos OS       | 7.9.2009                              |
 | RT kernel       | 3.10.0-1127.19.1.rt56.1116.el7.x86_64 |
 | linuxptp        | 2.0                                   |
 | Intel QAT plugin| 0.23.0                                |
-| Wireless Network Ready Intelligent Traffic Management | 4.0.0  |
+| Wireless Network Ready Intelligent Traffic Management | 5.0.0  |
+| Multi-Access with Private 5G | 1.0.0  |
 
 > Table 3 - software list
 
@@ -542,6 +544,10 @@ RRH_PTPV2_SUB_DOMAIN_NUM = 44
 - RRU status check
 
 Please make sure RRU has passed the normal process and can start to work with a BBU. Please refer to the RRU User Manual for more details.
+![image](images/pwek/pwek-rru-check.png)
+
+The above picture is the snippet Logging of Foxconn RPQN-7800 RRU. The *state=2* means the right connectivity between RRU and BBU.
+> NOTE: Different RRU has different logging format with its special connectivity indicator. Please contact your RRU vendor to get more information about connectivity.
 
 #### Grand Master Preparation
 - Hardware connection
@@ -570,9 +576,9 @@ The offset information reported by phc2sys shows the time offset between the PHC
 
 Configure the Grandmaster and ensure it is working correctly before beginning the deployment.
 
-### Autonomous Deployment Through ESP
+### Infrastructure Deployment Through ESP
 
-The Private Wireless Experience Kit can be deployed autonomously using the Edge Software Provisioner (ESP).
+The Private Wireless Experience Kit Infrastructure can be deployed autonomously using the Edge Software Provisioner (ESP).
 
 #### Prerequisites
 
@@ -617,14 +623,6 @@ profiles:
     controlplane_mac: ''
   ...
 ```
-
-> NOTE: Use the following toggle switches to control the deployment behavior.
-
-|     Name                   |       Behavior                                               | Default Value    |                      Note                        |
-| -------------------------- | :----------------------------------------------------------- | :--------------- | :----------------------------------------------- |
-| pwek_common_enable         | Common parameters configuration and scripts installation for 5G CNFs                          | true | This is the dependencies of pwek_vendor_enable and pwek_vendor_install_enable             |
-| pwek_vendor_enable         | Download and depoy vendor special CNFs boundles（images，artifacts and util tools ）on cluster| true | This is the dependency of pwek_vendor_install_enable                                     |
-| pwek_vendor_install_enable | Install 5G CNFs automatically                                                                 | true | Enable the whole flow of Autonomous Deployment                                           |
 
 5. Build ESP server and installation image
 
@@ -771,10 +769,10 @@ When you complete the "prov.yml", enter the custom network port name in the foll
           fronthaul_e810_enable: true
           # Option #1
           pwek_common_enable: true
-          # Option #2
-          pwek_vendor_enable: true
-          # Option #2 manual launch vendor 5G
-          pwek_vendor_install_enable: true
+          # Option #1
+          pwek_vendor_enable: false
+          # Option #1 manual launch vendor 5G
+          pwek_vendor_install_enable: false
           pwek_vendor: radisys
 
           openness_enable: true
@@ -863,21 +861,21 @@ profiles:
               priority: 1
               vendor: 8086
               pf_names: ["{{ midhaul.du_side.pf }}#0-0"]
-              device_type: netdevice
+              device_type: vfio-pci
             - name: "midhaul-cu"
               resource_name: "{{ midhaul.cu_side.resourceName }}"
               num_vfs: "{{ midhaul.cu_side.vf_num }}"
               priority: 1
               vendor: 8086
               pf_names: ["{{ midhaul.cu_side.pf }}#1-1"]
-              device_type: netdevice
+              device_type: vfio-pci
             - name: "backhaul-cu"
               resource_name: "{{ backhaul.cu_side.resourceName }}"
               num_vfs: "{{ backhaul.cu_side.vf_num }}"
               priority: 1
               vendor: 8086
               pf_names: ["{{ backhaul.cu_side.pf }}#2-2"]
-              device_type: netdevice
+              device_type: vfio-pci
             - name: "upf-in"
               resource_name: "{{ backhaul.upf_side.resourceName }}"
               num_vfs: "{{ backhaul.upf_side.vf_num }}"
@@ -926,21 +924,21 @@ profiles:
               priority: 1
               vendor: 8086
               pf_names: ["{{ midhaul.du_side.pf }}#0-0"]
-              device_type: netdevice
+              device_type: vfio-pci
             - name: "midhaul-cu"
               resource_name: "{{ midhaul.cu_side.resourceName }}"
               num_vfs: "{{ midhaul.cu_side.vf_num }}"
               priority: 1
               vendor: 8086
               pf_names: ["{{ midhaul.cu_side.pf }}#1-1"]
-              device_type: netdevice
+              device_type: vfio-pci
             - name: "backhaul-cu"
               resource_name: "{{ backhaul.cu_side.resourceName }}"
               num_vfs: "{{ backhaul.cu_side.vf_num }}"
               priority: 1
               vendor: 8086
               pf_names: ["{{ backhaul.cu_side.pf }}#2-2"]
-              device_type: netdevice
+              device_type: vfio-pci
             - name: "upf-in"
               resource_name: "{{ backhaul.upf_side.resourceName }}"
               num_vfs: "{{ backhaul.upf_side.vf_num }}"
@@ -1081,21 +1079,21 @@ profiles:
               priority: 1
               vendor: 8086
               pf_names: ["{{ midhaul.du_side.pf }}#0-0"]
-              device_type: netdevice
+              device_type: vfio-pci
             - name: "midhaul-cu"
               resource_name: "{{ midhaul.cu_side.resourceName }}"
               num_vfs: "{{ midhaul.cu_side.vf_num }}"
               priority: 1
               vendor: 8086
               pf_names: ["{{ midhaul.cu_side.pf }}#1-1"]
-              device_type: netdevice
+              device_type: vfio-pci
             - name: "backhaul-cu"
               resource_name: "{{ backhaul.cu_side.resourceName }}"
               num_vfs: "{{ backhaul.cu_side.vf_num }}"
               priority: 1
               vendor: 8086
               pf_names: ["{{ backhaul.cu_side.pf }}#2-2"]
-              device_type: netdevice
+              device_type: vfio-pci
             - name: "upf-in"
               resource_name: "{{ backhaul.upf_side.resourceName }}"
               num_vfs: "{{ backhaul.upf_side.vf_num }}"
@@ -1181,6 +1179,7 @@ profiles:
               num_vfs: "{{ fronthaul.du_side.vf_num }}"
               priority: 1
               vendor: 8086
+              vendor: 8086
               pf_names: ["{{ fronthaul.du_side.pf }}#1-1"]
               device_type: vfio-pci
             - name: "midhaul-du"
@@ -1189,21 +1188,21 @@ profiles:
               priority: 1
               vendor: 8086
               pf_names: ["{{ midhaul.du_side.pf }}#0-0"]
-              device_type: netdevice
+              device_type: vfio-pci
             - name: "midhaul-cu"
               resource_name: "{{ midhaul.cu_side.resourceName }}"
               num_vfs: "{{ midhaul.cu_side.vf_num }}"
               priority: 1
               vendor: 8086
               pf_names: ["{{ midhaul.cu_side.pf }}#1-1"]
-              device_type: netdevice
+              device_type: vfio-pci
             - name: "backhaul-cu"
               resource_name: "{{ backhaul.cu_side.resourceName }}"
               num_vfs: "{{ backhaul.cu_side.vf_num }}"
               priority: 1
               vendor: 8086
               pf_names: ["{{ backhaul.cu_side.pf }}#2-2"]
-              device_type: netdevice
+              device_type: vfio-pci
             - name: "upf-in"
               resource_name: "{{ backhaul.upf_side.resourceName }}"
               num_vfs: "{{ backhaul.upf_side.vf_num }}"
@@ -1238,16 +1237,13 @@ profiles:
           # Setting below for CPU management
           # Using default cores allocation below is preferred, or should be made sure upf/cu/phy/du core numbers are 5/6/8/9 respectively at least.
           upf_core_num: 5
-          cu_core_num: 6
-          phy_core_num: 8
-          du_core_num: 10
         controller_group:
         edgenode_group:
           # Setting below for CPU management
           # CPU policy - possible values: none (disabled), static (default)
           cpus_policy: "static"
           # Configure reserved CPUs for System threads
-          reservedsys_cpus: "0,1,32-127"
+          reservedsys_cpus: "0,1,30-65,94-127"
 ```
 
 - Set up the SRIOV-FEC Operator, which requires that ACC100 is enabled on the server:
@@ -1301,9 +1297,9 @@ profiles:
           # isolcpus_enabled controls the CPU isolation mechanisms configured via grub command line.
           isolcpus_enabled: true
           # CPUs to be isolated (for RT procesess)
-          isolcpus: "1-31,33-63,65-95,97-127"
+          isolcpus: "2-29,66-93"
           # CPUs not to be isolate (for non-RT processes) - minimum of two OS cores necessary for controller
-          os_cpu_affinity_cpus: "0,32,64,96"
+          os_cpu_affinity_cpus: "0,1,30-65,94-127"
 ```
 
 - Set up hugepages settings:
@@ -1340,26 +1336,6 @@ profiles:
           gm_ip: "10.0.1.179"           # Grand Master IP.
           ptp_port_ip: "10.0.1.150"     # Static IP for the server port connected to Grand Master
           ptp_port_cidr: "24"
-```
-
-- Prepare offline packages about gNodeB and 5GCN images and deployment files
-The binaries for gNodeB and 5GCN are required to be copied to the ESP server, both of them need to reserve at least 50-60 GB of storage space. Default path:"/opt/pwek_offline_files/"
-```yaml
-profiles:
-  ...
-    sideload:
-      # Example entries:
-      # This will cause a file /opt/extra_package.zip to be copied to /opt/seo/extra/extra_package_renamed.zip
-      # - file_path: "/opt/extra_package.zip"
-      #   dest_path: "./extra/extra_package_renamed.zip"
-      # This will cause a file /root/extra_package.zip to be copied to /opt/seo/extra/extra_package.zip
-      # - file_path: "/root/extra_package.zip"
-      #   dest_path: "extra/"
-      # This will cause a content of a folder /root/extra_sideload_dir to be copied under /opt/offline_files
-      # - file_path: "/root/extra_sideload_dir"
-      #   dest_path: "../offline_files"
-      - file_path: "/opt/pwek_offline_files"
-        dest_path: "/opt/pwek_offline_files"
 ```
 
 - Customize hostname
@@ -1428,158 +1404,266 @@ profiles:
           kubernetes_service_port_https: "6443"
 ```
 
-### Staged Deployment Through ESP
+### 5G CNFs Deployment
+#### Steps
+**1. Install vendor artifacts and tool kits**
 
-The Private Wireless Experience Kit can be deployed in a staged way using the Edge Software Provisioner (ESP).
-
-#### Prerequisites
-
-- One Controller and one edge Node machine which support Private Wireless Experience Kit.
-- One machine for ESP server with preinstalled:
-  - Docker
-  - Git
-  - Python 3.6 with PyYAML
-- Both machines need to be connected to the same network with an Internet access
-
-#### Phase 1 Steps
-These steps are used to deploy infrastructure without 5G CNFs.
-Please use these parameters to toggle 5G CNFs deployment off in `deployments/pwek-all-in-one/all.yml` file.
-```yaml
-pwek_common_enable: false
-pwek_vendor_enable: false
-pwek_vendor_install_enable: false
-```
-For Phase 1, complete the autonomous deployment steps, please refer to [autonomous deployment steps](#steps-to-buliding-esp-server)
-
-#### Phase 2 Steps
-These steps are used to deploy vendor's 5G CNFs manually.
-Please perform the operations as [Phase 1 Steps](#phase-1-steps) to set up your infrastructure with the same configuration of hardware and software including the network topology as described in this document.
-
-**1. push cnfs container images to harbor**
-
-Get the images from vendor. This example pushes `smf_2.5.1_01.tar` image file to harbor registry with image name `smf`.
-
-Ⅰ. Define environment variable for **image information**, please contact Radisys or your local Intel representative to get the right information.
+Get the *installer.sh* from vendor and run it on controller.
 ```shell
-image_name=smf
-image_file=smf_2.5.1_01.tar
+pip3 install yq xmlstarlet jinja2 netconf-console2
+./installer.sh
+```
+> NOTE: The `installer.sh` will try to install some dependencies, update configure files and populate CRDs. It will do some sanity checks, there may be some error messages during installation, you can ignore them.
+
+**2. push cnfs container images to harbor**
+
+Get the images from vendor and copy them to controller. This example pushes `cu-3.2.2.tar.gz` image file to harbor registry.
+
+```shell
+image=cu-3.2.2.tar.gz
+kubectl push cnf radisys $image 
+```
+> NOTE: This command will try to use `nerdctl` to push image, you can ignore *nerdctl command not found*.
+
+Check the images info.
+```shell
+kubectl harbor get ~cu
+kubectl harbor get intel/cu
 ```
 
-Ⅱ. upload images to harbor registry
+**3. update 5G parameters**
+
+Get which 5G parameters configurations are supported by this command:
 ```shell
-pass=$(kubectl get secret --namespace harbor harbor-admin -o jsonpath="{.data.admin-password}" | base64 -d)
-port=$(kubectl get svc harbor -n harbor -o json | jq -c '.spec.ports[] | select(.name | contains("https"))' | jq .nodePort)
-controller=$(kubectl get node -l "node-role.kubernetes.io/control-plane=" -o name)
-controllerIP=$(kubectl get node -l "node-role.kubernetes.io/control-plane=" -o json | jq -c '.items[0].status.addresses[] | select(.type | contains("InternalIP"))' |jq -r .address)
-docker load < $image_file
-
-image_tag=$(docker images --filter=reference="*/*/$image_name" --filter=reference="*/$image_name" \
- --filter=reference="$image_name" --format "{{.Tag}}")
-docker tag $image_name:$image_tag $controllerIP:$port/intel/$image_name:$image_tag
-
-docker login -u admin $controllerIP:$port --password-stdin  <<< $pass
-docker push $controllerIP:$port/intel/$image_name:$image_tag
-image_id=$(docker images --filter=reference="*/*/$image_name" --filter=reference="*/$image_name" \
- --filter=reference="$image_name" --format "{{.ID}}")
-docker rmi $image_id -f
-docker images --filter=reference="*/*/$image_name" --filter=reference="*/$image_name" \
- --filter=reference="$image_name"
+kubectl api-resources --api-group=pwek.smart.edge.org
+```
+For this release, we support these 5G parameters:
+```shell
+NAME             SHORTNAMES   APIVERSION               NAMESPACED   KIND
+cpus             cpu          pwek.smart.edge.org/v1   true         CPU
+gnbfrequencies   freq         pwek.smart.edge.org/v1   true         GnbFrequency
+gnbmcses         mcs          pwek.smart.edge.org/v1   true         GnbMCS
+gnbmimoes        mimo         pwek.smart.edge.org/v1   true         GnbMIMO
+gnbplmns         plmn         pwek.smart.edge.org/v1   true         GnbPLMN
+imsies           imsi         pwek.smart.edge.org/v1   true         IMSI
+ssbmtcs          smtc         pwek.smart.edge.org/v1   true         SSBMTC
 ```
 
-**2. upload Artifacts and install**
+Not all parameters need to be configured, it depends on the RRU and UE devices.
+These examples show how to confiugre some of the parameters by "kubectl patch".
+You can also use "kubectl edit" to update the configure.
 
-Get the Artifacts from vendor. There maybe some differences among different vendors, please contact vendor or your local Intel representative to get the right information.
+> NOTE: Please restart 5G RAN and Core after 5G parameters update.
 
-This example installs and configures the helm chart for Radisys 5G CNFs.
+Ⅰ. Update frequency
 
-Ⅰ. Define environment variable for helm chart artifacts, please contact Radisys or your local Intel representative to get the right information.
+Check your RRU spec to get the frequency info of it. Update the RAN frequency parameters by:
+
 ```shell
-helm_path=/opt/smartedge/pwek/charts/radisys_5g_cnf/deployment
-```
-
-Ⅱ. copy the whole helm directory to `/opt/smartedge/pwek/charts/radisys_5g_cnf/deployment/` on controller node.
-Enter the helm chart path on host, and list the content of helm chart directory:
-```shell
-cd $helm_path/helm
-ls
-```
-
-Ⅲ. The output should look like as follow:
-```shell
-cn  cu  du  du-host
-```
-
-**3. customize CNFs helm chart by specific environment**
-
-This section explains how to update some configurations. Get the pwek customized helm chart artifacts if you need to more customized configurations.
-
-* Update QAT VFs PCI Address
-
-Ⅰ. Please get 2 available QAT VFs PCI Address on node and set the environment variable on controller.
-```shell
-fastCryptoPort0Pci=0000:b3:01.0
-fastCryptoPort1Pci=0000:b3:01.1
-```
-Ⅱ. Run these commands to change the value the helm chart:
-```shell
-sed -i "s/fastCryptoPort0Pci: [^ ]*/fastCryptoPort0Pci: $fastCryptoPort0Pci/g" $helm_path/helm/cu/values.yaml
-sed -i "s/fastCryptoPort1Pci: [^ ]*/fastCryptoPort1Pci: $fastCryptoPort1Pci/g" $helm_path/helm/cu/values.yaml
-```
-
-* Update fronthaul VFs PCI Address
-
-Use the PWEK customized helm chart from Radisys，it only supports E810 as fronthaul interface, if you want to configure fronthaul interface as X710, please contact Radisys or your local Intel representative.
-
-Ⅰ. Login to the node, set the environment variable on node as follow:
-```shell
-PFNAME=p1p1
-```
-Ⅱ. Use the following commands to get the VF PCI bus
-```shell
-PFBUS=$(ethtool -i $PFNAME |grep bus-info |awk '{print $2}')
-ls /sys/bus/pci/devices/$PFBUS/virtfn* -l | awk -F "/" '{print $8}'
-```
-Ⅲ. Login the controller，and set the environment variable with the value is got on node as above.
-```shell
-RUVF0VALUE=0000:b9:01.1
-```
-Ⅳ. Run these commands to change the value the helm chart:
-```shell
-# $1 element tag, $2 element value, $3 the n time occurrent, $4 file name
-function sub_xml_val ()
+# For downlink frequency
+arfcnPointA=620208
+freqPointA=3303120
+arfcnSsb=620736
+earfcn=623484
+freqSsb=3311040
+kubectl -n pwek-rdc patch freq dlcommon --type=merge --patch-file=/dev/stdin <<-EOF
 {
-  sed -i -e ':a;N;$!ba; s/[^>]*\(<\/'"$1"'>\)/'"$2"'\1/'"$3"'' $4
+  "spec": {
+     "absArfcnPointA": $arfcnPointA,
+     "absArfcnSsbDl": $arfcnSsb,
+     "absFreqPointA": $freqPointA,
+     "absFreqSsbDl": $freqSsb,
+     "earfcn": $earfcn
+  }
 }
+EOF
 
-RUVF0NAME=PciBusAddoRu0Vf0
-sub_xml_val $RUVF0NAME "$RUVF0VALUE" 1 $helm_path/helm/du/l1config/xrancfg_sub6.xml
+# For uplink frequency
+arfcnPointA=633936
+freqPointA=3509040
+earfcn=623484
+kubectl -n pwek-rdc patch freq ulcommon --type=merge --patch-file=/dev/stdin <<-EOF
+{
+  "spec": {
+     "absArfcnPointA": $arfcnPointA,
+     "absFreqPointA": $freqPointA,
+     "earfcn": $earfcn
+  }
+}
+EOF
 ```
 
-* Update Harbor IP/port information
+Ⅱ. Update IMSI
 
-Change the harbor registry value of helm chart by following these commands
+There are 17 default IMSIs are pre-configure. You can change one of them for your expect IMSI:
+This example show how to update "ue-13".
 ```shell
-sed -i -e "/dockerRegistry/, +4 s/ip:.*/ip: $controllerIP/" $helm_path/helm/cn/values.yaml
-sed -i -e "/dockerRegistry/, +4 s/port:.*/port: $port\/intel/" $helm_path/helm/cn/values.yaml
-sed -i -e "s/\(repository:\).*\(cu-*\|du-*\|flexran-*\)/\1 $controllerIP:$port\/intel\/\2/" $helm_path/helm/[cd]u/values.yaml
+UE="ue-13"
+supi="460110000000003"
+kubectl -n pwek-rdc patch imsi $UE --type=merge -p '{"spec": {"ue": {"supi": "'$supi'"}}}'
 ```
-These values are defined in helm chart `values.yaml` file, so they can also be passed via helm command line parameters.
 
-
-* CPU allocation configuration
-
-Radisys does not support CPU allocation automatically in this release. Please change the CPU allocation in the configure files of `cu/du/phy/upf` manually. There are dozens of threads needed for CPU allocation, and the configurations are in different formats. Some may use the bitmap format and require decimal-to-binary conversion.
-
-**4. start 5G CNFs**
-
-Run the follow command to start 5G core and 5G RAN CNFs:
+Ⅲ. Update MCS:
 ```shell
-helm install vcn $helm_path/helm/cn -n pwek-rdc
-helm install vcu $helm_path/helm/du -n pwek-rdc
-helm install vdu $helm_path/helm/cu -n pwek-rdc
+name=common
+
+bcch=9
+dl=20
+pcch=9
+rar=6
+ul=20
+kubectl -n pwek-rdc patch mcs $name --type=merge --patch-file=/dev/stdin <<-EOF
+{
+  "spec": {
+     "bcch": $bcch,
+     "dl": $dl,
+     "pcch": $pcch,
+     "rar": $rar,
+     "ul": $ul
+  }
+}
+EOF
 ```
 
-> NOTE: Please contact Radisys or your local Intel representative for more information if different hardware and software configuration are used for deployment of 5G CNFs.
+Ⅳ. Update SMTC
+```shell
+duration=3
+periodicity=sf20
+tomeasure=10000000
+offset=0
+
+kubectl -n pwek-rdc patch smtc common --type=merge --patch-file=/dev/stdin <<-EOF
+{
+  "spec": {
+     "periodicity": "$periodicity",
+     "offset": $offset,
+     "duration": {
+       "tomeasure": "$tomeasure",
+       "value": $duration
+     }
+  }
+}
+EOF
+```
+Ⅴ. Update MIMO
+```shell
+name=common
+
+dlnumofantports=4
+dlrank=4
+ulnumofantports=2
+ulrank=2
+kubectl -n pwek-rdc patch mimo $name --type=merge --patch-file=/dev/stdin <<-EOF
+{
+  "spec": {
+     "dlnumofantports": $dlnumofantports,
+     "dlrank": $dlrank,
+     "ulnumofantports": $ulnumofantports,
+     "ulrank": $ulrank
+  }
+}
+EOF
+```
+
+Ⅴ. Update PLMN
+```shell
+mcc=460
+mnc=11
+
+kubectl -n pwek-rdc patch plmn common --type=merge -p '
+  {"spec": {"mcc": "'$mcc'", "mnc": "'$mnc'"}}'
+```
+
+**4. start 5G RAN and CORE**
+```shell
+kubectl core start
+```
+Waiting 3 minutes for CORE ready.
+```shell
+kubectl ran start
+```
+**5. stop 5G RAN and CORE**
+```shell
+kubectl core stop
+kubectl ran stop
+```
+> NOTE: The "kubectl ran start" can detect the interface model (X710 or E810) intelligently, no need to extra configure for it.
+
+### Multi cells Deployment
+#### Steps
+Ⅰ. Configure DU numbers
+```shell
+dunum=3
+kubectl -n pwek-rdc patch rans common --type=merge -p '{"spec": {"ndu": '$dunum'}}'
+```
+Ⅱ. Create new fronthaul interface resources for the *n*th DU.
+
+Please make sure to choose the right physical NIC for fronthaul interface (Here choose em3).
+```shell
+pfNames='["em3"]'
+deviceType="vfio-pci"
+numVfs=1
+name="fronthaul-du2"
+resourceName="intel_sriov_10G_RRU2_VF0"
+
+kubectl sriov policy render "$(jq <<EOF
+{
+  "name": "$name",
+  "resourceName": "$resourceName",
+  "numVfs":  $numVfs,
+  "vendor": "8086",
+  "pfNames": $pfNames
+}
+EOF
+)" | kubectl apply -f -
+```
+> NOTE: There is a convention for the resourceName. The resourceName prefix with "intel_sriov_10G_RRU*n*", *n* is the DU index (number *n* starts from 2).
+
+Ⅲ. Create new middlehaul interface resources for the *n*th DU
+
+Please make sure to choose the right physical NIC for middlehaul interface (Here choose em4).
+```shell
+pfNames='["em4"]'
+deviceType="vfio-pci"
+numVfs=1
+name="middlehaul-du2"
+resourceName="intel_sriov_DU2"
+
+kubectl sriov policy render "$(jq <<EOF
+{
+  "name": "$name",
+  "resourceName": "$resourceName",
+  "numVfs":  $numVfs,
+  "vendor": "8086",
+  "pfNames": $pfNames
+}
+EOF
+)" | kubectl apply -f -
+```
+> NOTE: There is a convention for the resourceName. The resourceName is "intel_sriov_DU*n*", *n* is the DU index (number *n* starts from 2).
+
+Ⅳ. Create [CRs](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/) (Custom Resources) for 5G parameters.
+
+> NOTE: This step is optional. If no new CRs of 5G parameters for DU*n*, then it will share the same CRs with DU1.
+
+Example to create a new uplink frequency CR.
+
+Firstly, duplicate the DU1 uplink frequency CR with different name and set it with 2 lables: "purpose=du*n*" and "type=ul".
+```shell
+crd=freq
+res=ulcommon
+newname=uldu2
+kubectl -n pwek-rdc get $crd $res -o yaml | sed -e "s/^\(\s*name:\)\(.*\)/\1 $newname/" | kubectl apply -f -
+
+# label it for duN, (N depends on the DU index, here is 2)
+key="purpose"
+label="${key}=du2"
+kubectl label $crd $newname -n pwek-rdc "$label" "type=ul"
+```
+Then update with spcicial values for DU*n*, please rer [update 5G parameters](#2-update-5G-parameters).
+Use the similar way to Create other CRs for DU*n*.
+> NOTE: For other CRs, only need to set one lable **purpose=du*n*** (*n* is the DU index). For frequency CR, we need to set **type** lable, "type=ul" or "type=dl".
+> NOTE: Please restart 5G RAN and Core after 5G parameters update.
 
 ### Onboard The Wireless Network-Ready Intelligent Traffic Management Application
 
@@ -1593,6 +1677,19 @@ Below show pwek based Wireless Network Ready Intelligent Traffic Management appl
 ![itm_on_pwek_architecture](images/pwek/itm_on_pwek_architecture.png)
 
 Please follow this link [ITM_Guide](https://www.intel.com/content/www/us/en/developer/articles/reference-implementation/wireless-network-ready-intelligent-traffic-management.html) download v5.0 and use the document to Onboard Wireless Network-Ready Intelligent Traffic Management Application.
+
+### Multi-Access with Private 5G Application
+
+The Multi-Access with Private 5G application requires the application pod.  Once the Private Wireless Experience Kit has been installed, the application can be deployed using Helm.
+
+The solution has a client software part (running at the PC/UE/IoT device side) and a server software part (running at the Edge Server). The Generic Multi-Access (GMA) client software connects to the GMA server software over cellular and Wi-Fi connectivity. At the very beginning, the client has only one connection established (e.g., cellular) and will try to establish the second connection. After both connections are established, the client will then establish a websocket-based secure connection between the client and the server to exchange messages. A [new protocol layer](https://www.ietf.org/archive/id/draft-zhu-intarea-gma-control-02.txt) is introduced by GMA to handle all multi-path related operations.
+
+In the Private Wireless Experience Kit environment, you can experiment with traffic management provided by the Generic Multi-Access (GMA) RI to make edge client connections much more stable. You can also enable functions like seamless handover, simultaneous Wi-Fi and cellular during download, and uplink (downlink) redundancy to improve performance.
+
+Below show pwek based Multi-Access with Private 5G application
+![gma_on_pwek_architecture](images/pwek/gma_on_pwek_architecture.png)
+
+Please follow this link [GMA_Guide](https://www.intel.com/content/www/us/en/developer/articles/reference-implementation/multi-access-with-private-5g.html) download v1.0 and use the document to Multi-Access with Private 5G Application.
 
 ### How to use edgeDNS
 
@@ -1703,16 +1800,47 @@ bdb6cc78a64e
 
 ## Troubleshooting
 
-### How to configure mimo
-Mimo configuration is used to define the antenna ports and data streams for DU. When find the mimo configuration of DU does not match RRU, we need to re-configure the mimo as follow.
-Login to controller and run:
+### QAT Configuration
+There is an QAT issue from Radisys CU CNF. If more than 2 VF resources are allocated from qat device plugin, UE attach may fail. The default VF number configure is 1 in the former release, and PWEK will help to improve the Radisys related Configure.
 
+In this release, it is recommended to configure the VF manually not by qat device plugin.
+
+Login node, and pick up 2 VFs by the follow command.
 ```shell
-kubectl api-resources --api-group="pwek.smart.edge.org"
-kubectl get mimo -n pwek-rdc
-kubectl edit mimo -n pwek-rdc common
-stop_ran
-start_ran
+PCI=$(lspci  | grep -i quick | head -n 1 | cut -d " " -f 1)
+ls  /sys/bus/pci/devices/0000\:${PCI}/virtfn* -l  | cut -d '/' -f 8
+```
+Login controller, and configure QAT.
+```shell
+PCI=${One-of-Pickup-Address}
+cd /opt/smartedge/pwek/charts/radisys_5g_cnf/deployment/
+sed -i "s/fastCryptoPort0Pci: [^ ]*/fastCryptoPort0Pci: $fastCryptoPort0Pci/g" ./helm/cu/values.yaml
+PCI=${Another-of-Pickup-Address}
+sed -i "s/fastCryptoPort1Pci: [^ ]*/fastCryptoPort1Pci: $fastCryptoPort1Pci/g" ./helm/cu/values.yaml
+
+mv /opt/smartedge/pwek/5gran_entry_point/radisys/050-runtime-crypto-conf.sh /opt/smartedge/pwek/5gran_entry_point/radisys/bak.050-runtime-crypto-conf.sh
+```
+> NOTE: Please ignore this troubleshooting once Radisys has fixed this issue.
+
+### How to change interface driver
+The Radisys V3.2.2 CNFs interfaces works in user space, these commands can help to change the dirver of interfaces.
+```shell
+kubectl sriov policy get
+
+driver="vfio-pci"
+
+policy="midhaul-cu"
+kubectl -n sriov-network-operator patch sriovnetworknodepolicy $policy --type=merge -p '{"spec": {"deviceType": "'$driver'"}}'
+
+policy="midhaul-du"
+kubectl -n sriov-network-operator patch sriovnetworknodepolicy $policy --type=merge -p '{"spec": {"deviceType": "'$driver'"}}'
+
+policy="backhaul-cu"
+kubectl -n sriov-network-operator patch sriovnetworknodepolicy $policy --type=merge -p '{"spec": {"deviceType": "'$driver'"}}
+
+kubectl sriov policy get "midhaul-cu"
+kubectl sriov policy get "midhaul-du"
+kubectl sriov policy get "backhaul-cu"
 ```
 
 ### kubernetes-dashboard can not be deleted.
@@ -1747,6 +1875,8 @@ mv pwek pwek_backup
 ```
 redo install [Steps to buliding ESP server](#steps-to-buliding-esp-server)
 
+For more details, please refer to [Private Wireless Experience Kit Provisioning](https://github.com/smart-edge-open/docs/blob/main/experience-kits/provisioning/provisioning_pwek.md)
+
 ### How to Restart Deploy Cluster
 First login to the controller or edge_node
 
@@ -1764,22 +1894,37 @@ sudo su -
 2. Use the following commands to deploy 5gc etc.
 > Note: Must be in strict order
 ```shell
-start_core
-start_ran
+kubectl core start
+kubectl ran start
 ```
 3. Use the following commands to uninstall 5gc etc.
 > Note: Must be in strict order
 ```shell
-stop_ran
-stop_core
+kubectl core stop
+kubectl ran stop
 ```
-
-For more details, please refer to [Private Wireless Experience Kit Provisioning](https://github.com/smart-edge-open/docs/blob/main/experience-kits/provisioning/provisioning_pwek.md)
 
 ## Summary and Next Steps
 
 This guide explained how to deploy the Private Wireless Experience Kit. The blueprint for private wireless deployment through Intel® Smart Edge Open efficiently deploys, manages, and optimizes network functions and applications specifically for an on-premises private wireless network. You can continue to customize this deployment to meet your own use cases.
 
 ### Next Steps
-- Install the [Wireless Network Ready Intelligent Traffic Management reference implementation.](https://github.com/smart-edge-open/edgeapps/blob/master/applications/wnr-itm-app/README.md)
+- Install the [Wireless Network Ready Intelligent Traffic Management reference implementation.](https://github.com/smart-edge-open/edgeapps/blob/main/applications/wnr-itm-app/README.md)
 This reference implementation detects and tracks vehicles and pedestrians using deep learning, and provides the intelligence required to estimate a safety metric for an intersection.
+
+- Install the [Multi-Access with Private 5G reference implementation.](https://github.com/smart-edge-open/applications.services.esh.multi-access-with-private-5g/tree/1.0.0#readme)
+This reference implementation demonstrates how a device can be simultaneously connected to multiple networks, for example, Wi-Fi, LTE, 5G, and DSL.
+
+- NIC VF allocation based on bandwidth.
+Currently the NIC VF allocation to pod is simple based on the VF numbers. This is not good to make full use of NIC capability for QOS. The solution is working in progress.
+
+- IP address allocation and discovery mechanical for CNF User plane
+Currently the IP address assigned to CNF User plane is hard code. The IP address allocation and discovery mechanical is in plan.
+
+- Intelligent NIC detect.
+Currently the deployer need to label the node with the interface purpose.
+This command can get the interface purpose.
+```shell
+kubectl sriov label get
+```
+After Intelligent NIC detection merged, it can label the interface automatically and create different interfaces resource intelligently.

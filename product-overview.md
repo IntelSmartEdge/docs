@@ -10,6 +10,7 @@ Copyright (c) 2021 Intel Corporation
   - [Next Steps](#next-steps)
 
 # Intel® Smart Edge Open Developer Guide
+Version 21.09 
 
 ## What is Intel® Smart Edge Open?
 Intel® Smart Edge Open is an edge computing software toolkit for building platforms optimized for the edge. 
@@ -88,5 +89,5 @@ The Intel® Smart Edge Open edge node manages the edge services, including the A
 Intel® Smart Edge Open (formerly known as OpenNESS) is a [CNCF Certified Kubernetes*](https://landscape.cncf.io/card-mode?organization=intel&selected=open-ness) product, ensuring a consistent, updated, confirmable Kubernetes-conformant implementation.
 
 ## Next Steps
-- Get started with the [Developer Experience Kit](/experience-kits/developer-experience-kit-default-install.md).
+- Get started with the [Developer Experience Kit](/experience-kits/developer-experience-kit.md). 
 - To get started with our licensed experience kits, [request a license](https://smart-edge-open.github.io/request-license/).
